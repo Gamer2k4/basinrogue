@@ -3,27 +3,39 @@
 = Discussions of technology, content, development approach and communication =
 
 = Technology =
-  * Thin client but with a telnet option in the back of our head
+  * Thin client but with a telnet option in the back of our head 
   * C++
   * SVN for accessing our code repository
 
 = TimeZones =
-  * *Antoine* is from New Zealand
+  * *Antoine* is in Wellington, NZ
   * *Konijn* is in New York
   * *Cavalaria Christophe* is in France
   * *Gamer2k4* is in Wisconsin, USA
 
-
 = Communication =
+  * Wiki seems like the way to go
   * IRC might be used sometimes, but we have no bot on rgrd
-  * Emails are confusing for new people joining the team
-  * Wiki pages could be good for discussion ( see talk pages )
+  * Email an option for 1-1 communication if it doesn't need to be saved for posterity
 
 = Roles =
   * Gamer2k4 will set up a story line
   * Konijn will be a C++ meddler
-  * ...
+  * Antoine happy to do either/both of above
 
 = Issues =
-  * We have no server!
-  * ...
+  * We have no test server!
+  * [Antoine]: I haven't done much sysadmin. None in fact. So I'm not really familiar with the issues around setting up a program to run on a remote server and giving it appropriate permissions and allowing client access to it and all this sort of thing. Do any of you guys have more knowledge about this? If not, should we grab someone off RGRD to help us get started?
+     (On this, konijn earlier wrote: "if we do a (PHP or Python ) / javascript roguelike that almost anybody can host that ( Easier to host PHP than Python obviously ). Ilya Beli started one ( with Python ), that is online here : http://80.64.90.140:8484/ Source code here : cvs -d :pserver:anonymous@l64-90-140.cn.ru:/home/cvs checkout heroquest  This one is actually multiplayer in AJAX mode. Browser can do transparancy easy, play music/sounds, do caching and has a scripting engine.")
+
+
+= Game design questions =
+
+  * [Antoine]: Are we primarily thinking ASCII or tiles? I mean, I suppose we should support both, but which should be primary? I think the big impact is on mapsize - if tiles are primary, then the map should arguably be somewhat small; if ASCII is primary, the map can be bigger but tile users would then have to use a scrolling main window...
+
+  * Multiplayer support. I think we all agree that there should be a chat feature, a common highscore list and some form of interaction through shops. And so on. But
+  1. should players be able to interact in town (presumably in real time)?
+  2. should players be able to interact in the dungeon (presumably in some kind of turn based system?) 
+  [Antoine:] I think a 'yes' on 1 (with some safeguards to prevent PK, and perhaps restrictions on giving each other items/gold) and a 'no' on 2 (too hard basket).
+
+  * [gamer2k4]: Interface is key.  That's been the topic of discussion recently in r.g.r.d and it's a good thing to think about.  How can we make our game as user-friendly as possible?
