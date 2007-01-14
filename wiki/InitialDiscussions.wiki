@@ -1,0 +1,29 @@
+#Initial discussions.
+
+= Discussions of technology, content, development approach and communication =
+
+= Technology =
+  * Thin client but with a telnet option in the back of our head
+  * C++
+  * SVN for accessing our code repository
+
+= TimeZones =
+  * *Antoine* is from New Zealand
+  * *Konijn* is in New York
+  * *Cavalaria Christophe* is in France
+  * *Gamer2k4* is in Wisconsin, USA
+
+
+= Communication =
+  * IRC might be used sometimes, but we have no bot on rgrd
+  * Emails are confusing for new people joining the team
+  * Wiki pages could be good for discussion ( see talk pages )
+
+= Roles =
+  * Gamer2k4 will set up a story line
+  * Konijn will be a C++ meddler
+  * ...
+
+= Issues =
+  * We have no server!
+  * ...
