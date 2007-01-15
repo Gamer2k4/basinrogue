@@ -7,3 +7,11 @@ We have no test server!
 (On this, konijn earlier wrote: "if we do a (PHP or Python ) / javascript roguelike that almost anybody can host that ( Easier to host PHP than Python obviously ). Ilya Beli started one ( with Python ), that is online here : http://80.64.90.140:8484/ Source code here : cvs -d :pserver:anonymous@l64-90-140.cn.ru:/home/cvs checkout heroquest This one is actually multiplayer in AJAX mode. Browser can do transparancy easy, play music/sounds, do caching and has a scripting engine.") 
 
 (Christophe: "I doubt such patform will scale. It is possible but somewhat hard to write a roguelike in Python without performance issues. Now consider that the server might be used by several players at the same time. Also, the requirements are quite different than most regular PHP sites. There is a difference between a simple PHP site and a long standing process with it's own socket.") 
+
+A: What kind of server machine would we want anyway? Is the OS important? - I suppose it would have implications in terms of the dialect of C++ we use?
+
+What kind of technology should we use to connect the client to the server?
+
+What kind of authentication would we use?
+
+How would a user create an account?
