@@ -12,6 +12,7 @@ Some of the issues that we currently have:
   * Danger of the last two options - allows players to give l33t items from their strongest character to their weakest characters to power them up very quickly! To be avoided if the game is to be at all competitive... (A.)
     * G2k4: If the game has a single victory condition, this shouldn't be a problem.  A stronger player won't give away his items, and a person that beat the game already would no longer have that character.
     * A. Consider this scenario. I'm playing a L40 warrior; I decide to start a L1 mage to try something different. 'Hmm', I think, 'my warrior has 100000 gold, he won't miss 10000. I'll give it to the mage and get him off to a good start.' That's what we want to prevent.
+      * G2k4: No logging on twice from the same ip? Items disappear after 5 minutes; Different accounts can't log in from the same ip for 5 minutes?
   * If trading is possible, skills (at least item creation skills) are ideal
   * Are houses necessary? If so, what limitations are on them (cost, space, etc.)?
     * A. I like the idea of players being able to create/decorate their houses or places of business...
