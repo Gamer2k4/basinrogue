@@ -10,8 +10,11 @@ Some of the issues that we currently have:
     * Indirect - one player drops, another player picks up
     * Direct - a trade window opens, trade occurs simultaneously
   * Danger of the last two options - allows players to give l33t items from their strongest character to their weakest characters to power them up very quickly! To be avoided if the game is to be at all competitive... (A.)
+    G2k4: If the game has a single victory condition, this shouldn't be a problem.  A stronger player won't give away his items, and a person that beat the game already would no longer have that character.
   * If trading is possible, skills (at least item creation skills) are ideal
-  * Are houses necessary? If so, what limitations are on them (cost, space, etc.)? (A. I like the idea of players being able to create/decorate their houses or places of business...)
+  * Are houses necessary? If so, what limitations are on them (cost, space, etc.)?
+    A. I like the idea of players being able to create/decorate their houses or places of business...
+      G2k4: This would be another reason to have a real-time town.  I do like the idea of a town being a gathering place, as opposed to a resupply area.
   * Multiplayer, multiuser, or simply online?
     * Multiplayer - real-time gameplay, shared levels, artifacts, uniques, stores
     * Multiuser - turn-based gameplay, shared artifacts, uniques, possibly shared town
