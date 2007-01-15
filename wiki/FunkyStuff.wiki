@@ -1,0 +1,13 @@
+#summary Miscellaneous ideas for making the game cool.
+
+(Gamer2k4:) Interface is key. That's been the topic of discussion recently in r.g.r.d and it's a good thing to think about. How can we make our game as user-friendly as possible? 
+
+It would be cool if items could be enhanced with monster souls. For example, infusing a helmet with a dragon soul might grant firebreathing, infusing body armor with a dragon soul might grant fire resistance, and infusing a cloak with a dragon soul might grant flying. 
+(Christophe:) There is a similar system in Ragnarok Online. Each monster can drop it's card when killed, and such card can be used to upgrade weapons and armors to get a specific bonus. Some of them are nearly useless, some are considered fundamental must-have items. Only common weapons and armors can be enhanced in such ways to keep some balance. 
+
+Monsters with enough experience should change (young dragon to mature dragon) and some monsters should be able to merge with others (water elemental + shock elemental -> storm elemental) 
+
+On that note, spells should be combinable. The player should only be able to learn a small amount of spells, and combining these would unlock more powerful spells. Also, spells should have a level, and there should be a different failure message for a non-existent spell and one that's too advanced. 
+Fusion: levitation + fire bolt -> nothing (non-existent) "Nothing happens." 
+Fusion: air aura + water aura -> water breathing "The spell fizzles." 
+Fusion: strike + flame aura -> fist of flame "Your hand starts glowing!" 
