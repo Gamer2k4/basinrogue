@@ -11,14 +11,14 @@
   * *Antoine* is in Wellington, NZ (GMT + 13)
   * *Konijn* is in New York (GMT - 5)
   * *Christophe* ( Cavalaria Christophe ) is in France (GMT + 1)
-  * *Gamer2k4* is in Wisconsin (GMT - 6)
+  * *Gamer_2k4* is in Wisconsin (GMT - 6)
 
 = Communication =
-Wiki is like the way to go
+Wiki seems like the way to go;
 We can also use IRC, Emain or IM but remember to copy into the Wiki any important information.
 
 = Roles =
-  * Gamer2k4 will initially set up a story line, then contribute code as needed
+  * Gamer_2k4 will initially set up a story line, then contribute code as needed
   * Konijn will be a C++ meddler
   * Antoine happy to do either/both of above
   * Christophe : primary coder
@@ -32,19 +32,28 @@ We can also use IRC, Emain or IM but remember to copy into the Wiki any importan
 = Game design questions =
 
   * (Antoine:) Are we primarily thinking ASCII or tiles? I mean, I suppose we should support both, but which should be primary? I think the big impact is on mapsize - if tiles are primary, then the map should arguably be somewhat small; if ASCII is primary, the map can be bigger but tile users would then have to use a scrolling main window...
-    (gamer2k4:) I'd say SDL tiles.  I think Radomir volunteered to do graphics at some point, and until then, we can use bitmaps of ASCII characters.
+    (Gamer_2k4:) I'd say SDL tiles.  I think Radomir volunteered to do graphics at some point, and until then, we can use bitmaps of ASCII characters.
 
   * Multiplayer support. I think we all agree that there should be a chat feature, a common highscore list and some form of interaction through shops. And so on. But
       # should players be able to interact in town (presumably in real time)?
       # should players be able to interact in the dungeon (presumably in some kind of turn based system?) 
   (Antoine:) I think a 'yes' on 1 (with some safeguards to prevent PK, and perhaps restrictions on giving each other items/gold) and a 'no' on 2 (too hard basket).
+    (Gamer_2k4:) Restrictions in trade probably aren't necessary.  Someone with a valuable enough item won't give it away for free, and someone charging too much won't be able to sell the item.  I think it will work out.
   
-  (gamer2k4:) I don't know that real time is necessary, as far as movement goes.  Trading can take place in real time though (offer, accept, real time trading window, accept/decline).  #2 is out, IMO.  I think this game should have shared artifacts and uniques, like MAngband, but be single player for exploration and combat.  Perhaps chatting would be the only interaction among players.  With no trading, artifacts would become much more special.  OTOH, a no-lifer might take it upon himself to collect as many artifacts as possible.  A possible solution for this is to allow a character to have only, say, three artifacts at all times (more in a house).  This also helps recirculate weaker artifacts for new players.
+  (Gamer_2k4:) I don't know that real time is necessary, as far as movement goes.  Trading can take place in real time though (offer, accept, real time trading window, accept/decline).  #2 is out, IMO.  I think this game should have shared artifacts and uniques, like MAngband, but be single player for exploration and combat.  Perhaps chatting would be the only interaction among players.  With no trading, artifacts would become much more special.  OTOH, a no-lifer might take it upon himself to collect as many artifacts as possible.  A possible solution for this is to allow a character to have only, say, three artifacts at all times (more in a house).  This also helps recirculate weaker artifacts for new players.
 
   (Christophe:) Let's start making some new Wiki pages for the main points. It'll get messy if we keep everything here. So, the main points of interest are : MultiplayerTown and SharedArtifacts.
 
-  * (gamer2k4:) Interface is key.  That's been the topic of discussion recently in r.g.r.d and it's a good thing to think about.  How can we make our game as user-friendly as possible?
+  * Interface is key.  That's been the topic of discussion recently in r.g.r.d and it's a good thing to think about.  How can we make our game as user-friendly as possible?
 
+  * It would be cool if items could be enhanced with monster souls.  For example, infusing a helmet with a dragon soul might grant firebreathing, infusing body armor with a dragon soul might grant fire resistance, and infusing a cloak with a dragon soul might grant flying.
+
+  * Monsters with enough experience should change (young dragon to mature dragon) and some monsters should be able to merge with others (water element + shock elemental -> storm elemental)
+
+ * On that note, spells should be combinable.  The player should only be able to learn a small amount of spells, and combining these would unlock more powerful spells.  Also, spells should have a level, and there should be a different failure message for a non-existent spell and one that's too advanced.
+    * Fusion: levitation + fire bolt -> nothing (non-existent)  "Nothing happens."
+    * Fusion: air aura + water aura -> water breathing "The spell fizzles."
+    * Fusion: strike + flame aura -> fist of flame "Your hand starts glowing!"
 
 
 
