@@ -48,13 +48,12 @@ We can also use IRC, Emain or IM but remember to copy into the Wiki any importan
 
   * It would be cool if items could be enhanced with monster souls.  For example, infusing a helmet with a dragon soul might grant firebreathing, infusing body armor with a dragon soul might grant fire resistance, and infusing a cloak with a dragon soul might grant flying.
 
-  * Monsters with enough experience should change (young dragon to mature dragon) and some monsters should be able to merge with others (water element + shock elemental -> storm elemental)
+  * Monsters with enough experience should change (young dragon to mature dragon) and some monsters should be able to merge with others (water elemental + shock elemental -> storm elemental)
 
  * On that note, spells should be combinable.  The player should only be able to learn a small amount of spells, and combining these would unlock more powerful spells.  Also, spells should have a level, and there should be a different failure message for a non-existent spell and one that's too advanced.
     * Fusion: levitation + fire bolt -> nothing (non-existent)  "Nothing happens."
     * Fusion: air aura + water aura -> water breathing "The spell fizzles."
     * Fusion: strike + flame aura -> fist of flame "Your hand starts glowing!"
-
 
 
 
