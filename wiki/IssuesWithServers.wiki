@@ -1,0 +1,9 @@
+#summary We don't have a server, and some of us wouldn't know what to do if we did
+
+We have no test server! 
+
+(Antoine:) I haven't done much sysadmin. None in fact. So I'm not really familiar with the issues around setting up a program to run on a remote server and giving it appropriate permissions and allowing client access to it and all this sort of thing. Do any of you guys have more knowledge about this? If not, should we grab someone off RGRD to help us get started? 
+
+(On this, konijn earlier wrote: "if we do a (PHP or Python ) / javascript roguelike that almost anybody can host that ( Easier to host PHP than Python obviously ). Ilya Beli started one ( with Python ), that is online here : http://80.64.90.140:8484/ Source code here : cvs -d :pserver:anonymous@l64-90-140.cn.ru:/home/cvs checkout heroquest This one is actually multiplayer in AJAX mode. Browser can do transparancy easy, play music/sounds, do caching and has a scripting engine.") 
+
+(Christophe: "I doubt such patform will scale. It is possible but somewhat hard to write a roguelike in Python without performance issues. Now consider that the server might be used by several players at the same time. Also, the requirements are quite different than most regular PHP sites. There is a difference between a simple PHP site and a long standing process with it's own socket.") 
