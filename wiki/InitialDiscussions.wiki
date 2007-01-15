@@ -32,10 +32,19 @@
 = Game design questions =
 
   * (Antoine:) Are we primarily thinking ASCII or tiles? I mean, I suppose we should support both, but which should be primary? I think the big impact is on mapsize - if tiles are primary, then the map should arguably be somewhat small; if ASCII is primary, the map can be bigger but tile users would then have to use a scrolling main window...
+    (gamer2k4:) I'd say SDL tiles.  I think Radomir volunteered to do graphics at some point, and until then, we can use bitmaps of ASCII characters.
 
   * Multiplayer support. I think we all agree that there should be a chat feature, a common highscore list and some form of interaction through shops. And so on. But
 1. should players be able to interact in town (presumably in real time)?
+
 2. should players be able to interact in the dungeon (presumably in some kind of turn based system?) 
   (Antoine:) I think a 'yes' on 1 (with some safeguards to prevent PK, and perhaps restrictions on giving each other items/gold) and a 'no' on 2 (too hard basket).
+  
+  (gamer2k4:) I don't know that real time is necessary, as far as movement goes.  Trading can take place in real time though (offer, accept, real time trading window, accept/decline).  #2 is out, IMO.  I think this game should have shared artifacts and uniques, like MAngband, but be single player for exploration and combat.  Perhaps chatting would be the only interaction among players.  With no trading, artifacts would become much more special.  OTOH, a no-lifer might take it upon himself to collect as many artifacts as possible.  A possible solution for this is to allow a character to have only, say, three artifacts at all times (more in a house).  This also helps recirculate weaker artifacts for new players.
 
   * (gamer2k4:) Interface is key.  That's been the topic of discussion recently in r.g.r.d and it's a good thing to think about.  How can we make our game as user-friendly as possible?
+
+
+
+
+
