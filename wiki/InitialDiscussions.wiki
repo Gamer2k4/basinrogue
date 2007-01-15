@@ -1,4 +1,4 @@
-#Initial discussions.
+#summary Initial discussions.
 
 = Discussions of technology, content, development approach and communication =
 
