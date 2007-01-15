@@ -8,10 +8,10 @@
   * SVN for accessing our code repository
 
 = TimeZones =
-  * *Antoine* is in Wellington, NZ
-  * *Konijn* is in New York
-  * *Cavalaria Christophe* is in France
-  * *Gamer2k4* is in Wisconsin, USA
+  * *Antoine* is in Wellington, NZ (GMT + 13)
+  * *Konijn* is in New York (GMT - 5)
+  * *Cavalaria Christophe* is in France (GMT + 1)
+  * *Gamer2k4* is in Wisconsin (GMT - 6)
 
 = Communication =
   * Wiki seems like the way to go
@@ -43,7 +43,6 @@
   (gamer2k4:) I don't know that real time is necessary, as far as movement goes.  Trading can take place in real time though (offer, accept, real time trading window, accept/decline).  #2 is out, IMO.  I think this game should have shared artifacts and uniques, like MAngband, but be single player for exploration and combat.  Perhaps chatting would be the only interaction among players.  With no trading, artifacts would become much more special.  OTOH, a no-lifer might take it upon himself to collect as many artifacts as possible.  A possible solution for this is to allow a character to have only, say, three artifacts at all times (more in a house).  This also helps recirculate weaker artifacts for new players.
 
   * (gamer2k4:) Interface is key.  That's been the topic of discussion recently in r.g.r.d and it's a good thing to think about.  How can we make our game as user-friendly as possible?
-
 
 
 
