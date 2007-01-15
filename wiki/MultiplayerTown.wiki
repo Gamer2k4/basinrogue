@@ -3,13 +3,14 @@
 Some of the issues that we currently have:
   * Should the town be real-time or turn-based?
   * How should trading occur?  Possible options:
+    * Absent - trading cannot occur between players
     * Abstracted - anything sold to a shop is available to everyone else
     * Indirect - one player drops, another player picks up
     * Direct - a trade window opens, trade occurs simultaneously
+  * If trading is possible, skills (at least item creation skills) are ideal
   * Are houses necessary? If so, what limitations are on them (cost, space, etc.)?
   * Multiplayer, multiuser, or simply online?
     * Multiplayer - real-time gameplay, shared levels, artifacts, uniques, stores
     * Multiuser - turn-based gameplay, shared artifacts, uniques, possibly shared town
     * Online - like a single player game, with chatting and shared high scores
-
 
