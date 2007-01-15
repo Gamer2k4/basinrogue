@@ -2,8 +2,8 @@
 
 Do we want permadeath? MUDs don't have it and Mangband doesn't have it. But I think we should have it. What do you guys think?
 
-  2k4: Permadeath is good, IMO.  My vision of this was always something like the online version of Nethack, only unique objects are shared.
+  G2k4: Permadeath is good, IMO.  My vision of this was always something like the online version of Nethack, only unique objects are shared.
 
 Do we want to have a victory condition (e.g. kill Morgoth) after which your character gets retired? Or do we want to have a more MUD-like scenario where your characters just hang round forever getting tougher and doing minor quests along the way?
 
-  2k4: How about we have an initial boss monster, then every player who kills it becomes the new boss monster?  The contents of his house would be regenerated throughout the dungeon, his high score would be saved, and the new monster would have all of his stats and equipment.
+  G2k4: How about we have an initial boss monster, then every player who kills it becomes the new boss monster?  The contents of his house would be regenerated throughout the dungeon, his high score would be saved, and the new monster would have all of his stats and equipment.
