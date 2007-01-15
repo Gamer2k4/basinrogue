@@ -10,24 +10,24 @@
 = TimeZones =
   * *Antoine* is in Wellington, NZ (GMT + 13)
   * *Konijn* is in New York (GMT - 5)
-  * *Cavalaria Christophe* is in France (GMT + 1)
+  * *Christophe* ( Cavalaria Christophe ) is in France (GMT + 1)
   * *Gamer2k4* is in Wisconsin (GMT - 6)
 
 = Communication =
-  * Wiki seems like the way to go
-  * IRC might be used sometimes, but we have no bot on rgrd
-  * Email an option for 1-1 communication if it doesn't need to be saved for posterity
+Wiki is like the way to go
+We can also use IRC, Emain or IM but remember to copy into the Wiki any important information.
 
 = Roles =
   * Gamer2k4 will initially set up a story line, then contribute code as needed
   * Konijn will be a C++ meddler
   * Antoine happy to do either/both of above
+  * Christophe : primary coder
 
 = Issues =
   * We have no test server!
   * (Antoine:) I haven't done much sysadmin. None in fact. So I'm not really familiar with the issues around setting up a program to run on a remote server and giving it appropriate permissions and allowing client access to it and all this sort of thing. Do any of you guys have more knowledge about this? If not, should we grab someone off RGRD to help us get started?
      (On this, konijn earlier wrote: "if we do a (PHP or Python ) / javascript roguelike that almost anybody can host that ( Easier to host PHP than Python obviously ). Ilya Beli started one ( with Python ), that is online here : http://80.64.90.140:8484/ Source code here : cvs -d :pserver:anonymous@l64-90-140.cn.ru:/home/cvs checkout heroquest  This one is actually multiplayer in AJAX mode. Browser can do transparancy easy, play music/sounds, do caching and has a scripting engine.")
-
+     (Christophe: "I doubt such patform will scale. It is possible but somewhat hard to write a roguelike in Python without performance issues. Now consider that the server might be used by several players at the same time. Also, the requirements are quite different than most regular PHP sites. There is a difference between a simple PHP site and a long standing process with it's own socket.")
 
 = Game design questions =
 
@@ -41,6 +41,8 @@
   (Antoine:) I think a 'yes' on 1 (with some safeguards to prevent PK, and perhaps restrictions on giving each other items/gold) and a 'no' on 2 (too hard basket).
   
   (gamer2k4:) I don't know that real time is necessary, as far as movement goes.  Trading can take place in real time though (offer, accept, real time trading window, accept/decline).  #2 is out, IMO.  I think this game should have shared artifacts and uniques, like MAngband, but be single player for exploration and combat.  Perhaps chatting would be the only interaction among players.  With no trading, artifacts would become much more special.  OTOH, a no-lifer might take it upon himself to collect as many artifacts as possible.  A possible solution for this is to allow a character to have only, say, three artifacts at all times (more in a house).  This also helps recirculate weaker artifacts for new players.
+
+  (Christophe:) Let's start making some new Wiki pages for the main points. It'll get messy if we keep everything here. So, the main points of interest are : MultiplayerTown and SharedArtifacts.
 
   * (gamer2k4:) Interface is key.  That's been the topic of discussion recently in r.g.r.d and it's a good thing to think about.  How can we make our game as user-friendly as possible?
 
