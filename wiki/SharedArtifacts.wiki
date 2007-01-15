@@ -10,3 +10,5 @@ Cons:
   * Artifacts do not scale well in a multiplayer game: the more players, the more different artifacts are needed to maintain the same ratio of artifact per player.
 
 How keep artifacts in circulation? Limit artefacts per character?
+  * Limit the amount of real time someone can keep an artefact.
+  * Diablo 2 style: do not prevent the creation of an artefact if the current owner isn't online at the time. Artefacts aren't really unique like that but it should prevent someone from getting easily duplicates.
