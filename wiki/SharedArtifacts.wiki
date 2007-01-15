@@ -8,7 +8,7 @@ Cons:
   * Experienced players ( and less experienced ) could hoard artifacts
   * Many artifacts required to maintain 'freshness'
   * Artifacts do not scale well in a multiplayer game: the more players, the more different artifacts are needed to maintain the same ratio of artifact per player.
-    G2k4: Remember how many people played MAngband?  I don't think this will be an issue.
+    * G2k4: Remember how many people played MAngband?  I don't think this will be an issue.
 
 How keep artifacts in circulation? Limit artifacts per character?
   * Limit the amount of real time someone can keep an artifact.
