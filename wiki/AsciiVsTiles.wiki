@@ -1,0 +1,5 @@
+#summary The display question; do we want primarily ASCII or primarily tiles?
+
+(Antoine:) Are we primarily thinking ASCII or tiles? I mean, I suppose we should support both, but which should be primary? I think the big impact is on mapsize - if tiles are primary, then the map should arguably be somewhat small; if ASCII is primary, the map can be bigger but tile users would then have to use a scrolling main window... 
+
+(Gamer_2k4:) I'd say SDL tiles. I think Radomir volunteered to do graphics at some point, and until then, we can use bitmaps of ASCII characters. 
