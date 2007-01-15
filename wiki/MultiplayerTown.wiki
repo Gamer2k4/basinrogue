@@ -2,6 +2,8 @@
 
 Some of the issues that we currently have:
   * Should the town be real-time or turn-based?
+    * If the town is shared between players, probably real time.
+    * No PK in town. This saves a whole lot of difficulties in game design. If players really want to fight against each other, we can always create an arena for that later. We could even make it turn based since 1vs1 fights wouldn't involve that much waiting for the other.
   * How should trading occur?  Possible options:
     * Absent - trading cannot occur between players
     * Abstracted - anything sold to a shop is available to everyone else
@@ -13,4 +15,3 @@ Some of the issues that we currently have:
     * Multiplayer - real-time gameplay, shared levels, artifacts, uniques, stores
     * Multiuser - turn-based gameplay, shared artifacts, uniques, possibly shared town
     * Online - like a single player game, with chatting and shared high scores
-
