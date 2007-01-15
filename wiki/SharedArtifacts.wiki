@@ -8,3 +8,5 @@ Cons:
   * Experienced players ( and less experienced ) could hoard artifacts
   * Many artifacts required to maintain 'freshness'
   * Artifacts do not scale well in a multiplayer game: the more players, the more different artifacts are needed to maintain the same ratio of artifact per player.
+
+How keep artifacts in circulation? Limit artefacts per character?
