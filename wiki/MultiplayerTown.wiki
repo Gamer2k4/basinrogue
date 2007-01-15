@@ -9,8 +9,9 @@ Some of the issues that we currently have:
     * Abstracted - anything sold to a shop is available to everyone else
     * Indirect - one player drops, another player picks up
     * Direct - a trade window opens, trade occurs simultaneously
+  * Danger of the last two options - allows players to give l33t items from their strongest character to their weakest characters to power them up very quickly! To be avoided if the game is to be at all competitive... (A.)
   * If trading is possible, skills (at least item creation skills) are ideal
-  * Are houses necessary? If so, what limitations are on them (cost, space, etc.)?
+  * Are houses necessary? If so, what limitations are on them (cost, space, etc.)? (A. I like the idea of players being able to create/decorate their houses or places of business...)
   * Multiplayer, multiuser, or simply online?
     * Multiplayer - real-time gameplay, shared levels, artifacts, uniques, stores
     * Multiuser - turn-based gameplay, shared artifacts, uniques, possibly shared town
