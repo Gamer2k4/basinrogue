@@ -1,0 +1,6 @@
+#summary Two big issues.
+
+Do we want permadeath? MUDs don't have it and Mangband doesn't have it. But I think we should have it. What do you guys think?
+
+Do we want to have a victory condition (e.g. kill Morgoth) after which your character gets retired? Or do we want to have a more MUD-like scenario where your characters just hang round forever getting tougher and doing minor quests along the way?
+
