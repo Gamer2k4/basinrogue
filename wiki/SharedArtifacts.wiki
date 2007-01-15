@@ -1,0 +1,8 @@
+#summary Are artifacts truly unique?
+
+Pros:
+  * Artifacts have increased value and uniqueness
+
+Cons:
+  * Experienced players could hoard artifacts
+  * Many artifacts required to maintain 'freshness'
