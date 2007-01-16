@@ -10,9 +10,13 @@ We have no test server!
 (Christophe: "I doubt such patform will scale. It is possible but somewhat hard to write a roguelike in Python without performance issues. Now consider that the server might be used by several players at the same time. Also, the requirements are quite different than most regular PHP sites. There is a difference between a simple PHP site and a long standing process with it's own socket.") 
 
 A: What kind of server machine would we want anyway? Is the OS important? - I suppose it would have implications in terms of the dialect of C++ we use?
+(C.) It should be possible to get a C++ written server working on anything that pretends to be an Internet Server.
 
 What kind of technology should we use to connect the client to the server?
+(C.) Simple BSD sockets should work. If needed, we could add a standard protocol above them like XML-RPC.
 
 What kind of authentication would we use?
+(C.) Standard procedure as follows : client sends it's username to the server. Server knows the expected password. Server generates a random string of sufficient length ( 20 should be more than enouth ) to the client. The client concatenates his password to that string and computes the MD5 sum of the resulting string ( replace MD5 with SHA as appropriate ) and sends it back to the server. Server checks that the MD5 is the same as the one it computed on it's own.
 
 How would a user create an account?
+(C.) Either on the client or a forced passage on a dynamic web site. I would go for the former I think. That way you don't have to install and administer a HTTP server at the same time as the game server to get the game working. It doesn't mean such interaction would be impossible, just not required.
