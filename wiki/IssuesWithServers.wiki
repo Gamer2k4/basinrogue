@@ -3,6 +3,7 @@
 We have no test server! 
   * G2k4: How about this? http://www.soldatforums.com/index.php?topic=9986.0  I know a guy who knows a guy...
   * C.: Price?
+  * G2k4: I'd have to email him...I just put it up as an option.
 
 (Antoine:) I haven't done much sysadmin. None in fact. So I'm not really familiar with the issues around setting up a program to run on a remote server and giving it appropriate permissions and allowing client access to it and all this sort of thing. Do any of you guys have more knowledge about this? If not, should we grab someone off RGRD to help us get started? 
 
@@ -25,4 +26,3 @@ What kind of authentication would we use?
 
 How would a user create an account?
   (C.) Either on the client or a forced passage on a dynamic web site. I would go for the former I think. That way you don't have to install and administer a HTTP server at the same time as the game server to get the game working. It doesn't mean such interaction would be impossible, just not required.
-
