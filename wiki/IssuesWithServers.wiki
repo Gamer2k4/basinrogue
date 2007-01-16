@@ -3,7 +3,7 @@
 We have no test server! 
   * G2k4: How about this? http://www.soldatforums.com/index.php?topic=9986.0  I know a guy who knows a guy...
   * C.: Price?
-  * G2k4: I'd have to email him...I just put it up as an option.
+  * G2k4: I sent the host an email.  I'll let you know the price ASAP, then you can discuss technical details with him.
 
 (Antoine:) I haven't done much sysadmin. None in fact. So I'm not really familiar with the issues around setting up a program to run on a remote server and giving it appropriate permissions and allowing client access to it and all this sort of thing. Do any of you guys have more knowledge about this? If not, should we grab someone off RGRD to help us get started? 
 
