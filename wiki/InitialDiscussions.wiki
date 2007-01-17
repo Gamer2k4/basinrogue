@@ -15,12 +15,18 @@
 
 = Communication =
 Wiki seems like the way to go;
-We can also use IRC, Emain or IM but remember to copy into the Wiki any important information.
+We can also use IRC, Email or IM but remember to copy into the Wiki any important information.
 
 = Roles =
   * Gamer_2k4 will initially set up a story line, then contribute code as needed
   * Konijn will be a C++ meddler
   * Antoine happy to do either/both of above
   * Christophe : primary coder
+  
+  Idea by G2k4:
+  * Lead Programmer: Christophe
+  * Administrator: Konijn
+  * Design: Gamer_2k4
+  * <insert title here>: Antoine
 
 (Antoine:) Most content moved out of here.
