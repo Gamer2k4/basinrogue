@@ -1,0 +1,14 @@
+#Ever roguelike has elements, except maybe Rogue.
+
+= On Elements =
+
+Elements can be either used by @ , monsters , traps or weapons or wand/staff/rod. Did I forget anything ?
+
+There should be unresistable elements, elements only monsters can resists, 
+
+
+= List of elements, add/remove as you wish  =
+
+ * Fire, Cold
+ * Light, Dark
+ * Poison
