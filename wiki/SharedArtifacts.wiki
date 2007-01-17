@@ -11,12 +11,12 @@ Cons:
     * G2k4: Remember how many people played MAngband?  I don't think this will be an issue.
 
 Alternative:
-  * As in some bands have a set of known/real artefacts that are truly unique. Then have an infinite set of random artefacts that are slightly sub-par to the known/real artefacts.
+  * As in some bands have a set of known/real artifacts that are truly unique. Then have an infinite set of random artifacts that are slightly sub-par to the known/real artifacts.
 
 How keep artifacts in circulation? Limit artifacts per character?
   * Limit the amount of real time someone can keep an artifact.
   * Diablo 2 style: do not prevent the creation of an artifact if the current owner isn't online at the time. Artifacts aren't really unique like that but it should prevent someone from getting easily duplicates.
-  * Maybe the gods dont like players to have too much power, so they force them to have not more than 2 artefacts ? Once a player has 3 artefacts, he gets forced to sacrifice one.
-
+  * Maybe the gods don't like players to have too much power, so they force them to have not more than 2 artifacts ? Once a player has 3 artifacts, he gets forced to sacrifice one.
+  * G2k4: The magical energies in the artifacts cancel out if there are too many in close proximity?  The magical energies amplify, causing the player to lose hitpoints?
 
 
