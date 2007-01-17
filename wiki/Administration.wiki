@@ -17,3 +17,5 @@ Occasional shutdowns to install updates
 In-game testing using some kind of wizard mode
 
 ...?
+
+(Konijn) Well, I am just a humble developer. I'll do RFE's, bugreports, shutdowns/reboots and ingame testing. I _love_ wizard mode.
