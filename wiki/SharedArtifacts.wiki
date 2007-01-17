@@ -18,5 +18,5 @@ How keep artifacts in circulation? Limit artifacts per character?
   * Diablo 2 style: do not prevent the creation of an artifact if the current owner isn't online at the time. Artifacts aren't really unique like that but it should prevent someone from getting easily duplicates.
   * Maybe the gods don't like players to have too much power, so they force them to have not more than 2 artifacts ? Once a player has 3 artifacts, he gets forced to sacrifice one.
   * G2k4: The magical energies in the artifacts cancel out if there are too many in close proximity?  The magical energies amplify, causing the player to lose hitpoints?
-
+    * Konijn: I like that very much, so players can stay atheist and also they can choose how much risk they are willing to take. Great idea.
 
