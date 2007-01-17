@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================================= -->
+<!-- Java embeddable telnet daemon Buildfile                                 -->
+<!-- ======================================================================= -->
+
+<project name="telnetd" default="runit" basedir=".">
+
+   <!-- This property will be overwritten by the import, so
+        we need to make sure it does not happen! -->
+   <property name="version" value="2.0"/>
+
+   <target name="init">
+    <tstamp>
+      <format property="src.timestamp" pattern="dd/MM/yyyy"/>
+    </tstamp>
+
+    <!-- Allow any user specific values to override the defaults -->
+    <property file="build.properties"/>
+    <property file="${user.home}/.build.properties"/>
+
+    <property name="Name" value="telnetd"/>
+	<property name="name" value="telnetd"/>
+
+    
+    <property name="copyright" value="2000-2005 Dieter Wimberger."/>
+    <loadfile property="license" srcFile="${basedir}${file.separator}LICENSE.txt"/>
+
+    <!-- Filters -->
+    <filter token="date" value="${src.timestamp}"/>
+    <filter token="version" value="${version}"/>
+    <filter token="copyright" value="${copyright}"/>
+    <filter token="license" value="${license}"/>
+
+    <property name="src.dir" value="${basedir}${file.separator}src"/>
+    <property name="src.java" value="${src.dir}${file.separator}java"/>
+    <property name="src.resources" value="${src.dir}${file.separator}net${file.separator}wimpi${file.separator}telnetd${file.separator}resources"/>
+    <property name="src.excludes" value="**/dtw/**"/>
+    <property name="lib.dir" value="${basedir}${file.separator}lib${file.separator}"/>
+
+    <property name="build.dir" value="${basedir}${file.separator}build"/>
+    <property name="build.src" value="${build.dir}${file.separator}src"/>
+    <property name="build.classes" value="${build.dir}${file.separator}classes"/>
+    <property name="build.jar" value="${build.dir}${file.separator}${name}.jar"/>
+    <property name="build.classpath"
+        value="${build.classes}${path.separator}
+               ${lib.dir}${file.separator}commons-logging.jar${path.separator}
+               ${lib.dir}${file.separator}log4j.jar${path.separator}"
+
+    />
+
+    <property name="build.docs" value="${build.dir}${file.separator}site"/>
+    <property name="build.javadocs" value="${build.docs}${file.separator}api"/>
+    <property name="build.dist" value="${build.dir}${file.separator}${name}-${version}"/>
+    <property name="build.resources"
+      value="${build.classes}/net/wimpi/telnetd/resources"/>
+
+    <property name="dist.basedir" value="${build.dir}"/>
+
+    <property name="dist.includes" value="${name}-${version}${file.separator}**"/>
+    <property name="dist.excludes"
+      value="**/prj/**,
+      **/dist/**,
+      **/test/**,
+      **/old/**,
+      **/build/**,
+      **/.DS_Store"
+      />
+
+    <property name="packages" value="net.wimpi.telnetd.*"/>
+    <property name="library.includes" value="net${file.separator}**"/>
+    <property name="manifest" value="${basedir}${file.separator}MANIFEST"/>
+
+  </target>
+ 
+  <!-- =================================================================== -->
+  <!-- Run test daemon                                                     -->
+  <!-- =================================================================== -->
+  <target name="runit" depends="init" description="Runs BasinRogue.">
+  	<java
+  		fork="yes" 
+  		classname="net.wimpi.telnetd.TelnetD"
+  		taskname="testtnd"
+  		failonerror="true">
+      <jvmarg value="-Dlog4j.configuration=file://${basedir}${file.separator}log4j.properties"/>
+    	<arg value="file://${basedir}${file.separator}telnetd.properties"/>
+  	    <classpath>
+          <pathelement path="bin"/>
+          <pathelement path="${build.jar}"/>
+          <pathelement path="${lib.dir}/commons-logging.jar"/>
+          <pathelement path="${lib.dir}/log4j.jar"/>
+          <pathelement path="${lib.dir}/telnetd.jar"/>	
+  	    </classpath>
+  	</java>	
+  </target>
+ 
+
+</project>
+
