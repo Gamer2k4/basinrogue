@@ -23,10 +23,9 @@ We can also use IRC, Email or IM but remember to copy into the Wiki any importan
   * Antoine happy to do either/both of above
   * Christophe : primary coder
   
-  Idea by G2k4:
+  
+===Proposal by Gamer_2k4:===
+  * Team Leader: Antoine
   * Lead Programmer: Christophe
   * Administrator: Konijn
   * Design: Gamer_2k4
-  * <insert title here>: Antoine
-
-(Antoine:) Most content moved out of here.
