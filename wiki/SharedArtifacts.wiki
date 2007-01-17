@@ -10,6 +10,13 @@ Cons:
   * Artifacts do not scale well in a multiplayer game: the more players, the more different artifacts are needed to maintain the same ratio of artifact per player.
     * G2k4: Remember how many people played MAngband?  I don't think this will be an issue.
 
+Alternative:
+  * As in some bands have a set of known/real artefacts that are truly unique. Then have an infinite set of random artefacts that are slightly sub-par to the known/real artefacts.
+
 How keep artifacts in circulation? Limit artifacts per character?
   * Limit the amount of real time someone can keep an artifact.
   * Diablo 2 style: do not prevent the creation of an artifact if the current owner isn't online at the time. Artifacts aren't really unique like that but it should prevent someone from getting easily duplicates.
+  * Maybe the gods dont like players to have too much power, so they force them to have not more than 2 artefacts ? Once a player has 3 artefacts, he gets forced to sacrifice one.
+
+
+
