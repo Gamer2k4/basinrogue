@@ -3,7 +3,7 @@
 = On Elements =
 
 Elements can be either used by @ , monsters , traps or weapons or wand/staff/rod. Did I forget anything ?
-  * G2k4: In my RPG, I had the following system to deal with spells and item creation:
+  * G2k4: In my RPG, I planned the following system to deal with spells and item creation:
     * Wands - Attack, Morph spells.  Made of metal and wood.
     * Staffs - Protection, Healing spells.  Made two types of wood.
     * Rods - Movement, Divination spells.  Made of two types of metal.
