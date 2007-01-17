@@ -1,4 +1,4 @@
-#Page on Konijn
+#summary Page on Konijn
 
 = Who is konijn ? =
 
