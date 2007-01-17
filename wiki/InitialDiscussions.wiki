@@ -24,8 +24,8 @@ We can also use IRC, Email or IM but remember to copy into the Wiki any importan
   * Christophe : primary coder
   
   
-===Proposal by Gamer_2k4:===
-  * Team Leader: Antoine
-  * Lead Programmer: Christophe
-  * Administrator: Konijn
-  * Design: Gamer_2k4
+  * Proposal by Gamer_2k4:
+    * Team Leader: Antoine
+    * Lead Programmer: Christophe
+    * Administrator: Konijn
+    * Design: Gamer_2k4
