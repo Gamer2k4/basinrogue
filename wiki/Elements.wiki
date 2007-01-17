@@ -1,4 +1,4 @@
-#Ever roguelike has elements, except maybe Rogue.
+#summary Every roguelike has elements, except maybe Rogue.
 
 = On Elements =
 
