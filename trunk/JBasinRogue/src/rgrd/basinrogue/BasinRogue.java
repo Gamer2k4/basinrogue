@@ -4,166 +4,207 @@
  */
 package rgrd.basinrogue;
 
-//import net.wimpi.telnetd.io.BasicTerminalIO;
-//import net.wimpi.telnetd.io.TerminalIO;
-//import net.wimpi.telnetd.io.terminal.ColorHelper;
-//import net.wimpi.telnetd.io.terminal.TerminalManager;
-//import net.wimpi.telnetd.io.toolkit.*;
-//import net.wimpi.telnetd.net.Connection;
-//import net.wimpi.telnetd.net.ConnectionData;
-//import net.wimpi.telnetd.net.ConnectionEvent;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
+/* So you are thinking of working on BasinRogue ?
+ * StyleGuide : 
+ *        no tabs, use spaces, 4 of them
+ *        functions and instances are camel case starting with a lowercase
+ *        Objects are camelcase starting with an uppercase
+ *        Do not comment the obvious
+ *
+ *    How to run it ?
+ * 		Use the ant file, default task is runit, so you can just call ant in the root dir or use Eclipse
+ * 
+ *    Which IDE ?
+ * 		Use Eclipse. If you find xxx better, please do not ask any questions. The answer will be : use Eclipse
+ * 
+ * You want access to SVN
+ *    	Myself, Antoine, Gamer2k4 and Cavalaria Christophe cant grant you access
+ *        I would prefer new people to give a patch so we can see what kind of coder we are giving access
+ * 
+ *    Would feature x be great to code ?
+ *         Please propose it on the wiki first : 
+ */
 
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import rgrd.basinrogue.connections.ConnectionInfo;
 
-import net.wimpi.telnetd.io.BasicTerminalIO;
+//import net.wimpi.telnetd.io.*;
 /*
-import net.wimpi.telnetd.io.TerminalIO;
-import net.wimpi.telnetd.io.terminal.ColorHelper;
-import net.wimpi.telnetd.io.terminal.TerminalManager;
-import net.wimpi.telnetd.io.toolkit.BufferOverflowException;
-import net.wimpi.telnetd.io.toolkit.Checkbox;
-import net.wimpi.telnetd.io.toolkit.Editarea;
-import net.wimpi.telnetd.io.toolkit.Editfield;
-import net.wimpi.telnetd.io.toolkit.InputFilter;
-import net.wimpi.telnetd.io.toolkit.Label;
-import net.wimpi.telnetd.io.toolkit.Pager;
-import net.wimpi.telnetd.io.toolkit.Point;
-import net.wimpi.telnetd.io.toolkit.Selection;
-import net.wimpi.telnetd.io.toolkit.Statusbar;
-import net.wimpi.telnetd.io.toolkit.Titlebar;
-*/
-//import net.wimpi.telnetd.io.toolkit.Editfield;
-import net.wimpi.telnetd.net.Connection;
 
+ import net.wimpi.telnetd.io.terminal.TerminalManager;
+ import net.wimpi.telnetd.io.toolkit.BufferOverflowException;
+ import net.wimpi.telnetd.io.toolkit.Point;
+ import net.wimpi.telnetd.io.toolkit.Selection;
+ import net.wimpi.telnetd.io.toolkit.Statusbar;
+ import net.wimpi.telnetd.io.toolkit.Titlebar;
+ */
+import net.wimpi.telnetd.net.Connection;
 import net.wimpi.telnetd.net.ConnectionEvent;
 import net.wimpi.telnetd.shell.*;
+import rgrd.basinrogue.connections.*;
+import rgrd.basinrogue.menus.*;
 
 /**
- * BasinRogue by @author tomdemuyt
+ * BasinRogue by
+ * 
+ * @author tomdemuyt
  */
-public class BasinRogue implements Shell { 
-  
-  private static Log log = LogFactory.getLog(BasinRogue.class);
-  private Connection con;
-  private BasicTerminalIO pipe;
-  
-  private static boolean initialized = false;
-  private static boolean initializing = false;;
+public class BasinRogue implements Shell {
 
+    public static final String app = "RogueBasin 0.0.1";
 
-  public static void main(String[] args) {
-    //DoME ;)
-  }
-  
-  private void dump( String s ) throws IOException  {
-    pipe.write( s );
-    pipe.flush();
-  }
-  
-  public void run(Connection con) {
-    try {
-      this.con = con;
-      pipe = con.getTerminalIO();
-      con.addConnectionListener(this);
+    private static Log log = LogFactory.getLog(BasinRogue.class);
 
-      //clear the screen and start from zero
-      pipe.eraseScreen();
-      pipe.homeCursor();
+    private Connection con;
 
-      //We just read any key
-      dump("Welcome to BasinRogue 0.0.1\r\n");
-      ConnectionInfo.dumpConnectionInfo(con , pipe );
-      
-      if(!initialized && !initializing){
-        //We set it to true first, so that if we initialize for a long time, it wont happen twice
-        initializing = true;
-        initialize();
-        initialized = true;
-        initializing = false;
-      }
-      //If the user logs in while someone else is still initializing the game, let him wait
-      while( initializing ){
-        dump("BasinRogue is still initializing");
-        pipe.read();
-      }
-      
-      boolean done = false;
-      while (!done) {
-        int i = pipe.read();
-        if (i == -1 || i == -2) {
-          log.debug("Input(Code):" + i);
-          done = true;
+    public RogueIO pipe;
+
+    private static boolean initialized = false;
+
+    private static boolean initializing = false;
+
+    public static void main(String[] args) {
+        //DoME ;)
+    }
+
+    public void run(Connection con) {
+        try {
+            //Store connection, create and store pipe
+            this.con = con;
+            pipe = new RogueIO(con.getTerminalIO());
+            con.addConnectionListener(this);
+
+            boolean done;
+
+            //clear the screen and start from zero
+            pipe.eraseScreen();
+            pipe.homeCursor();
+
+            pipe.dump(app + "\r\n");
+            //Dump all known info about the connection for later reporting use
+            ConnectionInfo.dumpConnectionInfo(con, pipe.oldPipe);
+
+            //Initialize if not yet initialized
+            if (!initialized && !initializing) {
+                //We set it to true first, so that if we initialize for a long time, it
+                // wont happen twice
+                initializing = true;
+                initialize();
+                initialized = true;
+                initializing = false;
+            }
+            //If the user logs in while someone else is still initializing the game,
+            // let him wait
+            while (initializing) {
+                pipe.dump(app + " is still initializing");
+                pipe.read();
+            }
+
+            done = false;
+
+            if (initialMenu() != 2) {
+
+                Connections.addConnection(pipe, this);
+
+                while (!done) {
+                    int i = pipe.read();
+                    if (i == -1 || i == -2) {
+                        log.debug("Input(Code):" + i);
+                        done = true;
+                    }
+
+                    if (i == 10) {
+                        done = true;
+                    }
+
+                    // The / is for console mode, only console command so far is who
+                    if (i == '/') {
+                        pipe.dump("/");
+                        String command = pipe.getString();
+
+                        if (command.equals("who")) {
+                            pipe.dump(Connections.getActiveUsers());
+                        }
+
+                        //Once we are more advanced, this has to appear on a certain area
+                        // of the screen.
+                        //Maybe go in a buffer or something
+                        if (command.startsWith("say")) {
+                            String user = command.split(" ")[1];
+                            RogueIO pipe = Connections.getActiveUser(user).pipe;
+                            pipe.dump(command.substring(user.length() + 7));
+                        }
+
+                    }
+
+                }
+            }
+            pipe.homeCursor();
+            pipe.eraseScreen();
+            pipe.write("@ will miss you. Bye!.\r\n\r\n");
+            pipe.flush();
+
+        } catch (Exception ex) {
+            log.error("run()", ex);
         }
-        if (i == 10) {
-          done = true;
-        } 
+    }//run
 
-      }
-      pipe.homeCursor();
-      pipe.eraseScreen();
-      pipe.write("@ will miss you. Bye!.\r\n\r\n");
-      pipe.flush();
+    private void initialize() {
+        //Load Town to run around in
+    }
 
-    } catch (Exception ex) {
-      log.error("run()", ex);
-    }
-  }//run
-  
-  private void initialize(){
-    //Load Town to run around in
-  }
-  
-    
-    
-    
-  /* ALL THAT IS BELOW IS BOILER PLATE CODE TO KEEP telnetd2 HAPPY */   
-  /* LOOKING AT IT IS A WASTE OF TIME */
-  /* HOWEVER, IF YOU ARE READING THIS ... */
-  
-  public static Shell createShell() {
-    return new BasinRogue();
-  }
-  
-  public void connectionLogoutRequest(ConnectionEvent ce) {
-    try {
-      pipe.write("@ will miss you. Bye!");
-      pipe.flush();
-    } catch (IOException e) {
-      log.error("Failed log out message", e);
-    }
-  }
-  
-  public void connectionIdle(ConnectionEvent ce) {
-    try {
-      pipe.write("@ explodes in boredom. Bye!");
-      pipe.flush();
-    } catch (IOException e) {
-      log.error("Failed idle message.", e);
-    }
-  }
+    private int initialMenu() throws Exception {
+        String options[] = { "Login", "Register", "Quit", };
 
-  public void connectionTimedOut(ConnectionEvent ce) {
-    try {
-      pipe.write("Connection timed out!");
-      pipe.flush();
-      con.close();
-    } catch (IOException e) {
-      log.error("Failed time out or disconnection", e);
+        return GenericMenu.getMenuOption(pipe, options, GenericMenu.FIRSTLETTER);
     }
-  }
-  
-  public void connectionSentBreak(ConnectionEvent ce) {
-    try {
-      pipe.write("@ doesnt want a break!");
-      pipe.flush();
-    } catch (IOException e) {
-      log.error("Failed giving a break", e);
+
+    /* ALL THAT IS BELOW IS BOILER PLATE CODE TO KEEP telnetd2 HAPPY */
+    /* LOOKING AT IT IS A WASTE OF TIME */
+    /* HOWEVER, IF YOU ARE READING THIS ... */
+
+    public static Shell createShell() {
+        return new BasinRogue();
     }
-  }
-  
+
+    public void connectionLogoutRequest(ConnectionEvent ce) {
+        try {
+            pipe.write("@ will miss you. Bye!");
+            pipe.flush();
+        } catch (IOException e) {
+            log.error("Failed log out message", e);
+        }
+    }
+
+    public void connectionIdle(ConnectionEvent ce) {
+        try {
+            pipe.write("@ explodes in boredom. Bye!");
+            pipe.flush();
+        } catch (IOException e) {
+            log.error("Failed idle message.", e);
+        }
+    }
+
+    public void connectionTimedOut(ConnectionEvent ce) {
+        try {
+            pipe.write("Connection timed out!");
+            pipe.flush();
+            con.close();
+        } catch (IOException e) {
+            log.error("Failed time out or disconnection", e);
+        }
+    }
+
+    public void connectionSentBreak(ConnectionEvent ce) {
+        try {
+            pipe.write("@ doesnt want a break!");
+            pipe.flush();
+        } catch (IOException e) {
+            log.error("Failed giving a break", e);
+        }
+    }
+
 }
