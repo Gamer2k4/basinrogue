@@ -10,3 +10,4 @@ However, follow up question :
 *scrollable maps : yes , no, later.*
 Towers of Doom is a nice experience without scrolling maps.
 
+(A.) My suggestion would be 'no' with ASCII - aim to fit the whole map on one screen - and 'yes but later' for tiles.
