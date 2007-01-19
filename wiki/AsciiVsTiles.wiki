@@ -11,3 +11,5 @@ However, follow up question :
 Towers of Doom is a nice experience without scrolling maps.
 
 (A.) My suggestion would be 'no' with ASCII - aim to fit the whole map on one screen - and 'yes but later' for tiles.
+
+(C.) Does ASCII mean a 80x25 screen? Because with simple 16x16 tiles, you can display 40x30 tiles in a simple 640x480 screen which is less horizontaly, but more verticaly than text mode. If we go for non scrolling text mode, we end up with a huge waste of vertical space on tile mode later + a lot of horizontal scrolling.
