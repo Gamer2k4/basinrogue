@@ -17,6 +17,9 @@
 #include "tile.h"
 #include "mobile.h"
 
+const int FLAG_BLOCKS_MOVEMENT = 1 << 0;
+const int FLAG_BLOCKS_VIEW = 1 << 1;
+
 class LevelTile
 {
     public:
@@ -38,6 +41,7 @@ class Level
 
         Level(int sizex, int sizey);
         void SendLevelInfo(int socket) const;
+        Tile* GetTile(int posx, int posy);
         void SetTile(int posx, int posy, Tile* tile);
 
         void BeforeMoveEvent(Mobile& mob);

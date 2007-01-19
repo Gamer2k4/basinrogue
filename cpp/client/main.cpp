@@ -10,7 +10,27 @@
 
 bool must_quit = false;
 
-void handle_input()
+void send_command(ServerConnection& connection, SDLKey key)
+{
+    if (key == SDLK_KP1)
+        connection.SendCommand(move_sw);
+    else if (key == SDLK_KP2)
+        connection.SendCommand(move_s);
+    else if (key == SDLK_KP3)
+        connection.SendCommand(move_se);
+    else if (key == SDLK_KP4)
+        connection.SendCommand(move_w);
+    else if (key == SDLK_KP6)
+        connection.SendCommand(move_e);
+    else if (key == SDLK_KP7)
+        connection.SendCommand(move_nw);
+    else if (key == SDLK_KP8)
+        connection.SendCommand(move_n);
+    else if (key == SDLK_KP9)
+        connection.SendCommand(move_ne);
+}
+
+void handle_input(ServerConnection& connection)
 {
     SDL_Event event;
     while ( SDL_PollEvent( &event ) )
@@ -24,7 +44,7 @@ void handle_input()
                     break;
             }
 
-            //KeyDown( event.key.keysym.sym );
+            send_command(connection, event.key.keysym.sym);
             break;
 
         case SDL_KEYUP:
@@ -80,6 +100,6 @@ int main()
         main_view.DrawView();
         SDL_UpdateRect(screen, 0, 0, 0, 0);
         connection.Update();
-        handle_input();
+        handle_input(connection);
     }
 }

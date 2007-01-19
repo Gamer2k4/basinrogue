@@ -19,29 +19,29 @@ Tile* player_tile;
 
 const char* level_map =
         "#########################"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
-        "#.......................#"
+        "#...................#...#"
+        "#.............####..#...#"
+        "#......#####..#..#......#"
+        "#......#...#.....#..#####"
+        "#......#...#..#..#......#"
+        "#......##.##..####......#"
+        "#..............#........#"
+        "#..............#........#"
+        "#..............#........#"
+        "################..##.####"
+        "#.................#.....#"
+        "#.................#.....#"
+        "#.................#.....#"
+        "#.................#######"
+        "#....#####.....#####....#"
+        "#....#...#.....#...#....#"
+        "#....#...###.###...#....#"
+        "#....#.............#....#"
+        "#....####.......####....#"
+        "#.......#.......#.......#"
+        "#.......#...............#"
+        "#.......#.......#.......#"
+        "#.......#.......#.......#"
         "#########################";
 
 Tile* get_tile_id(char tile_char)
@@ -75,6 +75,68 @@ void send_player_position(int socket, int x, int y, int player_tile_id)
     send(socket, buff.c_str(), buff.length(), 0);
 }
 
+void try_move(Player& player, int decx, int decy)
+{
+    int x, y;
+    x = player.posx + decx;
+    y = player.posy + decy;
+    if ( !player.GetLevel()->GetTile(x, y)->HasOneFlag(FLAG_BLOCKS_MOVEMENT) )
+    {
+        player.Translate(decx, decy);
+    }
+}
+
+void read_message(int socket, Player& player)
+{
+    char command;
+    int recv_length;
+    int x, y, tile_id;
+    fd_set rread;
+    timeval to;
+    FD_ZERO(&rread);
+    FD_SET(socket,&rread);
+    memset((char *)&to,0,sizeof(to));
+    to.tv_usec=10000;
+    if (select(socket+1, &rread, (fd_set *)0, (fd_set *)0, &to) <= 0)
+        return;
+    recv_length = recv(socket, &command, 1, 0);
+    if (recv_length < 1)
+    {
+        perror("Socket error");
+        exit(2);
+    }
+    std::cout << "Received command " << command << "\n";
+    switch (command)
+    {
+        case '1':
+            try_move(player, -1,  1);
+            break;
+        case '2':
+            try_move(player,  0,  1);
+            break;
+        case '3':
+            try_move(player,  1,  1);
+            break;
+        case '4':
+            try_move(player, -1,  0);
+            break;
+        case '6':
+            try_move(player,  1,  0);
+            break;
+        case '7':
+            try_move(player, -1, -1);
+            break;
+        case '8':
+            try_move(player,  0, -1);
+            break;
+        case '9':
+            try_move(player,  1, -1);
+            break;
+    }
+
+    std::cout << "Received client command : " << command << "\n";
+}
+
 int main()
 {
     std::cout << "Server\n";
@@ -99,9 +161,9 @@ int main()
     }
 
     TileLib tile_lib;
-    ground_tile = &tile_lib.AddTile("ground");
-    wall_tile = &tile_lib.AddTile("wall");
-    player_tile = &tile_lib.AddTile("player");
+    ground_tile = &tile_lib.AddTile("ground", 0);
+    wall_tile = &tile_lib.AddTile("wall", FLAG_BLOCKS_MOVEMENT);
+    player_tile = &tile_lib.AddTile("player", FLAG_BLOCKS_MOVEMENT);
     tile_lib.SendTileLib(client_socket);
 
     Player player;
@@ -111,11 +173,18 @@ int main()
 
     level.SendLevelInfo(client_socket);
 
-    for (int ii=player.posx; ii < levelsizex-1; ++ii)
+    int lastx, lasty;
+    lastx = player.posx+1;
+    lasty = player.posy;
+    for (;;)
     {
-        player.Translate(1,1);
         level.SendLevelInfo(client_socket);
-        send_player_position(client_socket, player.posx, player.posy, player_tile->GetTileId());
-        sleep(1);
+        if (player.posx != lastx || player.posy != lasty)
+        {
+            send_player_position(client_socket, player.posx, player.posy, player_tile->GetTileId());
+            lastx = player.posx;
+            lasty = player.posy;
+        }
+        read_message(client_socket, player);
     }
 }

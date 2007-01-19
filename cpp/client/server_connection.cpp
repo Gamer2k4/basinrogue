@@ -45,7 +45,6 @@ void ServerConnection::Connect(const std::string server_URL, int server_port)
         exit(-1);
     }
     std::cout << "Connection succeded\n";
-    send(server_socket, "Hello\n", 6, 0);
 }
 
 int ReadNumber(int socket)
@@ -109,7 +108,7 @@ void ServerConnection::Update()
         FD_ZERO(&rread);
         FD_SET(server_socket,&rread);
         memset((char *)&to,0,sizeof(to));
-        to.tv_usec=100000;
+        to.tv_usec=10000;
         if (select(server_socket+1, &rread, (fd_set *)0, (fd_set *)0, &to) <= 0)
             return;
         recv_length = recv(server_socket, &command, 1, 0);
@@ -142,4 +141,42 @@ void ServerConnection::Update()
                 world.ClearAll();
         }
     }
+}
+
+void ServerConnection::SendCommand(ClientCommand command)
+{
+    char k;
+    switch (command)
+    {
+        case move_sw:
+            k = '1';
+            break;
+        case move_s:
+            k = '2';
+            break;
+        case move_se:
+            k = '3';
+            break;
+        case move_w:
+            k = '4';
+            break;
+        case move_e:
+            k = '6';
+            break;
+        case move_nw:
+            k = '7';
+            break;
+        case move_n:
+            k = '8';
+            break;
+        case move_ne:
+            k = '9';
+            break;
+        default:
+            return;
+    }
+    char buffer[2];
+    buffer[0] = k;
+    buffer[1] = '\n';
+    send(server_socket, buffer, 1, 0);
 }

@@ -26,11 +26,14 @@ class Tile
     private:
         const std::string name;
         int tile_id;
+        int flags;
     public:
         Tile ( const std::string name );
         ~Tile();
 
         int GetTileId() const;
+        bool HasOneFlag(int test_flags) const;
+        bool HasAllFlag(int test_flags) const;
 };
 
 class TileLib
@@ -40,7 +43,7 @@ class TileLib
     public:
         ~TileLib();
 
-        Tile& AddTile(const std::string name);
+        Tile& AddTile(const std::string name, int flags);
         void SendTileLib(int socket) const;
 };
 

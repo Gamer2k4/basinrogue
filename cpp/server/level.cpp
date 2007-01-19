@@ -55,6 +55,12 @@ void Level::SendLevelInfo(int socket) const
         }
 }
 
+Tile* Level::GetTile(int posx, int posy)
+{
+    int index = posx + posy * sizey;
+    return level_table[index].tile;
+}
+
 void Level::SetTile(int posx, int posy, Tile* tile)
 {
     int index = posx + posy * sizey;
