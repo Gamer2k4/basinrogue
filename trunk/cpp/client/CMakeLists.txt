@@ -2,4 +2,4 @@ FIND_PACKAGE(SDL REQUIRED)
 INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR})
 LINK_LIBRARIES(${SDL_LIBRARY} SDL_image)
 
-ADD_EXECUTABLE(brclient-sdl main)
+ADD_EXECUTABLE(brclient-sdl main game_elements tile_lib server_connection)
