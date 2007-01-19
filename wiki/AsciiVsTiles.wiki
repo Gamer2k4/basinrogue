@@ -16,3 +16,4 @@ Towers of Doom is a nice experience without scrolling maps.
 
 (Konijn) I would start with a 25*25 screen, more in the likings of the Lost Labyrint. Less profiling will then be needed in the beginning to have a reasonable game.
 
+(A.) That's the screensize I'm using for my in-dev game.  It works and is good for graphics but it sure is small.  
