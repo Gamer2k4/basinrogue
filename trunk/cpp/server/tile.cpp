@@ -27,6 +27,16 @@ int Tile::GetTileId() const
     return tile_id;
 }
 
+bool Tile::HasOneFlag(int test_flags) const
+{
+    return (flags & test_flags) != 0;
+}
+
+bool Tile::HasAllFlag(int test_flags) const
+{
+    return (flags & test_flags) == test_flags;
+}
+
 TileLib::~TileLib()
 {
     for (int ii=0; ii < tile_list.size(); ++ii)
@@ -34,12 +44,13 @@ TileLib::~TileLib()
     tile_list.clear();
 }
 
-Tile& TileLib::AddTile(const std::string name)
+Tile& TileLib::AddTile(const std::string name, int flags)
 {
     Tile* tile = new Tile(name);
     int new_id = tile_list.size();
     tile_list.push_back(tile);
     tile->tile_id = new_id;
+    tile->flags = flags;
     return *tile;
 }
 

@@ -31,6 +31,7 @@ class Mobile
         Mobile();
         void SetLevel(Level& newlevel, int newposx, int newposy);
         void Translate(int decx, int decy);
+        Level* GetLevel();
 };
 
 #endif

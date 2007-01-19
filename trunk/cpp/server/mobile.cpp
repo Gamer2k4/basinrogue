@@ -37,3 +37,8 @@ void Mobile::Translate(int decx, int decy)
     if (level)
         level->AfterMoveEvent(*this);
 }
+
+Level* Mobile::GetLevel()
+{
+    return level;
+}
