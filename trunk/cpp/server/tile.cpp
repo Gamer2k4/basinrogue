@@ -39,7 +39,7 @@ bool Tile::HasAllFlag(int test_flags) const
 
 TileLib::~TileLib()
 {
-    for (int ii=0; ii < tile_list.size(); ++ii)
+    for (unsigned ii=0; ii < tile_list.size(); ++ii)
         delete tile_list[ii];
     tile_list.clear();
 }
@@ -56,7 +56,7 @@ Tile& TileLib::AddTile(const std::string name, int flags)
 
 void TileLib::SendTileLib(NetworkCommandBuffer* buffer) const
 {
-    for (int ii=0; ii < tile_list.size(); ++ii)
+    for (unsigned ii=0; ii < tile_list.size(); ++ii)
     {
         buffer->SendChar('l');
         buffer->SendInt(tile_list[ii]->GetTileId());

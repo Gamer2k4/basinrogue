@@ -12,7 +12,7 @@
 
 #include "game_elements.h"
 
-GameWorld::GameWorld(int sizex, int sizey) : sizex(sizex), sizey(sizey), elem_array(sizex * sizey)
+GameWorld::GameWorld(int sizex, int sizey) : elem_array(sizex * sizey), sizex(sizex), sizey(sizey)
 {
 }
 
@@ -29,7 +29,7 @@ const std::vector<TileIdType>& GameWorld::GetTileList(int x, int y) const
 
 void GameWorld::ClearAll()
 {
-    for (int ii=0; ii < elem_array.size(); ++ii)
+    for (unsigned ii=0; ii < elem_array.size(); ++ii)
         elem_array.at(ii).clear();
 }
 
@@ -83,7 +83,7 @@ void GameView::DrawTile(int posx, int posy) const
         id = tile_list[0];
         surface = tile_lib.GetTileById(id);
         SDL_BlitSurface(surface, NULL, dest_surface, &dest);
-        for (int ii = 1; ii < tile_list.size(); ++ii )
+        for (unsigned ii = 1; ii < tile_list.size(); ++ii )
         {
             dest.x = posx*tile_lib.sizex;
             dest.y = posy*tile_lib.sizey;

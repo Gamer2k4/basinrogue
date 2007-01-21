@@ -78,13 +78,11 @@ void Level::SetTile(int posx, int posy, Tile* tile)
 
 void Level::BeforeMoveEvent(Mobile& mob)
 {
-    int index = mob.posx + mob.posy * sizey;
     SetIsDirty(mob.posx, mob.posy);
 }
 
 void Level::AfterMoveEvent(Mobile& mob)
 {
-    int index = mob.posx + mob.posy * sizey;
     SetIsDirty(mob.posx, mob.posy);
 }
 
