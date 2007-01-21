@@ -13,11 +13,13 @@
 #include "server_connection.h"
 
 #include <string.h>
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
+
 #include <iostream>
 
 ServerConnection::ServerConnection(GameWorld& world, TileLib& tile_lib) : world(world), tile_lib(tile_lib)

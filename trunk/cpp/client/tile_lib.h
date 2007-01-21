@@ -15,7 +15,7 @@
 
 #include <string>
 #include <map>
-#include <SDL/SDL.h>
+#include "SDL.h"
 
 typedef unsigned long TileIdType;
 

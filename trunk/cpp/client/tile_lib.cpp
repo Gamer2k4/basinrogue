@@ -11,7 +11,7 @@
 //
 
 #include "tile_lib.h"
-#include <SDL/SDL_image.h>
+#include "SDL_image.h"
 
 TileLib::TileLib(int sizex, int sizey) : sizex(sizex), sizey(sizey)
 {
