@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "SDL_main.h"
 #include "SDL_image.h"
+#include "SDL_net.h"
 
 #include "game_elements.h"
 #include "tile_lib.h"
@@ -63,15 +64,21 @@ void handle_input(ServerConnection& connection)
 const int levelsizex = 25;
 const int levelsizey = 25;
 
-int main()
+int main(int argc, char* argv[])
 {
     std::cout << "Client\n";
 
     atexit( SDL_Quit );
 
-    if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE ) < 0 )
     {
-        //fprintf( stderr, "Unable to init SDL: %s\n", SDL_GetError() );
+        std::cerr << "Unable to init SDL: " << SDL_GetError() << "\n";
+        exit( 1 );
+    }
+
+    if ( SDLNet_Init() < 0 )
+    {
+        std::cerr << "Unable to init SDLNet: " << SDLNet_GetError() << "\n";
         exit( 1 );
     }
 
@@ -81,7 +88,10 @@ int main()
     main_view_tile_lib.AddTile(1, "wall");
     main_view_tile_lib.AddTile(2, "player");
     ServerConnection connection(world, main_view_tile_lib);
-    connection.Connect("", 1664);
+    if (argc > 1)
+        connection.Connect(argv[1], 1664);
+    else
+        connection.Connect("localhost", 1664);
 
     SDL_Surface* screen = SDL_SetVideoMode( 800, 800, 0, SDL_SWSURFACE );
 

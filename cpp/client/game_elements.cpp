@@ -12,31 +12,48 @@
 
 #include "game_elements.h"
 
-GameWorld::GameWorld(int sizex, int sizey) : sizex(sizex), sizey(sizey)
+GameWorld::GameWorld(int sizex, int sizey) : sizex(sizex), sizey(sizey), elem_array(sizex * sizey)
 {
-    elem_array.resize(sizex * sizey);
 }
+
+#include <iostream>
 
 const std::vector<TileIdType>& GameWorld::GetTileList(int x, int y) const
 {
-    return elem_array[x * sizey+y];
+    if (x >= sizex || x < 0 || y >= sizey || y < 0)
+    {
+        std::cout << "Tile out of range :" << x << ", " << y << "\n";
+    }
+    return elem_array.at(x + y * sizex);
 }
 
 void GameWorld::ClearAll()
 {
     for (int ii=0; ii < elem_array.size(); ++ii)
-        elem_array[ii].clear();
+        elem_array.at(ii).clear();
 }
 
 void GameWorld::ClearTile(int posx, int posy)
 {
-    elem_array[posx * sizex + posy].clear();
+    if (posx >= sizex || posx < 0 || posy >= sizey || posy < 0)
+    {
+        std::cout << "Tile out of range :" << posx << ", " << posy << "\n";
+    }
+    elem_array.at(posx + posy * sizex).clear();
     //TODO Add dirty bit for quick refresh
 }
 
 void GameWorld::AddTile(int posx, int posy, TileIdType id)
 {
-    elem_array[posx * sizex + posy].push_back(id);
+    if (posx >= sizex || posx < 0 || posy >= sizey || posy < 0)
+    {
+        std::cout << "Tile out of range :" << posx << ", " << posy << "\n";
+    }
+    if (id > 3)
+    {
+        std::cout << "Invalid tile id: " << id << "\n";
+    }
+    elem_array.at(posx + posy * sizex).push_back(id);
     //TODO Add dirty bit for quick refresh
 };
 
@@ -59,12 +76,20 @@ void GameView::DrawTile(int posx, int posy) const
         dest.x = posx*tile_lib.sizex;
         dest.y = posy*tile_lib.sizey;
           //TODO Blit without alpha
-        SDL_BlitSurface(tile_lib.GetTileById(tile_list[0]), NULL, dest_surface, &dest);
+
+        TileIdType id;
+        SDL_Surface* surface;
+
+        id = tile_list[0];
+        surface = tile_lib.GetTileById(id);
+        SDL_BlitSurface(surface, NULL, dest_surface, &dest);
         for (int ii = 1; ii < tile_list.size(); ++ii )
         {
             dest.x = posx*tile_lib.sizex;
             dest.y = posy*tile_lib.sizey;
-            SDL_BlitSurface( tile_lib.GetTileById(tile_list[ii]), NULL, dest_surface, &dest);
+            id = tile_list[ii];
+            surface = tile_lib.GetTileById(id);
+            SDL_BlitSurface( surface, NULL, dest_surface, &dest);
         }
     }
 }

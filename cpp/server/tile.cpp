@@ -54,15 +54,12 @@ Tile& TileLib::AddTile(const std::string name, int flags)
     return *tile;
 }
 
-void TileLib::SendTileLib(int socket) const
+void TileLib::SendTileLib(NetworkCommandBuffer* buffer) const
 {
     for (int ii=0; ii < tile_list.size(); ++ii)
     {
-        std::stringstream message;
-        message << "l\n";
-        message << tile_list[ii]->GetTileId() << "\n";
-        message << tile_list[ii]->name << "\n";
-        std::string buff = message.str();
-        send(socket, buff.c_str(), buff.length(), 0);
+        buffer->SendChar('l');
+        buffer->SendInt(tile_list[ii]->GetTileId());
+        buffer->SendString(tile_list[ii]->name);
     }
 }

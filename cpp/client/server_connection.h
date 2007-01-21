@@ -16,6 +16,7 @@
 #include <string>
 #include "game_elements.h"
 #include "tile_lib.h"
+#include "networkcommandbuffer.h"
 
 enum ClientCommand
 {
@@ -35,10 +36,12 @@ class ServerConnection
     private:
         GameWorld& world;
         TileLib& tile_lib;
-        int server_socket;
+        NetworkCommandBuffer* server_socket;
     public:
-        void Update();
         ServerConnection(GameWorld& world, TileLib& tile_lib);
+        ~ServerConnection();
+
+        void Update();
         void Connect(const std::string server_URL, int server_port);
         void SendCommand(ClientCommand command);
 };
