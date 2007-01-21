@@ -1,7 +1,9 @@
 FIND_PACKAGE(SDL REQUIRED)
 FIND_PACKAGE(SDL_image REQUIRED)
 FIND_PACKAGE(SDL_net REQUIRED)
-INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR} ${SDLIMAGE_INCLUDE_DIR} ${SDLNET_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR} ${SDLIMAGE_INCLUDE_DIR} ${SDLNET_INCLUDE_DIR} ../network)
 LINK_LIBRARIES(${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLNET_LIBRARY} ${SDLMAIN_LIBRARY})
 
-ADD_EXECUTABLE(brclient-sdl main game_elements tile_lib server_connection)
+SET(source_files main game_elements tile_lib server_connection ../network/networkcommandbuffer)
+SET_SOURCE_FILES_PROPERTIES(${source_files} PROPERTIES COMPILE_FLAGS "-g")
+ADD_EXECUTABLE(brclient-sdl ${source_files})

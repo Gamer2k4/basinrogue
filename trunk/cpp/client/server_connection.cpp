@@ -13,134 +13,78 @@
 #include "server_connection.h"
 
 #include <string.h>
-
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <errno.h>
+#include "SDL_net.h"
 
 #include <iostream>
 
-ServerConnection::ServerConnection(GameWorld& world, TileLib& tile_lib) : world(world), tile_lib(tile_lib)
+ServerConnection::ServerConnection(GameWorld& world, TileLib& tile_lib) : world(world), tile_lib(tile_lib), server_socket(0)
 {
+}
+
+ServerConnection::~ServerConnection()
+{
+    if (server_socket)
+        delete server_socket;
+    server_socket = 0;
 }
 
 void ServerConnection::Connect(const std::string server_URL, int server_port)
 {
     std::cout << "Initiating server connection\n";
-    server_socket = socket(PF_INET, SOCK_STREAM, 0);
-    if (server_socket < 0)
-    {
-        std::cout << "Error connecting to the server : " << strerror(errno) << "\n";
-        exit(-1);
-    }
-    std::cout << "Socket initialised\n";
-    sockaddr_in addr;
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(server_port);
-    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    int conn_result = connect(server_socket, (struct sockaddr *)&addr, sizeof addr);
-    if (conn_result < 0)
-    {
-        std::cout << "Error connecting to the server : " << strerror(errno) << "\n";
-        exit(-1);
-    }
+    IPaddress ip;
+    if (SDLNet_ResolveHost(&ip, server_URL.c_str(), server_port) == -1)
+        RaiseSocketError("SDLNet_ResolveHost");
+    std::cout << "Server name resolved\n";
+    TCPsocket socket = SDLNet_TCP_Open(&ip);
+    if (!socket)
+        RaiseSocketError("SDLNet_TCP_Open");
+    server_socket = new NetworkCommandBuffer(socket);
     std::cout << "Connection succeded\n";
-}
-
-int ReadNumber(int socket)
-{
-    char buffer;
-    int result = 0;
-    int recv_length;
-    for(;;)
-    {
-        recv_length = recv(socket, &buffer, 1, 0);
-        if (recv_length < 0)
-            exit(2);
-        if (buffer >= '0' && buffer <= '9')
-            result = 10*result + (buffer - '0');
-        else if (buffer == '\n')
-            break;
-        else
-            exit(3);
-    }
-    return result;
-}
-
-char ReadChar(int socket)
-{
-    char buffer;
-    std::string result;
-    int recv_length;
-    recv_length = recv(socket, &buffer, 1, 0);
-    if (recv_length < 0)
-        exit(2);
-    return buffer;
-}
-
-std::string ReadString(int socket)
-{
-    char buffer;
-    std::string result;
-    int recv_length;
-    for(;;)
-    {
-        recv_length = recv(socket, &buffer, 1, 0);
-        if (recv_length < 0)
-            exit(2);
-        if (buffer == '\n')
-            break;
-        result += buffer;
-    }
-    return result;
 }
 
 void ServerConnection::Update()
 {
-    char command;
-    int recv_length;
-    int x, y, tile_id;
-    std::string tile_name;
-    fd_set rread;
-    timeval to;
-    for (;;)
+    server_socket->Think();
+    while (server_socket->HasCommands())
     {
-        FD_ZERO(&rread);
-        FD_SET(server_socket,&rread);
-        memset((char *)&to,0,sizeof(to));
-        to.tv_usec=10000;
-        if (select(server_socket+1, &rread, (fd_set *)0, (fd_set *)0, &to) <= 0)
-            return;
-        recv_length = recv(server_socket, &command, 1, 0);
-        if (recv_length < 0)
-        {
-            perror("Socket error");
-            exit(2);
-        }
-        if (recv_length < 1)
-            return;
-        ReadChar(server_socket);
+        char command = server_socket->PeekReadChar();
         switch (command)
         {
             case 'l':
-                x = ReadNumber(server_socket);
-                tile_name = ReadString(server_socket);
-                tile_lib.AddTile(x, tile_name);
-                break;
+                if (server_socket->GetNbCommands() >= 3)
+                {
+                    server_socket->ReadChar();
+                    int id = server_socket->ReadInt();
+                    std::string tile_name = server_socket->ReadString();
+                    tile_lib.AddTile(id, tile_name);
+                    break;
+                }
+                return;
             case 't':
-                x = ReadNumber(server_socket);
-                y = ReadNumber(server_socket);
-                tile_id = ReadNumber(server_socket);
-                world.AddTile(x, y, tile_id);
-                break;
+                if (server_socket->GetNbCommands() >= 4)
+                {
+                    server_socket->ReadChar();
+                    int x = server_socket->ReadInt();
+                    int y = server_socket->ReadInt();
+                    int id = server_socket->ReadInt();
+                    world.AddTile(x, y, id);
+                    break;
+                }
+                return;
             case 'c':
-                x = ReadNumber(server_socket);
-                y = ReadNumber(server_socket);
-                world.ClearTile(x, y);
+                if (server_socket->GetNbCommands() >= 3)
+                {
+                    server_socket->ReadChar();
+                    int x = server_socket->ReadInt();
+                    int y = server_socket->ReadInt();
+                    world.ClearTile(x, y);
+                    break;
+                }
+                return;
             case 'r':
+                server_socket->ReadChar();
                 world.ClearAll();
+                break;
         }
     }
 }
@@ -177,8 +121,5 @@ void ServerConnection::SendCommand(ClientCommand command)
         default:
             return;
     }
-    char buffer[2];
-    buffer[0] = k;
-    buffer[1] = '\n';
-    send(server_socket, buffer, 1, 0);
+    server_socket->SendChar(k);
 }

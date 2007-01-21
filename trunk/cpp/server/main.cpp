@@ -1,14 +1,15 @@
 #include <iostream>
 #include <sstream>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <errno.h>
+#include <vector>
+#include <algorithm>
 
 #include "tile.h"
 #include "level.h"
 #include "player.h"
+#include "networkcommandbuffer.h"
+
+#include "SDL.h"
+#include "SDL_net.h"
 
 const int levelsizex = 25;
 const int levelsizey = 25;
@@ -64,127 +65,125 @@ void set_level_map(Level& level)
             level.SetTile(ii, jj, get_tile_id(level_map[ii+jj*levelsizey]));
 }
 
-void send_player_position(int socket, int x, int y, int player_tile_id)
+bool MustRemovePlayer(Player* player)
 {
-    std::stringstream message;
-    message << "t\n";
-    message << x << "\n";
-    message << y << "\n";
-    message << player_tile_id << "\n";
-    std::string buff = message.str();
-    send(socket, buff.c_str(), buff.length(), 0);
-}
-
-void try_move(Player& player, int decx, int decy)
-{
-    int x, y;
-    x = player.posx + decx;
-    y = player.posy + decy;
-    if ( !player.GetLevel()->GetTile(x, y)->HasOneFlag(FLAG_BLOCKS_MOVEMENT) )
-    {
-        player.Translate(decx, decy);
-    }
-}
-
-void read_message(int socket, Player& player)
-{
-    char command;
-    int recv_length;
-    int x, y, tile_id;
-    fd_set rread;
-    timeval to;
-    FD_ZERO(&rread);
-    FD_SET(socket,&rread);
-    memset((char *)&to,0,sizeof(to));
-    to.tv_usec=10000;
-    if (select(socket+1, &rread, (fd_set *)0, (fd_set *)0, &to) <= 0)
-        return;
-    recv_length = recv(socket, &command, 1, 0);
-    if (recv_length < 1)
-    {
-        perror("Socket error");
-        exit(2);
-    }
-    std::cout << "Received command " << command << "\n";
-    switch (command)
-    {
-        case '1':
-            try_move(player, -1,  1);
-            break;
-        case '2':
-            try_move(player,  0,  1);
-            break;
-        case '3':
-            try_move(player,  1,  1);
-            break;
-        case '4':
-            try_move(player, -1,  0);
-            break;
-        case '6':
-            try_move(player,  1,  0);
-            break;
-        case '7':
-            try_move(player, -1, -1);
-            break;
-        case '8':
-            try_move(player,  0, -1);
-            break;
-        case '9':
-            try_move(player,  1, -1);
-            break;
-    }
-
-    std::cout << "Received client command : " << command << "\n";
+    bool must_remove = player->GetIsDisconnected();
+    if (must_remove)
+        delete player;
+    return must_remove;
 }
 
 int main()
 {
     std::cout << "Server\n";
-    int listen_socket;
-    int client_socket;
-
-    listen_socket = socket(PF_INET, SOCK_STREAM, 0);
-
-    sockaddr_in addr;
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(1664);
-    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-    bind(listen_socket, (struct sockaddr *)&addr, sizeof addr);
-    listen(listen_socket, 1);
-
-    client_socket = accept(listen_socket, NULL, NULL);
-    if (client_socket < 0)
-    {
-        perror("accept");
-        exit(2);
-    }
 
     TileLib tile_lib;
     ground_tile = &tile_lib.AddTile("ground", 0);
     wall_tile = &tile_lib.AddTile("wall", FLAG_BLOCKS_MOVEMENT);
     player_tile = &tile_lib.AddTile("player", FLAG_BLOCKS_MOVEMENT);
-    tile_lib.SendTileLib(client_socket);
 
-    Player player;
+    atexit( SDL_Quit );
+
+    if ( SDL_Init( SDL_INIT_NOPARACHUTE ) < 0 )
+    {
+        std::cerr << "Unable to init SDL: " << SDL_GetError() << "\n";
+        exit( 1 );
+    }
+
+    if ( SDLNet_Init() < 0 )
+    {
+        std::cerr << "Unable to init SDLNet: " << SDLNet_GetError() << "\n";
+        exit(1);
+    }
+
+    IPaddress ip;
+    TCPsocket listen_socket;
+
+    if ( SDLNet_ResolveHost(&ip, 0, 1664) == -1 )
+    {
+        std::cerr << "SDLNet_ResolveHost:" << SDLNet_GetError() << "\n";
+        exit(1);
+    }
+
+    listen_socket = SDLNet_TCP_Open(&ip);
+    if (!listen_socket)
+    {
+        std::cerr << "SDLNet_TCP_Open:" << SDLNet_GetError() << "\n";
+        exit(2);
+    }
+
+    SDLNet_SocketSet main_set = SDLNet_AllocSocketSet(32); //TODO handle max players here
+    if (!main_set)
+    {
+        std::cerr << "Error creating SocketSet: " << SDLNet_GetError() << "\n";
+        exit(1);
+    }
+
+    SDLNet_TCP_AddSocket(main_set, listen_socket);
+    std::vector<Player*> player_list;
     Level level(levelsizex, levelsizey);
-    player.SetLevel(level, 1, 1);
     set_level_map(level);
 
-    level.SendLevelInfo(client_socket);
+    int numready;
 
-    int lastx, lasty;
-    lastx = player.posx+1;
-    lasty = player.posy;
     for (;;)
     {
-        level.SendLevelInfo(client_socket);
-        if (player.posx != lastx || player.posy != lasty)
-        {
-            send_player_position(client_socket, player.posx, player.posy, player_tile->GetTileId());
-            lastx = player.posx;
-            lasty = player.posy;
+//         std::cout << "Waiting for network activity\n";
+        numready = SDLNet_CheckSockets(main_set, (Uint32)-1);  // -1 => a lot of time, but not infinite
+        if(numready==-1) {
+            std::cerr << "SDLNet_CheckSockets: " << SDLNet_GetError() << "\n";
+            perror("SDLNet_CheckSockets");
+            exit(2);
         }
-        read_message(client_socket, player);
+        if (numready > 0)
+        {
+//             std::cout << "Removing disconnected players\n";
+            for (int ii=0; ii < player_list.size(); ++ii)
+            {
+                Player* player = player_list[ii];
+                if (player->GetIsDisconnected())
+                {
+                    SDLNet_TCP_DelSocket(main_set, player->socket);
+                }
+            }
+            player_list.erase(
+                    remove_if(
+                        player_list.begin(),
+                        player_list.end(),
+                        MustRemovePlayer
+                    ),
+                    player_list.end()
+            );
+//             std::cout << "Player think loop\n";
+            for (int ii=0; ii < player_list.size(); ++ii)
+            {
+                Player* player = player_list[ii];
+                player->Think();
+            }
+//             std::cout << "Checking for new players\n";
+            if (SDLNet_SocketReady(listen_socket))
+            {
+                TCPsocket client_socket = SDLNet_TCP_Accept(listen_socket);
+                if (!client_socket)
+                {
+                    std::cerr << "SDLNet_TCP_Accept: " << SDLNet_GetError() << "\n";
+                }
+                else
+                {
+                    SDLNet_TCP_AddSocket(main_set, client_socket);
+                    std::cout << "New player connected\n";
+                    Mobile* player_mobile = new Mobile();
+                    player_mobile->SetAppearance(player_tile);
+                    player_mobile->SetLevel(level, 1, 1);
+                    Player* player = new Player(client_socket, player_mobile);
+                    tile_lib.SendTileLib(player->command_buffer);
+                    player->SendLevelInfo();
+                    player_list.push_back(player);
+                }
+            }
+//             std::cout << "Sending player information\n";
+            for (int ii=0; ii < player_list.size(); ++ii)
+                player_list[ii]->SendLevelInfo();
+        }
     }
 }

@@ -15,6 +15,8 @@
 #include <string>
 #include <vector>
 
+#include "networkcommandbuffer.h"
+
 class TileLib;
 
 /**
@@ -44,7 +46,7 @@ class TileLib
         ~TileLib();
 
         Tile& AddTile(const std::string name, int flags);
-        void SendTileLib(int socket) const;
+        void SendTileLib(NetworkCommandBuffer* buffer) const;
 };
 
 #endif
