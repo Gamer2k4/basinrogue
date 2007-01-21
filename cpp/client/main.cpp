@@ -1,8 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include "SDL.h"
+#include "SDL_main.h"
+#include "SDL_image.h"
 
 #include "game_elements.h"
 #include "tile_lib.h"
