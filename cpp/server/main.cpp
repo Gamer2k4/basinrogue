@@ -138,7 +138,7 @@ int main()
         if (numready > 0)
         {
 //             std::cout << "Removing disconnected players\n";
-            for (int ii=0; ii < player_list.size(); ++ii)
+            for (unsigned ii=0; ii < player_list.size(); ++ii)
             {
                 Player* player = player_list[ii];
                 if (player->GetIsDisconnected())
@@ -155,7 +155,7 @@ int main()
                     player_list.end()
             );
 //             std::cout << "Player think loop\n";
-            for (int ii=0; ii < player_list.size(); ++ii)
+            for (unsigned ii=0; ii < player_list.size(); ++ii)
             {
                 Player* player = player_list[ii];
                 player->Think();
@@ -182,7 +182,7 @@ int main()
                 }
             }
 //             std::cout << "Sending player information\n";
-            for (int ii=0; ii < player_list.size(); ++ii)
+            for (unsigned ii=0; ii < player_list.size(); ++ii)
                 player_list[ii]->SendLevelInfo();
         }
     }

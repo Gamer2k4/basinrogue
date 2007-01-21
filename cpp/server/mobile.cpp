@@ -13,7 +13,7 @@
 
 #include "level.h"
 
-Mobile::Mobile() : posx(0), posy(0), level(0), appearance(0), dirty(true)
+Mobile::Mobile() : level(0), appearance(0), posx(0), posy(0), dirty(true)
 {
 }
 
