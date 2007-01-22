@@ -16,3 +16,7 @@ Here is how I build the Windows version. First, make sure that all [Requirements
 
   * Follow the same instructions as in Windows, but you probably do not need to set the Environment vars to point to the SDL libs install path.
     If CMake complains that it cannot find one of the SDL libs, most often it means that your Distro split appart the libSDL header files into a separate devel package. Check your distro package manager for those additional installs.
+
+
+(A. Tonight or tomorrow, I'm going to have a go at building the project using Visual Studio (5.0 I think) on Windows. Will let you know if any problems. 
+I suspect an important next step will be to add a small test 'dungeon' area where the players are each adventuring at their own rate and not interacting with each other, v different from the all-in-together real-time town).
