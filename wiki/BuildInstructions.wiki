@@ -1,0 +1,18 @@
+#summary Build instructions.
+
+= Windows =
+
+Here is how I build the Windows version. First, make sure that all [Requirements] are installed of course.
+
+  * Open a terminal and change directory into the basinrogue\cpp folder.
+  * Make sure that SDLDIR, SDLIMAGEDIR and SDLNETDIR point to the install path of the development versions of those libs.
+    _Bug in CMake 2.4.6 : CMake might not find correction SDL_net because of a bug in the detect script. To work around that bug, set both SDLNETDIR and SDLNET to point to the SDL_net install path_
+  * Type the <cmake .> command. There should be no errors.
+  * Build using NMake
+
+Alternatively, you can run cmake with the -G "Visual Studio 8 2005" for example, open the corresponding Visual Studio project and build from here.
+
+= Unix or MacOS X =
+
+  * Follow the same instructions as in Windows, but you probably do not need to set the Environment vars to point to the SDL libs install path.
+    If CMake complains that it cannot find one of the SDL libs, most often it means that your Distro split appart the SDL lib package header files into a separate devel package. Check your distrop package manager for those additional installs.
