@@ -13,3 +13,9 @@
 = Details =
 
 The game, as in most roguelikes will be composed of an @ that wanders between the [Town] and the [Dungeon]. The [Player] will have to make use of his [Magic] and of the [Items] he finds in the [Dungeon] to defeat the many dangers that lurk in the shadows : [Monsters], [Traps], [Mazes] etc...
+
+= Build instructions =
+
+Assuming you've already downloaded the source from the SVN repository.
+[Requirements]
+BuildInstructions
