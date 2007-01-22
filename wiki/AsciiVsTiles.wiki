@@ -19,3 +19,7 @@ Towers of Doom is a nice experience without scrolling maps.
 (A.) That's the screensize I'm using for my in-dev game.  It works and is good for graphics but it sure is small.
 
 (G2k4) How about 40x40?  That way you get the same amount of tiles as you would in fullscreen ascii.  Maybe the display could be 20x20, and would be centered on the player.  That leaves you 10 rows for messages and 20 columns for information (like Gearhead's display).
+
+(A.) The more I think about it, the more I favor a 35x35 mapsize, plus a right-hand sidebar for character information and messages. With scrolling (but not the sort where the @ always stays in the middle).
+That will allow ASCII on a 640x480 screen, or 16x16 tiles or ASCII on an 800x600 screen, or 32x32 tiles on a real big screen.
+Perhaps allow the screensize to be user-changeable.
