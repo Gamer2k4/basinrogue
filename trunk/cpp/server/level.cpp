@@ -39,7 +39,7 @@ void Level::SendTileInfo(NetworkCommandBuffer* buffer, int x, int y) const
 
     //TODO better mobile search algorithm is needed
 
-    std::set<Mobile*>::iterator iter;
+    std::set<Mobile*>::const_iterator iter;
     for(iter = mobile_list.begin(); iter != mobile_list.end(); ++iter)
     {
         Mobile* mob = *iter;

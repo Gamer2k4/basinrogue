@@ -13,7 +13,6 @@
 
 #include <string>
 #include <sstream>
-#include <sys/socket.h>
 
 Tile::Tile ( const std::string name ) : name ( name ), tile_id( -1 )
 {}
