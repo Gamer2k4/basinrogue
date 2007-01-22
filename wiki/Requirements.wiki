@@ -1,0 +1,12 @@
+#summary Requirements to build the project
+
+= Build tools =
+
+The project uses CMake for now. You'll need at least CMake 2.4.x. You can download the latest version on the CMake download page: http://cmake.org/HTML/Download.html
+
+= External libraries =
+
+There are only a few of them, all SDL related:
+  * SDL
+  * SDL_image with PNG support
+  * SDL_net
