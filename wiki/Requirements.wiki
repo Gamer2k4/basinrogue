@@ -4,9 +4,15 @@
 
 The project uses CMake for now. You'll need at least CMake 2.4.x. You can download the latest version on the CMake download page: http://cmake.org/HTML/Download.html
 
+== Windows ==
+
+You'll need a C++ compiler. Any version of Visual Studio should work although the code was only tested on Visual 2005. Alternatively, you can install the free MinGW or the free command line compiler from Microsoft. _Links required_
+
 = External libraries =
 
 There are only a few of them, all SDL related:
   * SDL
   * SDL_image with PNG support
   * SDL_net
+
+Warning for Windows users: Download the devel version of the libs to get the requires .h and .lib files. If you are using MinGW and not Visual Studio, download the MinGW version of those.
