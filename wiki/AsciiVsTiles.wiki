@@ -25,3 +25,5 @@ That will allow ASCII on a 640x480 screen, or 16x16 tiles or ASCII on an 800x600
 Perhaps allow the screensize to be user-changeable.
 
 (C.) Or, if we have to have some custom tiles, we could drop the age old tradition of power of two sized tiles. Let's go for 28x28 tiles for example and it will be enouth for a standard 1280x1024 screen. And nearly enouth for a 1280x960 wide screen that you can find often on portable computers. Some tiles on the upper and lower side of the screen will have to be cut somewhat though.
+
+(A.) I agree in the long term. In the development stage though, we'll no doubt need to use an existing tileset. I guess the message is that we should allow for changes in screensize, mapsize, tilesize and tileset. Shouldn't be hard.
