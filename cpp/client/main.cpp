@@ -113,4 +113,6 @@ int main(int argc, char* argv[])
         connection.Update();
         handle_input(connection);
     }
+
+    return 0;
 }
