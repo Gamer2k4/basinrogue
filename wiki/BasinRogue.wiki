@@ -17,5 +17,6 @@ The game, as in most roguelikes will be composed of an @ that wanders between th
 = Build instructions =
 
 Assuming you've already downloaded the source from the SVN repository.
-[Requirements]
-BuildInstructions
+  * [Requirements]
+  * BuildInstructions
+
