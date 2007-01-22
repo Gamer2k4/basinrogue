@@ -5,5 +5,5 @@ INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR} ${SDLIMAGE_INCLUDE_DIR} ${SDLNET_INCLUDE_
 LINK_LIBRARIES(${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLNET_LIBRARY} ${SDLMAIN_LIBRARY})
 
 SET(source_files main game_elements tile_lib server_connection ../network/networkcommandbuffer)
-SET_SOURCE_FILES_PROPERTIES(${source_files} PROPERTIES COMPILE_FLAGS "-g -W -Wall")
+# SET_SOURCE_FILES_PROPERTIES(${source_files} PROPERTIES COMPILE_FLAGS "-g -W -Wall")
 ADD_EXECUTABLE(brclient-sdl ${source_files})

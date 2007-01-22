@@ -9,6 +9,7 @@
 #include "networkcommandbuffer.h"
 
 #include "SDL.h"
+#include "SDL_main.h"
 #include "SDL_net.h"
 
 const int levelsizex = 25;
@@ -73,7 +74,7 @@ bool MustRemovePlayer(Player* player)
     return must_remove;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     std::cout << "Server\n";
 

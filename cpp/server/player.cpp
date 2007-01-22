@@ -73,7 +73,7 @@ void Player::Think()
             }
         }
     }
-    catch (ReadSocketError e)
+    catch (ReadSocketError)
     {
         is_disconnected = true;
         std::cout << "Player disconnected\n";
