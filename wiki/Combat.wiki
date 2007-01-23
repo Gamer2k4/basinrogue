@@ -31,7 +31,7 @@ When creating a combat engine, many things must be taken into account.  How does
     * decreases stats slowly (reducing Toughness would reduce maximum HP, until the maximum is zero)
   * Poison
     * Same as hitpoints, maybe intensified or slowed by eating, drinking, etc.
-    * Requires special treatment to cure (special might be as simpel as drinking 3 potions of water to dilute it, or as complex as finding an elder healer and supplying him with certain herbs)
+    * Requires special treatment to cure (treatment might be as simple as drinking 3 potions of water to dilute it, or as complex as finding an elder healer and supplying him with certain herbs)
   * Pain
     * Effect varies based on intensity
     * Might decrease effectiveness of actions
