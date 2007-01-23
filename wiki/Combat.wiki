@@ -1,0 +1,12 @@
+#summary A discussion of the combat systems of BasinRogue.
+
+When creating a combat engine, many things must be taken into account.  How does armor protect?  How extensive are injuries?  How is damage handled?
+
+== Possible options for health ==
+  * Generic: The player has one set of hitpoints that determine how long he'll remain alive.  
+  * Realistic: Every body part has its own hitpoints.  Blows to the legs may reduce speed, blows to the chest may reduce stamina, blows to the face may reduce perception.  Every body part has a function, and harming it reduces the functionality.
+  * Simplified Realistic: Again, the body consists of many parts.  When one is destroyed, body parts attached to it are also destroyed, and items on it fall.  Cutting off an arm mainly prevents the player from wielding a weapon or shield.  Cutting off a head mainly prevents the player from living.
+  * Abstract realistic: Again, each body part has its own hitpoints.  However, there are significantly fewer parts.  Once one has no hitpoints remaining, the player dies (to simulate the helplessness that would occur given an amputated appendage).
+
+== Possible options for armor ==
+  * 
