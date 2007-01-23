@@ -19,6 +19,11 @@ When creating a combat engine, many things must be taken into account.  How does
   * Shields: Shields could have a chance of completely negating an attack.  A "shields" skill could indicate the maximum chance, and the shield itself would indicate the minimum chance.  If the user's skill is less than the shield's rating, it cannot be used.  Let's say the user has a skill of 80 and the shield has a rating of 30.  If the player is attacked with 55 accuracy (a number, not a percent), he has a 50% chance of avoiding the damage totally (rolling a 55 or higher on a roll from 30 to 80).
   * Kinetic vs Energy damage: Magic may bypass armor completely, and magical shields may be useless against physical attacks.
 
+== Damage Types ==
+  * Pierce, Slash, Crush
+  * Energy/Magic
+  * Heat, Cold, etc.
+
 == Conditional effects ==
   * Bleeding options
     * reduces hitpoints each turn
