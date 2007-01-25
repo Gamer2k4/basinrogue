@@ -84,9 +84,10 @@ int main(int argc, char* argv[])
 
     GameWorld world(levelsizex, levelsizey);
     TileLib main_view_tile_lib(32, 32);
-    main_view_tile_lib.AddTile(0, "ground");
-    main_view_tile_lib.AddTile(1, "wall");
-    main_view_tile_lib.AddTile(2, "player");
+    // main_view_tile_lib.AddTile(0, 22, 0); /* wall */
+    // main_view_tile_lib.AddTile(1, 23, 0); /* floor */
+    // main_view_tile_lib.AddTile(2, 3,  2); /* player */
+
     ServerConnection connection(world, main_view_tile_lib);
     if (argc > 1)
         connection.Connect(argv[1], 1664);

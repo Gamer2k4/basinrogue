@@ -29,6 +29,7 @@ class TileLib
 {
     private:
         std::map<TileIdType, TileDesc> tile_list;
+        SDL_Surface* full_bmp;
     public:
         const int sizex;
         const int sizey;
@@ -36,7 +37,7 @@ class TileLib
         ~TileLib();
 
         SDL_Surface* GetTileById(const TileIdType id) const;
-        void AddTile(const TileIdType id, const std::string tile_name);
+        void AddTile(const TileIdType id, const int row_of_bmp, const int col_of_bmp);
 };
 
 class TileLoadError

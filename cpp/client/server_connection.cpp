@@ -55,8 +55,9 @@ void ServerConnection::Update()
                 {
                     server_socket->ReadChar();
                     int id = server_socket->ReadInt();
-                    std::string tile_name = server_socket->ReadString();
-                    tile_lib.AddTile(id, tile_name);
+                    int row_of_bmp = server_socket->ReadInt();
+                    int col_of_bmp = server_socket->ReadInt();
+                    tile_lib.AddTile(id, row_of_bmp, col_of_bmp);
                     break;
                 }
                 return;
