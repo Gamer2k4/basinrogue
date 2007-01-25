@@ -15,6 +15,9 @@
 
 TileLib::TileLib(int sizex, int sizey) : sizex(sizex), sizey(sizey)
 {
+    full_bmp = IMG_Load("client/data/32x32.bmp");
+    if (!full_bmp)
+        throw TileLoadError(IMG_GetError());
 }
 
 TileLib::~TileLib()
@@ -24,6 +27,7 @@ TileLib::~TileLib()
         SDL_FreeSurface(cur->second.image);
     }
     tile_list.clear();
+    delete full_bmp;
 }
 
 SDL_Surface* TileLib::GetTileById(const TileIdType id) const
@@ -32,12 +36,18 @@ SDL_Surface* TileLib::GetTileById(const TileIdType id) const
     return const_cast<SDL_Surface*>(tile_desc.image);
 }
 
-void TileLib::AddTile(const TileIdType id, const std::string tile_name)
+void TileLib::AddTile(const TileIdType id, const int row_of_bmp, const int col_of_bmp)
 {
-    SDL_Surface* tile_surface = IMG_Load(("client/data/" + tile_name + ".png").c_str());
-    if (!tile_surface)
-        throw TileLoadError(IMG_GetError());
+    /* rows and columns count from 0 */
+	SDL_Surface* new_image = SDL_CreateRGBSurface(0,sizex,sizey,32,0,0,0,0);
+	SDL_SetColorKey(new_image, SDL_SRCCOLORKEY, 0);
+	SDL_Rect source_selector;
+    source_selector.x = col_of_bmp*sizex;
+    source_selector.y = row_of_bmp*sizey;
+    source_selector.w = sizex;
+    source_selector.h = sizey;
+    SDL_BlitSurface(full_bmp, &source_selector, new_image, NULL);
     TileDesc tile;
-    tile.image = tile_surface;
+    tile.image = new_image;
     tile_list[id] = tile;
 }
