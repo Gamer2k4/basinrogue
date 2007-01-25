@@ -78,10 +78,12 @@ int main(int argc, char* argv[])
 {
     std::cout << "Server\n";
 
+	unsigned ii;
+
     TileLib tile_lib;
-    ground_tile = &tile_lib.AddTile("ground", 0);
-    wall_tile = &tile_lib.AddTile("wall", FLAG_BLOCKS_MOVEMENT);
-    player_tile = &tile_lib.AddTile("player", FLAG_BLOCKS_MOVEMENT);
+    ground_tile = &tile_lib.AddTile("ground", 23, 13, 0);
+    wall_tile = &tile_lib.AddTile("wall", 25, 0, FLAG_BLOCKS_MOVEMENT);
+    player_tile = &tile_lib.AddTile("player", 3, 2, FLAG_BLOCKS_MOVEMENT);
 
     atexit( SDL_Quit );
 
@@ -139,7 +141,7 @@ int main(int argc, char* argv[])
         if (numready > 0)
         {
 //             std::cout << "Removing disconnected players\n";
-            for (unsigned ii=0; ii < player_list.size(); ++ii)
+            for (ii=0; ii < player_list.size(); ++ii)
             {
                 Player* player = player_list[ii];
                 if (player->GetIsDisconnected())
@@ -148,7 +150,7 @@ int main(int argc, char* argv[])
                 }
             }
             player_list.erase(
-                    remove_if(
+				std::remove_if(
                         player_list.begin(),
                         player_list.end(),
                         MustRemovePlayer
@@ -156,7 +158,7 @@ int main(int argc, char* argv[])
                     player_list.end()
             );
 //             std::cout << "Player think loop\n";
-            for (unsigned ii=0; ii < player_list.size(); ++ii)
+            for (ii=0; ii < player_list.size(); ++ii)
             {
                 Player* player = player_list[ii];
                 player->Think();
@@ -183,7 +185,7 @@ int main(int argc, char* argv[])
                 }
             }
 //             std::cout << "Sending player information\n";
-            for (unsigned ii=0; ii < player_list.size(); ++ii)
+            for (ii=0; ii < player_list.size(); ++ii)
                 player_list[ii]->SendLevelInfo();
         }
     }

@@ -43,13 +43,15 @@ TileLib::~TileLib()
     tile_list.clear();
 }
 
-Tile& TileLib::AddTile(const std::string name, int flags)
+Tile& TileLib::AddTile(const std::string name, int row_of_bmp, int col_of_bmp, int flags)
 {
     Tile* tile = new Tile(name);
     int new_id = tile_list.size();
     tile_list.push_back(tile);
     tile->tile_id = new_id;
     tile->flags = flags;
+	tile->row_of_bmp = row_of_bmp;
+	tile->col_of_bmp = col_of_bmp;
     return *tile;
 }
 
@@ -59,6 +61,7 @@ void TileLib::SendTileLib(NetworkCommandBuffer* buffer) const
     {
         buffer->SendChar('l');
         buffer->SendInt(tile_list[ii]->GetTileId());
-        buffer->SendString(tile_list[ii]->name);
+        buffer->SendInt(tile_list[ii]->row_of_bmp);
+        buffer->SendInt(tile_list[ii]->col_of_bmp);
     }
 }
