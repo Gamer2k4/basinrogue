@@ -29,6 +29,7 @@ class Tile
         const std::string name;
         int tile_id;
         int flags;
+        int row_of_bmp, col_of_bmp;
     public:
         Tile ( const std::string name );
         ~Tile();
@@ -45,7 +46,7 @@ class TileLib
     public:
         ~TileLib();
 
-        Tile& AddTile(const std::string name, int flags);
+        Tile& AddTile(const std::string name, int row_of_bmp, int col_of_bmp, int flags);
         void SendTileLib(NetworkCommandBuffer* buffer) const;
 };
 
