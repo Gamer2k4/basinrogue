@@ -29,6 +29,8 @@ G2k4: That's how my RPG works.  There are several places you can be hit, and onl
 
 G2k4: If I wanted to hit someone, I can't imagine missing unless they blocked me or moved out of the way.  I think it's safe to say that all attacks would hit (well, they'd need to pass the ER first).
 
+(C.) Last question then: is there a rating like the tohit which is used to counter the ER of the target? After all, evading a blow is much more difficult if the attacker is a skilled fighter.
+
 == Damage Types ==
   * Pierce, Slash, Crush
   * Energy/Magic
