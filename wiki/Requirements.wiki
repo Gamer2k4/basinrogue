@@ -6,7 +6,15 @@ The project uses CMake for now. You'll need at least CMake 2.4.x. You can downlo
 
 == Windows ==
 
-You'll need a C++ compiler. Any version of Visual Studio should work although the code was only tested on Visual 2005. Alternatively, you can install the free MinGW or the free command line compiler from Microsoft. _Links required_
+You'll need a C++ compiler. Any version of Visual Studio should work although the code was only tested on Visual 2005. Alternatively, you can install the free MinGW or the free command line compiler from Microsoft.
+  * Microsoft Visual C++ 2005 Express Edition: http://msdn.microsoft.com/vstudio/express/visualc/default.aspx
+    Don't forget to install the platform SDK
+  * MinGW: http://www.mingw.org/ You'll need at least:
+    * g++
+    * gcc-core ( I think )
+    * binutils
+
+Could someone with a plain Windows try one of those and update the requirements?
 
 = External libraries =
 
