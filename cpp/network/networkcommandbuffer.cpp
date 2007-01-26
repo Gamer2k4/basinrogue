@@ -68,6 +68,15 @@ std::string NetworkCommandBuffer::ReadString()
     return data;
 }
 
+double NetworkCommandBuffer::ReadDouble()
+{
+    if (buffer.empty())
+        throw ReadSocketError();
+    std::string data = buffer.front();
+    buffer.pop();
+    return atof(data.c_str());
+}
+
 int NetworkCommandBuffer::GetNbCommands()
 {
     return buffer.size();
@@ -91,6 +100,15 @@ void NetworkCommandBuffer::SendChar(char message)
 }
 
 void NetworkCommandBuffer::SendInt(int message)
+{
+    std::stringstream buffer;
+    buffer << message << "\n";
+    std::string data(buffer.str());
+
+    SDLNet_TCP_Send(socket, const_cast<char*>(data.data()), data.size());
+}
+
+void NetworkCommandBuffer::SendDouble(double message)
 {
     std::stringstream buffer;
     buffer << message << "\n";
@@ -158,7 +176,7 @@ void NetworkCommandBuffer::AddCharToBuffer(char chr)
     }
     else
     {
-        current_command.push_back(chr);
+        current_command+=chr;
     }
 }
 

@@ -85,3 +85,9 @@ void Player::SendLevelInfo()
     viewport.SendLevelInfo(command_buffer);
     viewport.MarkAllClean();
 }
+
+void Player::MakeSound(const Sound* s, double volume){
+	command_buffer->SendChar('p');
+    command_buffer->SendInt(s->GetSoundId());
+    command_buffer->SendDouble(volume);
+}
