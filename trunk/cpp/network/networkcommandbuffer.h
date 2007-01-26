@@ -61,10 +61,12 @@ class NetworkCommandBuffer
         char PeekReadChar();
         char ReadChar();
         std::string ReadString();
+        double ReadDouble();
 
         void SendString(const std::string message);
         void SendChar(char message);
         void SendInt(int message);
+        void SendDouble(double message);
 
         bool HasCommands();
         int GetNbCommands();

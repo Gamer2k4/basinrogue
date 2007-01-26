@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "tile.h"
+#include "sound.h"
 #include "level.h"
 #include "player.h"
 #include "networkcommandbuffer.h"
@@ -18,6 +19,8 @@ const int levelsizey = 25;
 Tile* ground_tile;
 Tile* wall_tile;
 Tile* player_tile;
+
+Sound* wind_sound;
 
 const char* level_map =
         "#########################"
@@ -85,6 +88,9 @@ int main(int argc, char* argv[])
     wall_tile = &tile_lib.AddTile("wall", 25, 0, FLAG_BLOCKS_MOVEMENT);
     player_tile = &tile_lib.AddTile("player", 3, 2, FLAG_BLOCKS_MOVEMENT);
 
+    SoundLib sound_lib;
+    wind_sound = &sound_lib.AddSound("whoosh", "wind");
+
     atexit( SDL_Quit );
 
     if ( SDL_Init( SDL_INIT_NOPARACHUTE ) < 0 )
@@ -127,6 +133,8 @@ int main(int argc, char* argv[])
     Level level(levelsizex, levelsizey);
     set_level_map(level);
 
+    Uint32 last_wind_whoosh = 0; // make a wind noise every 20s from now on
+
     int numready;
 
     for (;;)
@@ -157,6 +165,17 @@ int main(int argc, char* argv[])
                     ),
                     player_list.end()
             );
+//             std::cout << "Real-time based events\n";
+			if (SDL_GetTicks() - last_wind_whoosh > 20000){
+				// 20 s have elapsed - make wind noise
+				last_wind_whoosh = SDL_GetTicks();
+				for (ii=0; ii < player_list.size(); ++ii)
+				{
+					Player* player = player_list[ii];
+					player->MakeSound(wind_sound, 0.5);
+				}
+			}
+
 //             std::cout << "Player think loop\n";
             for (ii=0; ii < player_list.size(); ++ii)
             {
@@ -180,6 +199,7 @@ int main(int argc, char* argv[])
                     player_mobile->SetLevel(level, 1, 1);
                     Player* player = new Player(client_socket, player_mobile);
                     tile_lib.SendTileLib(player->command_buffer);
+                    sound_lib.SendSoundLib(player->command_buffer);
                     player->SendLevelInfo();
                     player_list.push_back(player);
                 }

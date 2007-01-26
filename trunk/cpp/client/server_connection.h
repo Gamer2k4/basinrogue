@@ -16,6 +16,7 @@
 #include <string>
 #include "game_elements.h"
 #include "tile_lib.h"
+#include "sound_lib.h"
 #include "networkcommandbuffer.h"
 
 enum ClientCommand
@@ -36,9 +37,10 @@ class ServerConnection
     private:
         GameWorld& world;
         TileLib& tile_lib;
+        SoundLib& sound_lib;
         NetworkCommandBuffer* server_socket;
     public:
-        ServerConnection(GameWorld& world, TileLib& tile_lib);
+        ServerConnection(GameWorld& world, TileLib& tile_lib, SoundLib& sound_lib);
         ~ServerConnection();
 
         void Update();

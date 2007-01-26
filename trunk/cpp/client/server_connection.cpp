@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-ServerConnection::ServerConnection(GameWorld& world, TileLib& tile_lib) : world(world), tile_lib(tile_lib), server_socket(0)
+ServerConnection::ServerConnection(GameWorld& world, TileLib& tile_lib, SoundLib& sound_lib) : world(world), tile_lib(tile_lib), sound_lib(sound_lib), server_socket(0)
 {
 }
 
@@ -51,13 +51,23 @@ void ServerConnection::Update()
         switch (command)
         {
             case 'l':
-                if (server_socket->GetNbCommands() >= 3)
+                if (server_socket->GetNbCommands() >= 4)
                 {
                     server_socket->ReadChar();
                     int id = server_socket->ReadInt();
                     int row_of_bmp = server_socket->ReadInt();
                     int col_of_bmp = server_socket->ReadInt();
                     tile_lib.AddTile(id, row_of_bmp, col_of_bmp);
+                    break;
+                }
+                return;
+            case 's':
+                if (server_socket->GetNbCommands() >= 3)
+                {
+                    server_socket->ReadChar();
+                    int id = server_socket->ReadInt();
+                    std::string filename_prefix = server_socket->ReadString();
+                    sound_lib.AddSound(id, filename_prefix);
                     break;
                 }
                 return;
@@ -79,6 +89,16 @@ void ServerConnection::Update()
                     int x = server_socket->ReadInt();
                     int y = server_socket->ReadInt();
                     world.ClearTile(x, y);
+                    break;
+                }
+                return;
+            case 'p':
+                if (server_socket->GetNbCommands() >= 3)
+                {
+                    server_socket->ReadChar();
+                    int id = server_socket->ReadInt();
+                    double volume = server_socket->ReadDouble();
+                    sound_lib.GetSoundById(id)->Play(volume);
                     break;
                 }
                 return;

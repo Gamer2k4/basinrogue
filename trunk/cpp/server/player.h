@@ -16,6 +16,7 @@
 #include "SDL_net.h"
 #include "networkcommandbuffer.h"
 #include "mobile.h"
+#include "sound.h"
 
 /**
     @author Cavalaria Christophe <chris.cavalaria@free.fr>
@@ -37,6 +38,8 @@ class Player
         void Think();
 
         void SendLevelInfo();
+
+        void MakeSound(const Sound* s, double volume); // volume of 0 is silent, 1 is loud
 };
 
 #endif

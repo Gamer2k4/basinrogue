@@ -4,10 +4,12 @@
 #include "SDL.h"
 #include "SDL_main.h"
 #include "SDL_image.h"
+#include "SDL_mixer.h"
 #include "SDL_net.h"
 
 #include "game_elements.h"
 #include "tile_lib.h"
+#include "sound_lib.h"
 #include "server_connection.h"
 
 bool must_quit = false;
@@ -70,7 +72,7 @@ int main(int argc, char* argv[])
 
     atexit( SDL_Quit );
 
-    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE ) < 0 )
+    if ( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE | SDL_INIT_AUDIO ) < 0 )
     {
         std::cerr << "Unable to init SDL: " << SDL_GetError() << "\n";
         exit( 1 );
@@ -82,13 +84,22 @@ int main(int argc, char* argv[])
         exit( 1 );
     }
 
+    int audio_rate = 22050;
+	Uint16 audio_format = AUDIO_S16SYS;
+	int audio_channels = 2;
+	int audio_buffers = 4096;
+
+	if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) < 0)
+	{
+		std::cerr << "Unable to initialize audio: \n" << Mix_GetError() << '\n';
+		exit( 1 );
+	}
+
     GameWorld world(levelsizex, levelsizey);
     TileLib main_view_tile_lib(32, 32);
-    // main_view_tile_lib.AddTile(0, 22, 0); /* wall */
-    // main_view_tile_lib.AddTile(1, 23, 0); /* floor */
-    // main_view_tile_lib.AddTile(2, 3,  2); /* player */
+    SoundLib sound_lib;
 
-    ServerConnection connection(world, main_view_tile_lib);
+    ServerConnection connection(world, main_view_tile_lib, sound_lib);
     if (argc > 1)
         connection.Connect(argv[1], 1664);
     else
@@ -114,6 +125,8 @@ int main(int argc, char* argv[])
         connection.Update();
         handle_input(connection);
     }
+
+    Mix_CloseAudio();
 
     return 0;
 }
