@@ -31,7 +31,7 @@ G2k4: If I wanted to hit someone, I can't imagine missing unless they blocked me
 
 (C.) Last question then: is there a rating like the tohit which is used to counter the ER of the target? After all, evading a blow is much more difficult if the attacker is a skilled fighter.
 
-G2k4: One solution is that the attackers weapons skill is subtracted from the ER.  Basically, the better you are, the less chance your target has of dodging.  Certain weapons, like whips, would affect the target's ER as well.  
+G2k4: One solution is that the attackers weapons skill is subtracted from the target's ER.  Basically, the better you are, the less chance your target has of dodging.  Certain weapons, like whips, would affect the target's ER as well.  
 
 == Damage Types ==
   * Pierce, Slash, Crush
