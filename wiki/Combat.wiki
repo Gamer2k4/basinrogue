@@ -14,7 +14,9 @@ When creating a combat engine, many things must be taken into account.  How does
   * Generic: There is one armor rating.  All items collectively add to that rating, and it determines hit chance and damage resistance.
   * Localized: Each armor piece protects one body part.  If that part is damaged, only a single piece of armor will reduce the damage.
 
-(C.) I think I would favor Localized here. It'll force the user to update his whole armor or risk facing very damaging hits when the monster hits the weak spot in his armor. It works with a Generic hit health system either. And it opens the way for some specific skills that allow the player/monster to aim for weak spots. We just have to make clear to the user that his armor rating isn't the sum of all armor parts but a mean value compounded by the chance of each body part beeing hit in normal situations.
+(C.) I think I would favor Localized here. It'll force the user to update his whole armor or risk facing very damaging hits when the monster hits the weak spot in his armor. It works with a Generic hit health system either. And it opens the way for some specific skills that allow the player/monster to aim for weak spots. We just have to make clear to the user that his armor rating isn't the sum of all armor parts but a mean value compounded by the chance of each body part being hit in normal situations.
+
+G2k4: That's how my RPG works.  There are several places you can be hit, and only the armor on that location protects you.  However, all damage is dealt to one set of hitpoints.
 
 == Possible damage reducers ==
   * Evade rating: The player's chance of completely avoiding damage.  This can be represented as a percentage (for every attack, a player has the same chance of dodging) or a decreasable value.  The value could be called "stamina" or something; it is reduced before hitpoints are, representing a player being able to avoid real damage, but tiring.  With this system, stamina could regenerate quickly when not in combat, but damage to hitpoints would have to have a greater effect on the player.
@@ -24,6 +26,8 @@ When creating a combat engine, many things must be taken into account.  How does
   * Kinetic vs Energy damage: Magic may bypass armor completely, and magical shields may be useless against physical attacks.
 
 (C.) There is another important factor that you haven't talked about: an attack that fails doesn't hit you. Does the attacker has a tohit roll to make against your AC ( D&D style ) or do you assume that all attacks always hit? Or something else.
+
+G2k4: If I wanted to hit someone, I can't imagine missing unless they blocked me or moved out of the way.  I think it's safe to say that all attacks would hit (well, they'd need to pass the ER first).
 
 == Damage Types ==
   * Pierce, Slash, Crush
