@@ -15,6 +15,7 @@ You'll need a C++ compiler. Any version of Visual Studio should work although th
     * binutils
 
 Could someone with a plain Windows try one of those and update the requirements?
+(A. I'll try VC++ EE when I get the chance)
 
 = External libraries =
 
