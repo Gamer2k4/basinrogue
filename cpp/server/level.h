@@ -24,60 +24,60 @@ const int FLAG_BLOCKS_VIEW = 1 << 1;
 
 class LevelTile
 {
-    public:
-        Tile* tile;
-        LevelTile();
+	public:
+		Tile* tile;
+		LevelTile();
 };
 
 class LevelViewPort;
 
 class Level
 {
-    private:
-        std::vector<LevelTile> level_table;
-        std::set<Mobile*> mobile_list;
-        std::set<LevelViewPort*> viewport_list;
+	private:
+		std::vector<LevelTile> level_table;
+		std::set<Mobile*> mobile_list;
+		std::set<LevelViewPort*> viewport_list;
 
-        void SetIsDirty(int x, int y);
-    public:
-        const int sizex;
-        const int sizey;
+		void SetIsDirty ( int x, int y );
+	public:
+		const int sizex;
+		const int sizey;
 
-        Level(int sizex, int sizey);
-        Tile* GetTile(int posx, int posy);
-        void SetTile(int posx, int posy, Tile* tile);
+		Level ( int sizex, int sizey );
+		Tile* GetTile ( int posx, int posy );
+		void SetTile ( int posx, int posy, Tile* tile );
 
-        void BeforeMoveEvent(Mobile& mob);
-        void AfterMoveEvent(Mobile& mob);
+		void BeforeMoveEvent ( Mobile& mob );
+		void AfterMoveEvent ( Mobile& mob );
 
-        void AddMobile(Mobile& mob);
-        void RemoveMobile(Mobile& mob);
+		void AddMobile ( Mobile& mob );
+		void RemoveMobile ( Mobile& mob );
 
-        void AddViewPort(LevelViewPort* viewport);
-        void RemoveViewPort(LevelViewPort* viewport);
+		void AddViewPort ( LevelViewPort* viewport );
+		void RemoveViewPort ( LevelViewPort* viewport );
 
-        void SendTileInfo(NetworkCommandBuffer* buffer, int x, int y) const;
+		void SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y ) const;
 };
 
 class LevelViewPort
 {
-    private:
-        std::vector<bool> dirty_table;
+	private:
+		std::vector<bool> dirty_table;
 
-        Level* level;
-        int sizex;
-        int sizey;
-    public:
-        LevelViewPort();
-        ~LevelViewPort();
+		Level* level;
+		int sizex;
+		int sizey;
+	public:
+		LevelViewPort();
+		~LevelViewPort();
 
-        void AttachToLevel(Level* new_level, NetworkCommandBuffer* buffer);
-        bool IsDirty(int x, int y);
-        void SetIsDirty(int x, int y);
-        void MarkAllDirty();
-        void MarkAllClean();
+		void AttachToLevel ( Level* new_level, NetworkCommandBuffer* buffer );
+		bool IsDirty ( int x, int y );
+		void SetIsDirty ( int x, int y );
+		void MarkAllDirty();
+		void MarkAllClean();
 
-        void SendLevelInfo(NetworkCommandBuffer* buffer, int posx, int posy);
+		void SendLevelInfo ( NetworkCommandBuffer* buffer, int posx, int posy );
 };
 
 #endif

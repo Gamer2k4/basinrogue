@@ -22,28 +22,27 @@ typedef unsigned long SoundIdType;
 
 class SoundDesc
 {
-    public:
-        Mix_Chunk* data;
-        void Play(double volume); /* volume between 0 (silent) and 1 (loud) */
+	public:
+		Mix_Chunk* data;
+		void Play ( double volume ); /* volume between 0 (silent) and 1 (loud) */
 };
 
 class SoundLib
 {
-    private:
-        std::map<SoundIdType, SoundDesc> sound_list;
-    public:
-        SoundLib();
-        ~SoundLib();
+	private:
+		std::map<SoundIdType, SoundDesc> sound_list;
+	public:
+		SoundLib();
+		~SoundLib();
 
-        SoundDesc* GetSoundById(const SoundIdType id) const;
-        void AddSound(const SoundIdType id, std::string& filename_prefix);
+		SoundDesc* GetSoundById ( const SoundIdType id ) const;
+		void AddSound ( const SoundIdType id, std::string& filename_prefix );
 };
 
 class SoundLoadError
 {
-    public:
-        const char* error;
-        SoundLoadError(const char* arg) : error(arg) { }
-};
+	public:
+		const char* error;
+		SoundLoadError ( const char* arg ) : error ( arg ) { }};
 
 #endif

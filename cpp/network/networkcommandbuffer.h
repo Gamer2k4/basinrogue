@@ -19,25 +19,25 @@
 
 class ReadSocketError
 {
-    public:
-        ReadSocketError()
-        {
-            std::cout << "In ReadSocketError\n";
-        }
+	public:
+		ReadSocketError()
+		{
+			std::cout << "In ReadSocketError\n";
+		}
 };
 
-void RaiseSocketError(const char* message);
+void RaiseSocketError ( const char* message );
 
 class SocketSetEncapsulator
 {
-    private:
-        SDLNet_SocketSet set;
-    public:
-        SocketSetEncapsulator(SDLNet_SocketSet set) : set(set) {}
-        ~SocketSetEncapsulator()
-        {
-            SDLNet_FreeSocketSet(set);
-        }
+	private:
+		SDLNet_SocketSet set;
+	public:
+	SocketSetEncapsulator ( SDLNet_SocketSet set ) : set ( set ) {}
+		~SocketSetEncapsulator()
+		{
+			SDLNet_FreeSocketSet ( set );
+		}
 };
 
 /**
@@ -45,35 +45,35 @@ class SocketSetEncapsulator
 */
 class NetworkCommandBuffer
 {
-    private:
-        TCPsocket socket;
-        std::queue<std::string> buffer;
-        bool is_connected;
-        std::string current_command;
+	private:
+		TCPsocket socket;
+		std::queue<std::string> buffer;
+		bool is_connected;
+		std::string current_command;
 
-        void AddCharToBuffer(char chr);
-    public:
-        NetworkCommandBuffer(TCPsocket socket);
-        ~NetworkCommandBuffer();
+		void AddCharToBuffer ( char chr );
+	public:
+		NetworkCommandBuffer ( TCPsocket socket );
+		~NetworkCommandBuffer();
 
-        bool GetIsConnected();
-        int ReadInt();
-        char PeekReadChar();
-        char ReadChar();
-        std::string ReadString();
-        double ReadDouble();
+		bool GetIsConnected();
+		int ReadInt();
+		char PeekReadChar();
+		char ReadChar();
+		std::string ReadString();
+		double ReadDouble();
 
-        void SendString(const std::string message);
-        void SendChar(char message);
-        void SendInt(int message);
-        void SendDouble(double message);
+		void SendString ( const std::string message );
+		void SendChar ( char message );
+		void SendInt ( int message );
+		void SendDouble ( double message );
 
-        bool HasCommands();
-        int GetNbCommands();
+		bool HasCommands();
+		int GetNbCommands();
 
-        void Think();
+		void Think();
 
-        void DumpBuffer();
+		void DumpBuffer();
 };
 
 #endif
