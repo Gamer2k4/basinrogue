@@ -63,8 +63,8 @@ void handle_input(ServerConnection& connection)
     }
 }
 
-const int levelsizex = 25;
-const int levelsizey = 25;
+const int levelsizex = 25; // for testing, increase later?
+const int levelsizey = 21;
 
 int main(int argc, char* argv[])
 {
@@ -95,17 +95,7 @@ int main(int argc, char* argv[])
 		exit( 1 );
 	}
 
-    GameWorld world(levelsizex, levelsizey);
-    TileLib main_view_tile_lib(32, 32);
-    SoundLib sound_lib;
-
-    ServerConnection connection(world, main_view_tile_lib, sound_lib);
-    if (argc > 1)
-        connection.Connect(argv[1], 1664);
-    else
-        connection.Connect("localhost", 1664);
-
-    SDL_Surface* screen = SDL_SetVideoMode( 800, 800, 0, SDL_SWSURFACE );
+    SDL_Surface* screen = SDL_SetVideoMode( 800, 672, 0, SDL_SWSURFACE );
 
     if (!screen)
     {
@@ -113,7 +103,17 @@ int main(int argc, char* argv[])
         exit( 1 );
     }
 
-    GameView main_view(world, main_view_tile_lib, screen, levelsizex, levelsizey, 0, 0);
+	GameWorld world;
+    TileLib main_view_tile_lib(32, 32);
+    SoundLib sound_lib;
+    GameView main_view(world, main_view_tile_lib, screen, levelsizex, levelsizey, -1e5, -1e5);
+
+    ServerConnection connection(world, main_view, main_view_tile_lib, sound_lib);
+    if (argc > 1)
+        connection.Connect(argv[1], 1664);
+    else
+        connection.Connect("localhost", 1664);
+
     main_view.DrawView();
     SDL_UpdateRect(screen, 0, 0, 0, 0);
 
