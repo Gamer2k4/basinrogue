@@ -21,30 +21,29 @@ typedef unsigned long TileIdType;
 
 class TileDesc
 {
-    public:
-        SDL_Surface* image;
+	public:
+		SDL_Surface* image;
 };
 
 class TileLib
 {
-    private:
-        std::map<TileIdType, TileDesc> tile_list;
-        SDL_Surface* full_bmp;
-    public:
-        const int sizex;
-        const int sizey;
-        TileLib(int sizex, int sizey);
-        ~TileLib();
+	private:
+		std::map<TileIdType, TileDesc> tile_list;
+		SDL_Surface* full_bmp;
+	public:
+		const int sizex;
+		const int sizey;
+		TileLib ( int sizex, int sizey );
+		~TileLib();
 
-        SDL_Surface* GetTileById(const TileIdType id) const;
-        void AddTile(const TileIdType id, const int row_of_bmp, const int col_of_bmp);
+		SDL_Surface* GetTileById ( const TileIdType id ) const;
+		void AddTile ( const TileIdType id, const int row_of_bmp, const int col_of_bmp );
 };
 
 class TileLoadError
 {
-    public:
-        const char* error;
-        TileLoadError(const char* arg) : error(arg) { }
-};
+	public:
+		const char* error;
+		TileLoadError ( const char* arg ) : error ( arg ) { }};
 
 #endif

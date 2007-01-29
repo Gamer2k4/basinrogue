@@ -18,38 +18,40 @@
 
 class GameWorld
 {
-    private:
-        std::vector<std::vector<TileIdType> >* elem_array;
-    public:
-        int sizex;
-        int sizey;
+	private:
+		std::vector<std::vector<TileIdType> >* elem_array;
+	public:
+		int sizex;
+		int sizey;
 
-        GameWorld();
-        ~GameWorld();
-        const std::vector<TileIdType>& GetTileList(int x, int y) const;
+		GameWorld();
+		~GameWorld();
+		const std::vector<TileIdType>& GetTileList ( int x, int y ) const;
 
-		void Resize(int _sizex, int _sizey);
-        void ClearAll();
-        void ClearTile(int posx, int posy);
-        void AddTile(int posx, int posy, TileIdType id);
+		void Resize ( int _sizex, int _sizey );
+		void ClearAll();
+		void ClearTile ( int posx, int posy );
+		void AddTile ( int posx, int posy, TileIdType id );
 };
 
 class GameView
 {
-    private:
-        SDL_Surface* dest_surface;
-        const GameWorld& world;
-        const TileLib& tile_lib;
-        int sizex;
-        int sizey;
-        int originx;
-        int originy;
-        void DrawTile(int posx, int posy, int scrolled_posx, int scrolled_posy) const;
-		void DrawBlack(int scrolled_posx, int scrolled_posy) const;
-    public:
-        GameView(const GameWorld& world, const TileLib& tile_lib, SDL_Surface* dest_surface, int sizex, int sizey, int originx, int originy);
-        void SetCharacterPos(int posx, int posy);
-        void DrawView() const;
+	private:
+		SDL_Surface* dest_surface;
+		const GameWorld& world;
+		const TileLib& tile_lib;
+		int sizex;
+		int sizey;
+		int originx;
+		int originy;
+		int viewx;
+		int viewy;
+		void DrawTile ( int posx, int posy, int scrolled_posx, int scrolled_posy ) const;
+		void DrawBlack ( int scrolled_posx, int scrolled_posy ) const;
+	public:
+		GameView ( const GameWorld& world, const TileLib& tile_lib, SDL_Surface* dest_surface, int sizex, int sizey, int originx, int originy );
+		void SetCharacterPos ( int posx, int posy );
+		void DrawView() const;
 };
 
 #endif

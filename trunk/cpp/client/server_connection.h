@@ -34,19 +34,19 @@ enum ClientCommand
 class ServerConnection
 {
 
-    private:
-        GameWorld& world;
-        GameView& view;
-        TileLib& tile_lib;
-        SoundLib& sound_lib;
-        NetworkCommandBuffer* server_socket;
-    public:
-        ServerConnection(GameWorld& world, GameView& view, TileLib& tile_lib, SoundLib& sound_lib);
-        ~ServerConnection();
+	private:
+		GameWorld& world;
+		GameView& view;
+		TileLib& tile_lib;
+		SoundLib& sound_lib;
+		NetworkCommandBuffer* server_socket;
+	public:
+		ServerConnection ( GameWorld& world, GameView& view, TileLib& tile_lib, SoundLib& sound_lib );
+		~ServerConnection();
 
-        void Update();
-        void Connect(const std::string server_URL, int server_port);
-        void SendCommand(ClientCommand command);
+		void Update();
+		void Connect ( const std::string server_URL, int server_port );
+		void SendCommand ( ClientCommand command );
 };
 
 #endif

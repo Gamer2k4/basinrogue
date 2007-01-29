@@ -24,27 +24,27 @@ class SoundLib;
 */
 class Sound
 {
-    friend class SoundLib;
-    private:
-        const std::string name;
-        int sound_id;
+		friend class SoundLib;
+	private:
+		const std::string name;
+		int sound_id;
 		std::string filename_prefix;
-    public:
-        Sound ( const std::string name );
-        ~Sound();
+	public:
+		Sound ( const std::string name );
+		~Sound();
 
-        int GetSoundId() const;
+		int GetSoundId() const;
 };
 
 class SoundLib
 {
-    private:
-        std::vector<Sound*> sound_list;
-    public:
-        ~SoundLib();
+	private:
+		std::vector<Sound*> sound_list;
+	public:
+		~SoundLib();
 
-        Sound& AddSound(const std::string name, const std::string filename_prefix);
-        void SendSoundLib(NetworkCommandBuffer* buffer) const;
+		Sound& AddSound ( const std::string name, const std::string filename_prefix );
+		void SendSoundLib ( NetworkCommandBuffer* buffer ) const;
 };
 
 #endif

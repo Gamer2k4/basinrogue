@@ -14,7 +14,7 @@
 #include <string>
 #include <sstream>
 
-Tile::Tile ( const std::string name ) : name ( name ), tile_id( -1 )
+Tile::Tile ( const std::string name ) : name ( name ), tile_id ( -1 )
 {}
 
 
@@ -23,45 +23,45 @@ Tile::~Tile()
 
 int Tile::GetTileId() const
 {
-    return tile_id;
+	return tile_id;
 }
 
-bool Tile::HasOneFlag(int test_flags) const
+bool Tile::HasOneFlag ( int test_flags ) const
 {
-    return (flags & test_flags) != 0;
+	return ( flags & test_flags ) != 0;
 }
 
-bool Tile::HasAllFlag(int test_flags) const
+bool Tile::HasAllFlag ( int test_flags ) const
 {
-    return (flags & test_flags) == test_flags;
+	return ( flags & test_flags ) == test_flags;
 }
 
 TileLib::~TileLib()
 {
-    for (unsigned ii=0; ii < tile_list.size(); ++ii)
-        delete tile_list[ii];
-    tile_list.clear();
+	for ( unsigned ii=0; ii < tile_list.size(); ++ii )
+		delete tile_list[ii];
+	tile_list.clear();
 }
 
-Tile& TileLib::AddTile(const std::string name, int row_of_bmp, int col_of_bmp, int flags)
+Tile& TileLib::AddTile ( const std::string name, int row_of_bmp, int col_of_bmp, int flags )
 {
-    Tile* tile = new Tile(name);
-    int new_id = tile_list.size();
-    tile_list.push_back(tile);
-    tile->tile_id = new_id;
-    tile->flags = flags;
+	Tile* tile = new Tile ( name );
+	int new_id = tile_list.size();
+	tile_list.push_back ( tile );
+	tile->tile_id = new_id;
+	tile->flags = flags;
 	tile->row_of_bmp = row_of_bmp;
 	tile->col_of_bmp = col_of_bmp;
-    return *tile;
+	return *tile;
 }
 
-void TileLib::SendTileLib(NetworkCommandBuffer* buffer) const
+void TileLib::SendTileLib ( NetworkCommandBuffer* buffer ) const
 {
-    for (unsigned ii=0; ii < tile_list.size(); ++ii)
-    {
-        buffer->SendChar('l');
-        buffer->SendInt(tile_list[ii]->GetTileId());
-        buffer->SendInt(tile_list[ii]->row_of_bmp);
-        buffer->SendInt(tile_list[ii]->col_of_bmp);
-    }
+	for ( unsigned ii=0; ii < tile_list.size(); ++ii )
+	{
+		buffer->SendChar ( 'l' );
+		buffer->SendInt ( tile_list[ii]->GetTileId() );
+		buffer->SendInt ( tile_list[ii]->row_of_bmp );
+		buffer->SendInt ( tile_list[ii]->col_of_bmp );
+	}
 }

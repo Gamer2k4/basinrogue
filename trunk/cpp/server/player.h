@@ -23,23 +23,23 @@
 */
 class Player
 {
-    public:
-        NetworkCommandBuffer* command_buffer;
-        TCPsocket socket;
-        Mobile* mobile;
-        LevelViewPort viewport;
-    private:
-        bool is_disconnected;
-    public:
-        Player(TCPsocket socket, Mobile* mobile);
-        ~Player();
+	public:
+		NetworkCommandBuffer* command_buffer;
+		TCPsocket socket;
+		Mobile* mobile;
+		LevelViewPort viewport;
+	private:
+		bool is_disconnected;
+	public:
+		Player ( TCPsocket socket, Mobile* mobile );
+		~Player();
 
-        bool GetIsDisconnected();
-        void Think();
+		bool GetIsDisconnected();
+		void Think();
 
-        void SendLevelInfo();
+		void SendLevelInfo();
 
-        void MakeSound(const Sound* s, double volume); // volume of 0 is silent, 1 is loud
+		void MakeSound ( const Sound* s, double volume ); // volume of 0 is silent, 1 is loud
 };
 
 #endif

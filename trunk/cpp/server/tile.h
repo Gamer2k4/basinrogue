@@ -24,30 +24,30 @@ class TileLib;
 */
 class Tile
 {
-    friend class TileLib;
-    private:
-        const std::string name;
-        int tile_id;
-        int flags;
-        int row_of_bmp, col_of_bmp;
-    public:
-        Tile ( const std::string name );
-        ~Tile();
+		friend class TileLib;
+	private:
+		const std::string name;
+		int tile_id;
+		int flags;
+		int row_of_bmp, col_of_bmp;
+	public:
+		Tile ( const std::string name );
+		~Tile();
 
-        int GetTileId() const;
-        bool HasOneFlag(int test_flags) const;
-        bool HasAllFlag(int test_flags) const;
+		int GetTileId() const;
+		bool HasOneFlag ( int test_flags ) const;
+		bool HasAllFlag ( int test_flags ) const;
 };
 
 class TileLib
 {
-    private:
-        std::vector<Tile*> tile_list;
-    public:
-        ~TileLib();
+	private:
+		std::vector<Tile*> tile_list;
+	public:
+		~TileLib();
 
-        Tile& AddTile(const std::string name, int row_of_bmp, int col_of_bmp, int flags);
-        void SendTileLib(NetworkCommandBuffer* buffer) const;
+		Tile& AddTile ( const std::string name, int row_of_bmp, int col_of_bmp, int flags );
+		void SendTileLib ( NetworkCommandBuffer* buffer ) const;
 };
 
 #endif
