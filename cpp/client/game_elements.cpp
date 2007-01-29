@@ -54,7 +54,7 @@ void GameWorld::ClearTile(int posx, int posy)
         std::cout << "Tile out of range :" << posx << ", " << posy << "\n";
     }
     elem_array->at(posx + posy * sizex).clear();
-    //TODO Add dirty bit for quick refresh
+    //TODO Add dirty bit for quick refresh (but how will this interact with scrolling? A.)
 }
 
 void GameWorld::AddTile(int posx, int posy, TileIdType id)
@@ -68,7 +68,7 @@ void GameWorld::AddTile(int posx, int posy, TileIdType id)
         std::cout << "Invalid tile id: " << id << "\n";
     }
     elem_array->at(posx + posy * sizex).push_back(id);
-    //TODO Add dirty bit for quick refresh
+    //TODO Add dirty bit for quick refresh (but how will this interact with scrolling? A.)
 };
 
 //-------------------------------------------------------------------------------------------------
