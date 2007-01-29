@@ -50,7 +50,7 @@ void ServerConnection::Update()
         char command = server_socket->PeekReadChar();
         switch (command)
         {
-            case 'l':
+            case 'l': // TODO can we use an enum instead of these chars? they are getting messy
                 if (server_socket->GetNbCommands() >= 4)
                 {
                     server_socket->ReadChar();
