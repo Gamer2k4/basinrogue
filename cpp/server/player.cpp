@@ -17,7 +17,7 @@
 Player::Player(TCPsocket socket, Mobile* mobile) : socket(socket), mobile(mobile), is_disconnected(false)
 {
     command_buffer = new NetworkCommandBuffer(socket);
-    viewport.AttachToLevel(mobile->GetLevel());
+    viewport.AttachToLevel(mobile->GetLevel(),command_buffer);
 }
 
 Player::~Player()
@@ -82,7 +82,7 @@ void Player::Think()
 
 void Player::SendLevelInfo()
 {
-    viewport.SendLevelInfo(command_buffer);
+    viewport.SendLevelInfo(command_buffer,mobile->posx,mobile->posy);
     viewport.MarkAllClean();
 }
 

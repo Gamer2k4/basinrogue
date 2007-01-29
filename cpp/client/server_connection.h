@@ -36,11 +36,12 @@ class ServerConnection
 
     private:
         GameWorld& world;
+        GameView& view;
         TileLib& tile_lib;
         SoundLib& sound_lib;
         NetworkCommandBuffer* server_socket;
     public:
-        ServerConnection(GameWorld& world, TileLib& tile_lib, SoundLib& sound_lib);
+        ServerConnection(GameWorld& world, GameView& view, TileLib& tile_lib, SoundLib& sound_lib);
         ~ServerConnection();
 
         void Update();

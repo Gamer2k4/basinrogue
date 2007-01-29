@@ -19,14 +19,16 @@
 class GameWorld
 {
     private:
-        std::vector<std::vector<TileIdType> > elem_array;
+        std::vector<std::vector<TileIdType> >* elem_array;
     public:
         int sizex;
         int sizey;
 
-        GameWorld(int sizex, int sizey);
+        GameWorld();
+        ~GameWorld();
         const std::vector<TileIdType>& GetTileList(int x, int y) const;
 
+		void Resize(int _sizex, int _sizey);
         void ClearAll();
         void ClearTile(int posx, int posy);
         void AddTile(int posx, int posy, TileIdType id);
@@ -42,9 +44,11 @@ class GameView
         int sizey;
         int originx;
         int originy;
-        void DrawTile(int posx, int posy) const;
+        void DrawTile(int posx, int posy, int scrolled_posx, int scrolled_posy) const;
+		void DrawBlack(int scrolled_posx, int scrolled_posy) const;
     public:
         GameView(const GameWorld& world, const TileLib& tile_lib, SDL_Surface* dest_surface, int sizex, int sizey, int originx, int originy);
+        void SetCharacterPos(int posx, int posy);
         void DrawView() const;
 };
 

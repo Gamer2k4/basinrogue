@@ -71,13 +71,13 @@ class LevelViewPort
         LevelViewPort();
         ~LevelViewPort();
 
-        void AttachToLevel(Level* new_level);
+        void AttachToLevel(Level* new_level, NetworkCommandBuffer* buffer);
         bool IsDirty(int x, int y);
         void SetIsDirty(int x, int y);
         void MarkAllDirty();
         void MarkAllClean();
 
-        void SendLevelInfo(NetworkCommandBuffer* buffer);
+        void SendLevelInfo(NetworkCommandBuffer* buffer, int posx, int posy);
 };
 
 #endif

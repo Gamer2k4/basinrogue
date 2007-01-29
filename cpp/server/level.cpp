@@ -25,7 +25,7 @@ Level::Level(int sizex, int sizey) : sizex(sizex), sizey(sizey)
 
 void Level::SendTileInfo(NetworkCommandBuffer* buffer, int x, int y) const
 {
-    int index = x + y * sizey;
+    int index = x + y * sizex;
     buffer->SendChar('c');
     buffer->SendInt(x);
     buffer->SendInt(y);
@@ -65,13 +65,13 @@ void Level::SetIsDirty(int x, int y)
 
 Tile* Level::GetTile(int posx, int posy)
 {
-    int index = posx + posy * sizey;
+    int index = posx + posy * sizex;
     return level_table[index].tile;
 }
 
 void Level::SetTile(int posx, int posy, Tile* tile)
 {
-    int index = posx + posy * sizey;
+    int index = posx + posy * sizex;
     level_table[index].tile = tile;
     SetIsDirty(posx, posy);
 }
@@ -114,10 +114,10 @@ LevelViewPort::LevelViewPort() : level(0)
 LevelViewPort::~LevelViewPort()
 {
     if (level)
-        AttachToLevel(0);
+        AttachToLevel(0,0);
 }
 
-void LevelViewPort::AttachToLevel(Level* new_level)
+void LevelViewPort::AttachToLevel(Level* new_level, NetworkCommandBuffer* buffer)
 {
     if (level)
         level->RemoveViewPort(this);
@@ -128,17 +128,20 @@ void LevelViewPort::AttachToLevel(Level* new_level)
         sizex = level->sizex;
         sizey = level->sizey;
         MarkAllDirty();
+		buffer->SendChar('d');
+	    buffer->SendInt(level->sizex);
+	    buffer->SendInt(level->sizey);
     }
 }
 
 bool LevelViewPort::IsDirty(int x, int y)
 {
-    return dirty_table[x + y * sizey];
+    return dirty_table[x + y * sizex];
 }
 
 void LevelViewPort::SetIsDirty(int x, int y)
 {
-    dirty_table[x + y * sizey] = true;
+    dirty_table[x + y * sizex] = true;
 }
 
 void LevelViewPort::MarkAllDirty()
@@ -153,8 +156,11 @@ void LevelViewPort::MarkAllClean()
     dirty_table.swap(new_dirty_table);
 }
 
-void LevelViewPort::SendLevelInfo(NetworkCommandBuffer* buffer)
+void LevelViewPort::SendLevelInfo(NetworkCommandBuffer* buffer, int posx, int posy)
 {
+	buffer->SendChar('@');
+    buffer->SendInt(posx);
+    buffer->SendInt(posy);
     for (int jj=0; jj < sizey; ++jj)
         for (int ii=0; ii < sizex; ++ii)
             if (IsDirty(ii, jj))

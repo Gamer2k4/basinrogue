@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-ServerConnection::ServerConnection(GameWorld& world, TileLib& tile_lib, SoundLib& sound_lib) : world(world), tile_lib(tile_lib), sound_lib(sound_lib), server_socket(0)
+ServerConnection::ServerConnection(GameWorld& world, GameView& view, TileLib& tile_lib, SoundLib& sound_lib) : world(world), view(view), tile_lib(tile_lib), sound_lib(sound_lib), server_socket(0)
 {
 }
 
@@ -71,6 +71,16 @@ void ServerConnection::Update()
                     break;
                 }
                 return;
+            case 'd':
+                if (server_socket->GetNbCommands() >= 3)
+                {
+                    server_socket->ReadChar();
+                    int sizex = server_socket->ReadInt();
+                    int sizey = server_socket->ReadInt();
+                    world.Resize(sizex,sizey);
+                    break;
+                }
+                return;
             case 't':
                 if (server_socket->GetNbCommands() >= 4)
                 {
@@ -89,6 +99,16 @@ void ServerConnection::Update()
                     int x = server_socket->ReadInt();
                     int y = server_socket->ReadInt();
                     world.ClearTile(x, y);
+                    break;
+                }
+                return;
+            case '@':
+                if (server_socket->GetNbCommands() >= 3)
+                {
+                    server_socket->ReadChar();
+                    int posx = server_socket->ReadInt();
+                    int posy = server_socket->ReadInt();
+                    view.SetCharacterPos(posx, posy);
                     break;
                 }
                 return;
