@@ -80,7 +80,10 @@ bool MustRemovePlayer ( Player* player )
 {
 	bool must_remove = player->GetIsDisconnected();
 	if ( must_remove )
+	{
+		std::cout << "Removing player\n";
 		delete player;
+	}
 	return must_remove;
 }
 
@@ -156,6 +159,12 @@ int main ( int argc, char* argv[] )
 		}
 		if ( numready > 0 )
 		{
+//             std::cout << "Player think loop\n";
+			for ( ii=0; ii < player_list.size(); ++ii )
+			{
+				Player* player = player_list[ii];
+				player->Think();
+			}
 //             std::cout << "Removing disconnected players\n";
 			for ( ii=0; ii < player_list.size(); ++ii )
 			{
@@ -185,12 +194,6 @@ int main ( int argc, char* argv[] )
 				}
 			}
 
-//             std::cout << "Player think loop\n";
-			for ( ii=0; ii < player_list.size(); ++ii )
-			{
-				Player* player = player_list[ii];
-				player->Think();
-			}
 //             std::cout << "Checking for new players\n";
 			if ( SDLNet_SocketReady ( listen_socket ) )
 			{
