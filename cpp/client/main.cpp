@@ -118,6 +118,7 @@ int main ( int argc, char* argv[] )
 	else
 		connection.Connect ( "localhost", 1664 );
 
+	connection.Update();
 	main_view.DrawView();
 	SDL_UpdateRect ( screen, 0, 0, 0, 0 );
 
