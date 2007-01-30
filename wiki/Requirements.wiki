@@ -26,3 +26,5 @@ There are only a few of them, all SDL related:
   * SDL_mixer
 
 Warning for Windows users: Download the devel version of the libs to get the requires .h and .lib files. If you are using MinGW and not Visual Studio, download the MinGW version of those.
+
+G2k4: Is there a way to just download a zip file or something, instead of getting the files one by one?
