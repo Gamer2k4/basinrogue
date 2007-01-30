@@ -7,6 +7,8 @@
 #include "SDL_mixer.h"
 #include "SDL_net.h"
 
+#pragma warning(disable:4786)
+
 #include "game_elements.h"
 #include "tile_lib.h"
 #include "sound_lib.h"

@@ -10,12 +10,14 @@
 //
 //
 
-#include "server_connection.h"
-
 #include <string.h>
 #include "SDL_net.h"
-
 #include <iostream>
+
+#pragma warning(disable:4786)
+
+#include "server_connection.h"
+
 
 ServerConnection::ServerConnection ( GameWorld& world, GameView& view, TileLib& tile_lib, SoundLib& sound_lib ) : world ( world ), view ( view ), tile_lib ( tile_lib ), sound_lib ( sound_lib ), server_socket ( 0 )
 {}
