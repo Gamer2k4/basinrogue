@@ -10,9 +10,12 @@
 //
 //
 
-#include "level.h"
 #include <sstream>
 #include <string>
+
+#pragma warning(disable:4786)
+
+#include "level.h"
 
 LevelTile::LevelTile() : tile ( 0 )
 {}

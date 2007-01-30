@@ -10,6 +10,8 @@
 //
 //
 
+#pragma warning(disable:4786)
+
 #include "sound_lib.h"
 
 SoundLib::SoundLib()

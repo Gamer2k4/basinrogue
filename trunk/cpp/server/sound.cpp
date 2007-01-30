@@ -9,10 +9,13 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "sound.h"
-
 #include <string>
 #include <sstream>
+
+#pragma warning(disable:4786)
+
+#include "sound.h"
+
 
 Sound::Sound ( const std::string name ) : name ( name ), sound_id ( -1 )
 {}

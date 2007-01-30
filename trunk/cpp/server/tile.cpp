@@ -9,10 +9,12 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "tile.h"
-
 #include <string>
 #include <sstream>
+
+#pragma warning(disable:4786)
+
+#include "tile.h"
 
 Tile::Tile ( const std::string name ) : name ( name ), tile_id ( -1 )
 {}

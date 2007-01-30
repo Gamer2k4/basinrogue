@@ -9,9 +9,11 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "player.h"
-
 #include <iostream>
+
+#pragma warning(disable:4786)
+
+#include "player.h"
 
 
 Player::Player ( TCPsocket socket, Mobile* mobile ) : socket ( socket ), mobile ( mobile ), is_disconnected ( false )

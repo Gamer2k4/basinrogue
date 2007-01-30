@@ -3,6 +3,8 @@
 #include <vector>
 #include <algorithm>
 
+#pragma warning(disable:4786)
+
 #include "tile.h"
 #include "sound.h"
 #include "level.h"

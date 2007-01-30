@@ -10,8 +10,12 @@
 //
 //
 
-#include "game_elements.h"
 #include <iostream>
+
+#pragma warning(disable:4786)
+
+#include "game_elements.h"
+
 
 GameWorld::GameWorld() : elem_array ( 0 )
 {}

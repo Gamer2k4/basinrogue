@@ -9,9 +9,11 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include "SDL_image.h"
+
+#pragma warning(disable:4786)
 
 #include "tile_lib.h"
-#include "SDL_image.h"
 
 TileLib::TileLib ( int sizex, int sizey ) : sizex ( sizex ), sizey ( sizey )
 {
