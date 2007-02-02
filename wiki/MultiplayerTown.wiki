@@ -2,7 +2,7 @@
 
 Some of the issues that we currently have:
   * Should the town be real-time or turn-based?
-    * If the town is shared between players, probably real time.
+    * We decided real-time
     * No PK in town. This saves a whole lot of difficulties in game design. If players really want to fight against each other, we can always create an arena for that later. We could even make it turn based since 1vs1 fights wouldn't involve that much waiting for the other.
   * How should trading occur?  Possible options:
     * Absent - trading cannot occur between players
@@ -15,11 +15,7 @@ Some of the issues that we currently have:
       * G2k4: No logging on twice from the same ip? Items disappear after 5 minutes; Different accounts can't log in from the same ip for 5 minutes?
         * A. What if they have two computers next to each other (or it's two friends playing together on separate machines). I think this sort of thing crops up in MUDing a lot.
       * Konijn: In all honesty if someone plays this game to get a level 40 character then he can boost his new mage char, we are not trying to destroy kids school life ( I wasted 1 year on MUDS ) It is a roguelike, you have to play and boast with honor.
-  * If trading is possible, skills (at least item creation skills) are ideal
+  * If trading is possible, skills (at least item creation skills) are ideal (A. yes, agree - see character development page)
   * Are houses necessary? If so, what limitations are on them (cost, space, etc.)?
     * A. I like the idea of players being able to create/decorate their houses or places of business...
       * G2k4: This would be another reason to have a real-time town.  I do like the idea of a town being a gathering place, as opposed to a resupply area.
-  * Multiplayer, multiuser, or simply online?
-    * Multiplayer - real-time gameplay, shared levels, artifacts, uniques, stores
-    * Multiuser - turn-based gameplay, shared artifacts, uniques, possibly shared town
-    * Online - like a single player game, with chatting and shared high scores
