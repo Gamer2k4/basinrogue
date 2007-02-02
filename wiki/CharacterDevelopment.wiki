@@ -1,25 +1,26 @@
 #summary The @'s abilities
 
 I'm going to propose a system of character development. It has some virtues:
-* easy to understand and familiar
-* can be implemented very simply at first
-* allows virtually unlimited amounts of content to be added later by anyone who feels like it
-* allows plenty of differences between characters in the long run 
-* encourages trading between players.
+ * easy to understand and familiar
+ * can be implemented very simply at first
+ * allows virtually unlimited amounts of content to be added later by anyone who feels like it
+ * allows plenty of differences between characters in the long run 
+ * encourages trading between players.
 
 Basically its a skill based system with no classes, and a lot of importance put on spells.
 
-* No classes, only stats and skills.
-* The four stats are; Strength (for damage, hp and encumbrance), Dexterity (for speed, accuracy and evasion), Magic (for max MP and MP regeneration), Intelligence (for learning more spells).
-* You get to choose your initial stats, and whenever you gain a level you can boost a stat.
-* Levelling up is based on killing monsters and gets slower and slower as you go on.
-* When you level up you get points to learn skills. You can choose any skill you like (except some might have prerequisites). Different skills cost different amounts of points. If you can find another character who has the skill you want to learn, they can teach it to you, which costs you less points.
-* Skills are 'either you have it or you don't'. I hate percentage based skill systems.
-* I suggest we implement just four skills at the start - Swordmastery, Sneaking, Sorcery, Prayer. That will get us started. We can then add lots of skills later. They can do just about anything - combat bonuses, special tactics or maneuvers you can use, new types of magic, craft skills for making trade goods, you name it.
-* Some skills should be passive ('always on') and others should be activated by a command (one keypress brings you to a menu where you can choose from all your activatable skills).
-* Spells are important. In the long run there will be different types of magic - ordinary roguelike spells that you can learn as often as you like, special spells that can only be cast once and then you have to relearn them in town, spells that require you to have the favor of the gods, spells that require material components, spells that can only be cast naked on the 13th of the month, whatever. In the short term we can just implement 1 or 2 types of magic.
-* You can only learn as many spells as your Intelligence allows, but you have a spellbook at home which records all your known spells. If you die *your new character gets the same spellbook*. So once you (the player) find a new spell, all your future characters will potentially be able to learn it. So spells need to be hard to find (perhaps spellbooks are quite rare, or are quest rewards). Spells can be traded between players.
-* We can add new spells later, whenever we feel like it.
-* And finally, the last type of character advancement is getting gold and equipment. I think that's important. Everyone likes to get the best stuff.
+ * No classes, only stats and skills.
+ * The four stats are; Strength (for damage, hp and encumbrance), Dexterity (for speed, accuracy and evasion), Magic (for max MP and MP regeneration), Intelligence (for learning more spells).
+ * You get to choose your initial stats, and whenever you gain a level you can boost a stat.
+ * Levelling up is based on killing monsters and gets slower and slower as you go on.
+ * When you level up you get points to learn skills. You can choose any skill you like (except some might have prerequisites). Different skills cost different amounts of points. If you can find another character who has the skill you want to learn, they can teach it to you, which costs you less points.
+ * Skills are 'either you have it or you don't'. I hate percentage based skill systems.
+ * I suggest we implement just four skills at the start - Swordmastery, Sneaking, Sorcery, Prayer. That will get us started. We can then add lots of skills later. They can do just about anything - combat bonuses, special tactics or maneuvers you can use, new types of magic, craft skills for making trade goods, you name it.
+ * Some skills should be passive ('always on') and others should be activated by a command (one keypress brings you to a menu where you can choose from all your activatable skills).
+ * Spells are important. In the long run there will be different types of magic - ordinary roguelike spells that you can learn as often as you like, special spells that can only be cast once and then you have to relearn them in town, spells that require you to have the favor of the gods, spells that require material components, spells that can only be cast naked on the 13th of the month, whatever. In the short term we can just implement 1 or 2 types of magic.
+ * You can only learn as many spells as your Intelligence allows, but you have a spellbook at home which records all your known spells. If you die *your new character gets the same spellbook*. So once you (the player) find a new spell, all your future characters will potentially be able to learn it. So spells need to be hard to find (perhaps spellbooks are quite rare, or are quest rewards). Spells can be traded between players.
+ * We can add new spells later, whenever we feel like it.
+ * And finally, the last type of character advancement is getting gold and equipment. I think that's important. Everyone likes to get the best stuff.
+ * Oh I almost forgot! Everyone should get to choose their own character tile (from a menu of options).
 
 A.
