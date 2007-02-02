@@ -7,3 +7,4 @@ Many methods have been used to represent the storing of items.  Ideally, one sho
   * ADOM: There are no commands to remove and wear items.  Instead, there is an command that brings up the worn items screen.  The player selects which slot he wants to change; if there is a item, it is removed, if not, the pack contents screen is displayed, and the user selects the item he wants to wear.
   * Contained: Every sort of item manipulation occurs from one screen.  That screen displays all of the items the player as, along with an <equipped> tag for the ones he is wearing.  An item is selected, then a command like use, equip, drop, etc. is given.
 
+(A.) I liked the ADOM model myself. Same as used in DoomRL, yes?
