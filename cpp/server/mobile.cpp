@@ -79,3 +79,33 @@ Tile* Mobile::GetAppearance()
 {
 	return appearance;
 }
+
+//-----------------------------------------------------------------------------
+
+Monster::Monster() : Hp ( 10 )
+{}
+
+int Monster::ComputeDamage ( Monster& target )
+{
+	return 1;
+}
+
+void Monster::CheckHp()
+{
+	/// @todo implement me
+}
+
+//-----------------------------------------------------------------------------
+
+PlayerMonster::PlayerMonster() :
+		Strength ( 1, 20 ),
+		Dexterity ( 1, 20 ),
+		Intelligence ( 1, 20 ),
+		Magic ( 1, 20 )
+{}
+
+int PlayerMonster::ComputeDamage ( Monster& target )
+{
+	return Strength;
+}
+

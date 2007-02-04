@@ -1,4 +1,4 @@
-PROJECT(BasinRogue)
+PROJECT(basinrogue)
 
 SUBDIRS(client server)
 
