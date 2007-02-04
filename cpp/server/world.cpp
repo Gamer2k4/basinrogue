@@ -13,6 +13,7 @@
 
 #include "dungeon.h"
 #include "mobile.h"
+#include "player.h"
 
 World::World()
 {}
@@ -53,4 +54,15 @@ void World::AddPlayer(Mobile* mobile)
 {
 	Level* level = dungeon_list[starting_dungeon]->GetLevel(0);
 	mobile->SetLevel( *level, 1, 1 );
+}
+
+void World::PlayerChangesDungeon(Player& player, const std::string& dungeon_name, int depth)
+{
+	Level* old_level = player.mobile->GetLevel();
+	Level* next_level = dungeon_list[dungeon_name]->GetLevel(depth);
+	player.mobile->SetLevel( *next_level, 1, 1 );
+	player.viewport.AttachToLevel( next_level, player.command_buffer );
+	if (old_level->getMustKillOnLeave())
+		delete old_level;
+	std::cout << "Player enters dungeon " << dungeon_name << " depth " << depth << "\n";
 }

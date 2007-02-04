@@ -36,6 +36,16 @@ bool Player::GetIsDisconnected()
 	return is_disconnected;
 }
 
+void Player::TryMove(int decx, int decy)
+{
+	if (mobile->TryMove ( decx,  decy ))
+	{
+		TileTrigger* trigger = mobile->GetLevel()->GetTile ( mobile->posx, mobile->posy ).trigger;
+		if (trigger)
+			trigger->OnPlayerStepsOnTile ( *this );
+	}
+}
+
 void Player::Think()
 {
 	try
@@ -48,28 +58,28 @@ void Player::Think()
 			switch ( cmd )
 			{
 				case '1':
-					mobile->TryMove ( -1,  1 );
+					TryMove ( -1,  1 );
 					break;
 				case '2':
-					mobile->TryMove ( 0,  1 );
+					TryMove ( 0,  1 );
 					break;
 				case '3':
-					mobile->TryMove ( 1,  1 );
+					TryMove ( 1,  1 );
 					break;
 				case '4':
-					mobile->TryMove ( -1,  0 );
+					TryMove ( -1,  0 );
 					break;
 				case '6':
-					mobile->TryMove ( 1,  0 );
+					TryMove ( 1,  0 );
 					break;
 				case '7':
-					mobile->TryMove ( -1, -1 );
+					TryMove ( -1, -1 );
 					break;
 				case '8':
-					mobile->TryMove ( 0, -1 );
+					TryMove ( 0, -1 );
 					break;
 				case '9':
-					mobile->TryMove ( 1, -1 );
+					TryMove ( 1, -1 );
 					break;
 			}
 		}

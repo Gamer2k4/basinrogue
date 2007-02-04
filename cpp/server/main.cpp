@@ -12,11 +12,16 @@
 #include "networkcommandbuffer.h"
 #include "world.h"
 #include "dungeon.h"
+#include "levelgenerator.h"
 
 #include "SDL.h"
 #include "SDL_main.h"
 #include "SDL_net.h"
 
+Tile* town_ground_tile;
+Tile* town_wall_tile;
+Tile* town_stairs_down_tile;
+Tile* town_stairs_up_tile;
 Tile* ground_tile;
 Tile* wall_tile;
 Tile* stairs_down_tile;
@@ -60,18 +65,33 @@ const char* level_map =
     "#............######################"
     "###################################";
 
+const int dungeonsizex = 10;
+const int dungeonsizey = 10;
+
+const char* dungeon_map =
+		"##########"
+		"#...>....#"
+		"#........#"
+		"#........#"
+		"#<.......#"
+		"#........#"
+		"#........#"
+		"#........#"
+		"#........#"
+		"##########";
+
 Tile* get_tile_id ( char tile_char )
 {
 	switch ( tile_char )
 	{
 		case '#':
-			return wall_tile;
+			return town_wall_tile;
 		case '.':
-			return ground_tile;
+			return town_ground_tile;
 		case '<':
-			return stairs_down_tile;
+			return town_stairs_down_tile;
 		case '>':
-			return stairs_up_tile;
+			return town_stairs_up_tile;
 		default:
 			return 0;
 	}
@@ -99,10 +119,14 @@ int main ( int argc, char* argv[] )
 	std::list<Player*>::iterator iter;
 
 	TileLib tile_lib;
-	ground_tile = &tile_lib.AddTile ( "ground", 23, 13, 0 );
-	wall_tile = &tile_lib.AddTile ( "wall", 25, 0, FLAG_BLOCKS_MOVEMENT );
-	stairs_down_tile = &tile_lib.AddTile ( "stairs_down", 25, 29, 0 );
-	stairs_up_tile = &tile_lib.AddTile ( "stairs_down", 25, 28, 0 );
+	town_ground_tile = &tile_lib.AddTile ( "town_ground", 23, 13, 0 );
+	town_wall_tile = &tile_lib.AddTile ( "town_wall", 25, 0, FLAG_BLOCKS_MOVEMENT );
+	town_stairs_down_tile = &tile_lib.AddTile ( "town_stairs_down", 25, 29, 0 );
+	town_stairs_up_tile = &tile_lib.AddTile ( "town_stairs_down", 25, 28, 0 );
+	ground_tile = &tile_lib.AddTile ( "ground", 23, 1, 0 );
+	wall_tile = &tile_lib.AddTile ( "wall", 22, 0, FLAG_BLOCKS_MOVEMENT );
+	stairs_down_tile = &tile_lib.AddTile ( "stairs_down", 22, 16, 0 );
+	stairs_up_tile = &tile_lib.AddTile ( "stairs_down", 22, 15, 0 );
 	player_tile = &tile_lib.AddTile ( "player", 3, 2, FLAG_BLOCKS_MOVEMENT );
 
 	SoundLib sound_lib;
@@ -149,8 +173,13 @@ int main ( int argc, char* argv[] )
 	std::list<Player*> player_list;
 	Level level ( levelsizex, levelsizey );
 	set_level_map ( level );
+	level.GetTile(1, 9).trigger = new StairsChangeDungeonTrigger("sewer", 0);
 	World world;
 	TownLevel town_level ( "town", world, level );
+	InstanceLevelGenerator generator(dungeonsizex, dungeonsizey, dungeon_map, ground_tile, wall_tile, stairs_down_tile, stairs_up_tile );
+	MultilevelDungeon sewer( "sewer", world, generator);
+	sewer.setLevelmax(10);
+
 	world.SetStartingDungeon ( "town" );
 
 	Uint32 last_wind_whoosh = SDL_GetTicks(); // make a wind noise every 20s from now on

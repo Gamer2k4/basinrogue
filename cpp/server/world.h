@@ -17,6 +17,7 @@
 
 class Dungeon;
 class Mobile;
+class Player;
 
 typedef std::map<std::string, Dungeon*> DungeonDatabase;
 
@@ -41,6 +42,7 @@ class World
 		void SetStartingDungeon(const std::string& dungeon_name);
 
 		void AddPlayer(Mobile* mobile);
+		void PlayerChangesDungeon(Player& player, const std::string& dungeon_name, int depth);
 };
 
 #endif
