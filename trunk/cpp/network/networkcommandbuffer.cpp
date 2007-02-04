@@ -22,7 +22,6 @@ NetworkCommandBuffer::NetworkCommandBuffer ( TCPsocket socket ) : socket ( socke
 
 NetworkCommandBuffer::~NetworkCommandBuffer()
 {
-	std::cout << "#### Closing socket connection\n";
 	SDLNet_TCP_Close ( socket );
 }
 

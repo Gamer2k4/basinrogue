@@ -46,6 +46,7 @@ class Level
 		Level ( int sizex, int sizey );
 		Tile* GetTile ( int posx, int posy );
 		void SetTile ( int posx, int posy, Tile* tile );
+		void SetTile ( int posx, int posy, LevelTile* tile );
 
 		void BeforeMoveEvent ( Mobile& mob );
 		void AfterMoveEvent ( Mobile& mob );

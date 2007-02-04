@@ -14,6 +14,7 @@
 
 #include <vector>
 #include "tile.h"
+#include "numericalstat.h"
 
 /**
     @author Cavalaria Christophe <chris.cavalaria@free.fr>
@@ -33,7 +34,7 @@ class Mobile
 		bool dirty;
 
 		Mobile();
-		~Mobile();
+		virtual ~Mobile();
 
 		void SetLevel ( Level& newlevel, int newposx, int newposy );
 		void Translate ( int decx, int decy );
@@ -42,6 +43,29 @@ class Mobile
 		Tile* GetAppearance();
 
 		void TryMove ( int decx, int decy );
+};
+
+class Monster : public Mobile
+{
+	public:
+		Monster();
+		NumericalStat Hp;
+
+	protected:
+		virtual int ComputeDamage ( Monster& target );
+		virtual void CheckHp();
+};
+
+class PlayerMonster : public Monster // Temporary class to handle Mobile elements with Player Stats
+{
+	public:
+		PlayerMonster();
+		NumericalStat Strength;
+		NumericalStat Dexterity;
+		NumericalStat Magic;
+		NumericalStat Intelligence;
+	protected:
+		virtual int ComputeDamage ( Monster& target );
 };
 
 #endif

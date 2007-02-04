@@ -24,7 +24,6 @@ Player::Player ( TCPsocket socket, Mobile* mobile ) : socket ( socket ), mobile 
 
 Player::~Player()
 {
-	std::cout << "Removing player\n";
 	delete command_buffer;
 	delete mobile;
 }
