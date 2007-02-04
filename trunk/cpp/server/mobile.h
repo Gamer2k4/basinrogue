@@ -42,7 +42,7 @@ class Mobile
 		void SetAppearance ( Tile* tile );
 		Tile* GetAppearance();
 
-		void TryMove ( int decx, int decy );
+		bool TryMove ( int decx, int decy );
 };
 
 class Monster : public Mobile

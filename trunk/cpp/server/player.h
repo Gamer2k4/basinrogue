@@ -37,6 +37,8 @@ class Player
 		bool GetIsDisconnected();
 		void Think();
 
+		void TryMove(int decx, int decy);
+
 		void SendLevelInfo();
 
 		void MakeSound ( const Sound* s, double volume ); // volume of 0 is silent, 1 is loud

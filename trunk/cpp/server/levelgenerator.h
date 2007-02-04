@@ -22,7 +22,7 @@ class LevelGenerator
 {
 	public:
 		virtual ~LevelGenerator();
-		virtual Level& GenerateLevel() = 0;
+		virtual Level& GenerateLevel(int depth) = 0;
 };
 
 class StaticLevelGenerator : public LevelGenerator
@@ -31,7 +31,7 @@ class StaticLevelGenerator : public LevelGenerator
 		Level& level;
 	public:
 		StaticLevelGenerator(Level& level);
-		virtual Level& GenerateLevel();
+		virtual Level& GenerateLevel(int depth);
 };
 
 class InstanceLevelGenerator : public LevelGenerator
@@ -42,10 +42,12 @@ class InstanceLevelGenerator : public LevelGenerator
 		const char* pattern;
 		Tile* ground;
 		Tile* wall;
+		Tile* stairs_down;
+		Tile* stairs_up;
 	public:
-		InstanceLevelGenerator(int sizex, int sizey, const char* pattern, Tile* ground, Tile* wall);
+		InstanceLevelGenerator(int sizex, int sizey, const char* pattern, Tile* ground, Tile* wall, Tile* stairs_down = 0, Tile* stairs_up = 0);
 		virtual ~InstanceLevelGenerator();
-		virtual Level& GenerateLevel();
+		virtual Level& GenerateLevel(int depth);
 };
 
 

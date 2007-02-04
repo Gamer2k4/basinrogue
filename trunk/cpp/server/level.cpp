@@ -16,11 +16,57 @@
 #pragma warning(disable:4786)
 
 #include "level.h"
+#include "player.h"
+#include "dungeon.h"
+#include "world.h"
 
-LevelTile::LevelTile() : tile ( 0 )
+
+void TileTrigger::OnPlayerStepsOnTile ( Player& player )
 {}
 
-Level::Level ( int sizex, int sizey ) : sizex ( sizex ), sizey ( sizey )
+void StairsDownTrigger::OnPlayerStepsOnTile ( Player& player )
+{
+	Level* level = player.mobile->GetLevel();
+	Dungeon& current_dungeon = level->GetDungeon();
+	current_dungeon.getWorld().PlayerChangesDungeon ( player, current_dungeon.getName(), level->depth + 1 );
+}
+
+void StairsUpTrigger::OnPlayerStepsOnTile ( Player& player )
+{
+	Level* level = player.mobile->GetLevel();
+	Dungeon& current_dungeon = level->GetDungeon();
+	current_dungeon.getWorld().PlayerChangesDungeon ( player, current_dungeon.getName(), level->depth - 1 );
+}
+
+StairsChangeDungeonTrigger::StairsChangeDungeonTrigger ( const std::string& next_dungeon, int depth ) :
+		next_dungeon ( next_dungeon ),
+		depth ( depth )
+{}
+
+void StairsChangeDungeonTrigger::OnPlayerStepsOnTile ( Player& player )
+{
+	Level* level = player.mobile->GetLevel();
+	Dungeon& current_dungeon = level->GetDungeon();
+	current_dungeon.getWorld().PlayerChangesDungeon ( player, next_dungeon, depth );
+}
+
+LevelTile::LevelTile() : tile ( 0 ), trigger ( 0 )
+{}
+
+/*LevelTile::~LevelTile()
+{
+	delete trigger;
+}
+
+TODO: delete those objects
+*/
+
+Level::Level ( int sizex, int sizey ) :
+		sizex ( sizex ),
+		sizey ( sizey ),
+		depth ( 0 ),
+		dungeon ( 0 ),
+		must_kill_on_leave( false )
 {
 	level_table.resize ( sizex * sizey );
 }
@@ -65,16 +111,17 @@ void Level::SetIsDirty ( int x, int y )
 	}
 }
 
-Tile* Level::GetTile ( int posx, int posy )
+LevelTile& Level::GetTile ( int posx, int posy )
 {
 	int index = posx + posy * sizex;
-	return level_table[index].tile;
+	return level_table[index];
 }
 
-void Level::SetTile ( int posx, int posy, Tile* tile )
+void Level::SetTile ( int posx, int posy, Tile* tile, TileTrigger* trigger )
 {
 	int index = posx + posy * sizex;
 	level_table[index].tile = tile;
+	level_table[index].trigger = trigger;
 	SetIsDirty ( posx, posy );
 }
 
@@ -108,6 +155,26 @@ void Level::RemoveViewPort ( LevelViewPort* viewport )
 	viewport_list.erase ( viewport );
 }
 
+void Level::SetDungeon ( Dungeon& dungeon )
+{
+	this->dungeon = &dungeon;
+}
+
+Dungeon& Level::GetDungeon()
+{
+	return *dungeon;
+}
+
+void Level::ActivateKillOnLeave()
+{
+	must_kill_on_leave = true;
+}
+
+bool Level::getMustKillOnLeave()
+{
+	return must_kill_on_leave;
+}
+
 
 LevelViewPort::LevelViewPort() : level ( 0 )
 {}
@@ -132,6 +199,7 @@ void LevelViewPort::AttachToLevel ( Level* new_level, NetworkCommandBuffer* buff
 		buffer->SendChar ( 'd' );
 		buffer->SendInt ( level->sizex );
 		buffer->SendInt ( level->sizey );
+		MarkAllDirty();
 	}
 }
 

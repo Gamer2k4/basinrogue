@@ -54,15 +54,18 @@ void Mobile::Translate ( int decx, int decy )
 		level->AfterMoveEvent ( *this );
 }
 
-void Mobile::TryMove ( int decx, int decy )
+bool Mobile::TryMove ( int decx, int decy )
 {
 	int x, y;
 	x = posx + decx;
 	y = posy + decy;
-	if ( ! level->GetTile ( x, y )->HasOneFlag ( FLAG_BLOCKS_MOVEMENT ) )
+	LevelTile& tile = level->GetTile ( x, y );
+	if ( ! tile.tile->HasOneFlag ( FLAG_BLOCKS_MOVEMENT ) )
 	{
 		Translate ( decx, decy );
+		return true;
 	}
+	return false;
 }
 
 Level* Mobile::GetLevel()

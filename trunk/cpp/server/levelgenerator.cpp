@@ -18,40 +18,69 @@ LevelGenerator::~LevelGenerator()
 StaticLevelGenerator::StaticLevelGenerator ( Level& level ) : level ( level )
 {}
 
-Level& StaticLevelGenerator::GenerateLevel()
+Level& StaticLevelGenerator::GenerateLevel ( int depth )
 {
 	return level;
 }
 
 
-InstanceLevelGenerator::InstanceLevelGenerator ( int sizex, int sizey, const char* pattern, Tile* ground, Tile* wall ) :
+InstanceLevelGenerator::InstanceLevelGenerator (
+    int sizex, int sizey,
+    const char* pattern,
+    Tile* ground,
+    Tile* wall,
+    Tile* stairs_down,
+    Tile* stairs_up ) :
 		sizex ( sizex ),
 		sizey ( sizey ),
 		pattern ( pattern ),
 		ground ( ground ),
-		wall ( wall )
+		wall ( wall ),
+		stairs_down ( stairs_down ),
+		stairs_up ( stairs_up )
 {}
 
 InstanceLevelGenerator::~InstanceLevelGenerator()
 {}
 
-Level& InstanceLevelGenerator::GenerateLevel()
+Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 {
 	Level& level = *new Level ( sizex, sizey );
 	for ( int jj=0; jj < sizey; ++jj )
 		for ( int ii=0; ii < sizex; ++ii )
 		{
 			Tile* tile;
+			TileTrigger* trigger = 0;
 			switch ( pattern[ii+jj*sizex] )
 			{
 				case '#':
 					tile = wall;
+					break;
 				case '.':
 					tile = ground;
+					break;
+				case '<':
+					if (depth < 10)
+					{
+						tile = stairs_down;
+						trigger = new StairsDownTrigger();
+					}
+					else
+						tile = ground;
+					break;
+				case '>':
+					tile = stairs_up;
+					if (depth > 0)
+						trigger = new StairsUpTrigger();
+					else
+						trigger = new StairsChangeDungeonTrigger("town");
+					break;
 				default:
 					tile = 0;
 			}
-			level.SetTile ( ii, jj, tile );
+			level.SetTile ( ii, jj, tile, trigger );
 		}
+	level.depth = depth;
+	level.ActivateKillOnLeave();
 	return level;
 }
