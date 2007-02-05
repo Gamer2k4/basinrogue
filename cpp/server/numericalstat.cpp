@@ -9,6 +9,8 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#pragma warning(disable:4786)
+
 #include "numericalstat.h"
 
 const int maximum_maximum = 100000;

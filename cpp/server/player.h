@@ -40,6 +40,7 @@ class Player
 		void TryMove(int decx, int decy);
 
 		void SendLevelInfo();
+		void SendReadyToGo();
 
 		void MakeSound ( const Sound* s, double volume ); // volume of 0 is silent, 1 is loud
 };

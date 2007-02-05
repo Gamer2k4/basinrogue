@@ -9,10 +9,10 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#pragma warning(disable:4786)
+
 #include "mobile.h"
 #include "level.h"
-
-#pragma warning(disable:4786)
 
 Mobile::Mobile() : level ( 0 ), appearance ( 0 ), posx ( 0 ), posy ( 0 ), dirty ( true )
 {}
