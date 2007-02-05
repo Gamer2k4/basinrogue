@@ -127,6 +127,10 @@ void ServerConnection::Update()
 				server_socket->ReadChar();
 				world.ClearAll();
 				break;
+			case 'o':
+				server_socket->ReadChar();
+				view.SetReadyToGo();
+				break;
 		}
 	}
 }

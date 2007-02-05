@@ -9,8 +9,9 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "dungeon.h"
+#pragma warning(disable:4786)
 
+#include "dungeon.h"
 #include "world.h"
 #include "level.h"
 #include "levelgenerator.h"

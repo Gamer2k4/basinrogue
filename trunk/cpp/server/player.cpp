@@ -97,6 +97,11 @@ void Player::SendLevelInfo()
 	viewport.MarkAllClean();
 }
 
+void Player::SendReadyToGo()
+{
+	command_buffer->SendChar( 'o' );
+}
+
 void Player::MakeSound ( const Sound* s, double volume )
 {
 	command_buffer->SendChar ( 'p' );

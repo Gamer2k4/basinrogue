@@ -9,8 +9,9 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "world.h"
+#pragma warning(disable:4786)
 
+#include "world.h"
 #include "dungeon.h"
 #include "mobile.h"
 #include "player.h"

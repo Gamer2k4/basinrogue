@@ -83,8 +83,19 @@ GameView::GameView ( const GameWorld& world, const TileLib& tile_lib, SDL_Surfac
 		originx ( originx ),
 		originy ( originy ),
 		viewx ( -1 ),
-		viewy ( -1 )
+		viewy ( -1 ),
+		ready_to_go( 0 )
 {}
+
+void GameView::SetReadyToGo()
+{
+	ready_to_go = 1;
+}
+
+int GameView::CheckReadyToGo()
+{
+	return ready_to_go;
+}
 
 void GameView::DrawTile ( int posx, int posy, int scrolled_posx, int scrolled_posy ) const
 {
@@ -117,16 +128,14 @@ void GameView::DrawTile ( int posx, int posy, int scrolled_posx, int scrolled_po
 	}
 }
 
-void GameView::DrawBlack ( int scrolled_posx, int scrolled_posy ) const
-{
-	SDL_Rect dest;
-	dest.x = scrolled_posx*tile_lib.sizex;
-	dest.y = scrolled_posy*tile_lib.sizey;
-	SDL_FillRect ( dest_surface,&dest,0 );
-}
-
 void GameView::DrawView() const
 {
+	SDL_Rect dest;
+	dest.x = originx;
+	dest.y = originy;
+	dest.w = tile_lib.sizex * sizex;
+	dest.h = tile_lib.sizey * sizey;
+	SDL_FillRect ( dest_surface,&dest,0 );
 	for ( int scrolled_jj = 0; scrolled_jj < sizey; ++scrolled_jj )
 	{
 		int jj = scrolled_jj + viewy - ( ( sizey-1 ) /2 );
@@ -136,10 +145,6 @@ void GameView::DrawView() const
 			if ( ii>=0 && ii<world.sizex && jj>=0 && jj<world.sizey )
 			{
 				DrawTile ( ii, jj, scrolled_ii, scrolled_jj );
-			}
-			else
-			{
-				DrawBlack ( scrolled_ii, scrolled_jj );
 			}
 		}
 	}

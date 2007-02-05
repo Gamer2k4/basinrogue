@@ -46,12 +46,14 @@ class GameView
 		int originy;
 		int viewx;
 		int viewy;
+		int ready_to_go;
 		void DrawTile ( int posx, int posy, int scrolled_posx, int scrolled_posy ) const;
-		void DrawBlack ( int scrolled_posx, int scrolled_posy ) const;
 	public:
 		GameView ( const GameWorld& world, const TileLib& tile_lib, SDL_Surface* dest_surface, int sizex, int sizey, int originx, int originy );
 		void SetCharacterPos ( int posx, int posy );
 		void DrawView() const;
+		void SetReadyToGo();
+		int CheckReadyToGo();
 };
 
 #endif

@@ -184,6 +184,7 @@ int main ( int argc, char* argv[] )
 
 	Uint32 last_wind_whoosh = SDL_GetTicks(); // make a wind noise every 20s from now on
 	// I just do not trust SDL_GetTicks to return the correct value :)
+	// What's better? A.
 
 	int numready;
 
@@ -208,7 +209,7 @@ int main ( int argc, char* argv[] )
 				( *iter )->Think();
 
 			//std::cout << "Removing disconnected players\n";
-			std::list<Player*>::iterator middle = partition (
+			std::list<Player*>::iterator middle = std::partition (
 			                                          player_list.begin(),
 			                                          player_list.end(),
 			                                          IsPlayerConnected );
@@ -252,6 +253,7 @@ int main ( int argc, char* argv[] )
 					tile_lib.SendTileLib ( player->command_buffer );
 					sound_lib.SendSoundLib ( player->command_buffer );
 					player->SendLevelInfo();
+					player->SendReadyToGo();
 					player_list.push_back ( player );
 				}
 			}
