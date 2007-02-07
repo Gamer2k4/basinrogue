@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <set>
+#include <map>
 #include "tile.h"
 #include "mobile.h"
 #include "networkcommandbuffer.h"
@@ -70,10 +71,12 @@ class Level
 {
 	private:
 		std::vector<LevelTile> level_table;
-		std::set<Mobile*> mobile_list;
+		std::set<Mobile*> mobile_list;                     // any changes to one of these
+		std::map<std::pair<int,int>, Mobile*> mobile_hash; // must be reflected in the other!
 		std::set<LevelViewPort*> viewport_list;
 		Dungeon* dungeon;
 		bool must_kill_on_leave;
+		double clock;
 
 		void SetIsDirty ( int x, int y );
 	public:
@@ -90,13 +93,18 @@ class Level
 		void BeforeMoveEvent ( Mobile& mob );
 		void AfterMoveEvent ( Mobile& mob );
 
+		void TimeElapse ( double time );
+		void StuffCanHappen();
+
 		void AddMobile ( Mobile& mob );
 		void RemoveMobile ( Mobile& mob );
+		void MoveMobile ( Mobile& mob, int old_posx, int old_posy );
+		Mobile* GetMobileAt ( int posx, int posy ); // return 0 if none there
 
 		void AddViewPort ( LevelViewPort* viewport );
 		void RemoveViewPort ( LevelViewPort* viewport );
 
-		void SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y ) const;
+		void SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y );
 
 		void SetDungeon ( Dungeon& dungeon );
 		Dungeon& GetDungeon();

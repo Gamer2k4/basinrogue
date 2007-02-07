@@ -2,6 +2,7 @@
 #include <sstream>
 #include <list>
 #include <algorithm>
+#include <ctime>
 
 #pragma warning(disable:4786)
 
@@ -27,6 +28,7 @@ Tile* wall_tile;
 Tile* stairs_down_tile;
 Tile* stairs_up_tile;
 Tile* player_tile;
+Tile* goblin_tile;
 
 Sound* wind_sound;
 
@@ -116,6 +118,8 @@ int main ( int argc, char* argv[] )
 {
 	std::cout << "Server\n";
 
+	srand((unsigned)time(0));
+
 	std::list<Player*>::iterator iter;
 
 	TileLib tile_lib;
@@ -128,6 +132,7 @@ int main ( int argc, char* argv[] )
 	stairs_down_tile = &tile_lib.AddTile ( "stairs_down", 22, 16, 0 );
 	stairs_up_tile = &tile_lib.AddTile ( "stairs_down", 22, 15, 0 );
 	player_tile = &tile_lib.AddTile ( "player", 3, 2, FLAG_BLOCKS_MOVEMENT );
+	goblin_tile = &tile_lib.AddTile ( "goblin", 21, 9, FLAG_BLOCKS_MOVEMENT );
 
 	SoundLib sound_lib;
 	wind_sound = &sound_lib.AddSound ( "whoosh", "wind" );
@@ -176,15 +181,15 @@ int main ( int argc, char* argv[] )
 	level.GetTile(1, 9).trigger = new StairsChangeDungeonTrigger("sewer", 0);
 	World world;
 	TownLevel town_level ( "town", world, level );
-	InstanceLevelGenerator generator(dungeonsizex, dungeonsizey, dungeon_map, ground_tile, wall_tile, stairs_down_tile, stairs_up_tile );
+	InstanceLevelGenerator generator(dungeonsizex, dungeonsizey, dungeon_map, goblin_tile, ground_tile, wall_tile, stairs_down_tile, stairs_up_tile );
 	MultilevelDungeon sewer( "sewer", world, generator);
 	sewer.setLevelmax(10);
 
 	world.SetStartingDungeon ( "town" );
 
-	Uint32 last_wind_whoosh = SDL_GetTicks(); // make a wind noise every 20s from now on
-	// I just do not trust SDL_GetTicks to return the correct value :)
-	// What's better? A.
+	//Uint32 last_wind_whoosh = SDL_GetTicks(); // make a wind noise every 20s from now on
+	//// I just do not trust SDL_GetTicks to return the correct value :)
+	//// What's better? A.
 
 	int numready;
 
@@ -226,13 +231,13 @@ int main ( int argc, char* argv[] )
 			player_list.erase ( middle, player_list.end() );
 
 			//std::cout << "Real-time based events\n";
-			if ( SDL_GetTicks() - last_wind_whoosh > 20000 )
-			{
-				// 20 s have elapsed - make wind noise
-				last_wind_whoosh = SDL_GetTicks();
-				for ( iter = player_list.begin(); iter != player_list.end(); ++iter )
-					( *iter )->MakeSound ( wind_sound, 0.5 );
-			}
+			//if ( SDL_GetTicks() - last_wind_whoosh > 20000 )
+			//{
+			//	// 20 s have elapsed - make wind noise
+			//	last_wind_whoosh = SDL_GetTicks();
+			//	for ( iter = player_list.begin(); iter != player_list.end(); ++iter )
+			//		( *iter )->MakeSound ( wind_sound, 0.5 );
+			//}
 
 			//std::cout << "Checking for new players\n";
 			if ( SDLNet_SocketReady ( listen_socket ) )

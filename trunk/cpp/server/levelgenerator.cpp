@@ -29,12 +29,14 @@ Level& StaticLevelGenerator::GenerateLevel ( int depth )
 InstanceLevelGenerator::InstanceLevelGenerator (
     int sizex, int sizey,
     const char* pattern,
+    Tile* goblin,
     Tile* ground,
     Tile* wall,
     Tile* stairs_down,
     Tile* stairs_up ) :
 		sizex ( sizex ),
 		sizey ( sizey ),
+		goblin ( goblin ),
 		pattern ( pattern ),
 		ground ( ground ),
 		wall ( wall ),
@@ -82,6 +84,9 @@ Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 			}
 			level.SetTile ( ii, jj, tile, trigger );
 		}
+	Monster* mob = new Monster();
+	mob->SetLevel ( level, 7, 7 );
+	mob->SetAppearance ( goblin );
 	level.depth = depth;
 	level.ActivateKillOnLeave();
 	return level;

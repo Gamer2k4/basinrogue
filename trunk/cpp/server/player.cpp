@@ -41,6 +41,7 @@ void Player::TryMove(int decx, int decy)
 	if (mobile->TryMove ( decx,  decy ))
 	{
 		TileTrigger* trigger = mobile->GetLevel()->GetTile ( mobile->posx, mobile->posy ).trigger;
+		mobile->GetLevel()->TimeElapse ( 1.0 / mobile->GetMovementSpeed () );
 		if (trigger)
 			trigger->OnPlayerStepsOnTile ( *this );
 	}
@@ -82,6 +83,7 @@ void Player::Think()
 					TryMove ( 1, -1 );
 					break;
 			}
+			mobile->GetLevel()->StuffCanHappen();
 		}
 	}
 	catch ( ReadSocketError )
