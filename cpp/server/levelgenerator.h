@@ -44,8 +44,9 @@ class InstanceLevelGenerator : public LevelGenerator
 		Tile* wall;
 		Tile* stairs_down;
 		Tile* stairs_up;
+   		Tile* goblin;
 	public:
-		InstanceLevelGenerator(int sizex, int sizey, const char* pattern, Tile* ground, Tile* wall, Tile* stairs_down = 0, Tile* stairs_up = 0);
+		InstanceLevelGenerator(int sizex, int sizey, const char* pattern, Tile* goblin, Tile* ground, Tile* wall, Tile* stairs_down = 0, Tile* stairs_up = 0);
 		virtual ~InstanceLevelGenerator();
 		virtual Level& GenerateLevel(int depth);
 };

@@ -66,12 +66,13 @@ Level::Level ( int sizex, int sizey ) :
 		sizey ( sizey ),
 		depth ( 0 ),
 		dungeon ( 0 ),
+		clock ( 0.0 ),
 		must_kill_on_leave( false )
 {
 	level_table.resize ( sizex * sizey );
 }
 
-void Level::SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y ) const
+void Level::SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y )
 {
 	int index = x + y * sizex;
 	buffer->SendChar ( 'c' );
@@ -84,20 +85,13 @@ void Level::SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y ) const
 		buffer->SendInt ( y );
 		buffer->SendInt ( level_table[index].tile->GetTileId() );
 	}
-
-	//TODO better mobile search algorithm is needed
-
-	std::set<Mobile*>::const_iterator iter;
-	for ( iter = mobile_list.begin(); iter != mobile_list.end(); ++iter )
+	Mobile* mob = GetMobileAt ( x, y );
+	if ( mob )
 	{
-		Mobile* mob = *iter;
-		if ( mob->posx == x && mob->posy == y )
-		{
 			buffer->SendChar ( 't' );
 			buffer->SendInt ( x );
 			buffer->SendInt ( y );
 			buffer->SendInt ( mob->GetAppearance()->GetTileId() );
-		}
 	}
 }
 
@@ -135,14 +129,54 @@ void Level::AfterMoveEvent ( Mobile& mob )
 	SetIsDirty ( mob.posx, mob.posy );
 }
 
+void Level::TimeElapse ( double time )
+{
+	clock = clock + time;
+	std::set<Mobile*>::iterator iter;
+	for ( iter = mobile_list.begin(); iter != mobile_list.end(); ++iter )
+		(*iter)->GainEnergy ( time );
+}
+
+void Level::StuffCanHappen()
+{
+	std::set<Mobile*>::iterator iter;
+	for ( iter = mobile_list.begin(); iter != mobile_list.end(); ++iter )
+	{
+		if ((*iter)->HasEnergy())
+		{
+			if ((*iter)->IsMonster())
+			{
+				Monster* this_mob = dynamic_cast<Monster*> ( *iter );
+				this_mob->MonsterTurn();
+			}
+		}
+	}
+}
+
 void Level::AddMobile ( Mobile& mob )
 {
 	mobile_list.insert ( &mob );
+	mobile_hash [ std::pair<int,int> (mob.posx,mob.posy) ] = &mob;
 }
 
 void Level::RemoveMobile ( Mobile& mob )
 {
 	mobile_list.erase ( &mob );
+	mobile_hash.erase ( std::make_pair (mob.posx,mob.posy) );
+}
+
+void Level::MoveMobile ( Mobile& mob, int old_posx, int old_posy  )
+{
+	mobile_hash.erase ( std::make_pair (old_posx,old_posy) );
+	mobile_hash [ std::pair<int,int> (mob.posx,mob.posy) ] = &mob;
+}
+
+Mobile* Level::GetMobileAt ( int posx, int posy )
+{
+	if ( mobile_hash.find ( std::make_pair ( posx, posy ) ) == mobile_hash.end ( ) )
+		return 0;
+	else
+		return mobile_hash [ std::make_pair ( posx, posy ) ];
 }
 
 void Level::AddViewPort ( LevelViewPort* viewport )
