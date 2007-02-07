@@ -15,7 +15,7 @@ You'll need a C++ compiler. Any version of Visual Studio should work although th
     * binutils
 
 Could someone with a plain Windows try one of those and update the requirements?
-(A. I'm struggling a bit with MinGW. I'll ask on RGRD for someone to give it a go)
+  (A. I was going to do this but chickened out. But didn't gamer2k4 get it going? How did that go, gamer2k4, can you record the results here?)
 
 = External libraries =
 
