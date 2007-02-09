@@ -8,3 +8,5 @@ Many methods have been used to represent the storing of items.  Ideally, one sho
   * Contained: Every sort of item manipulation occurs from one screen.  That screen displays all of the items the player as, along with an <equipped> tag for the ones he is wearing.  An item is selected, then a command like use, equip, drop, etc. is given.
 
 (A.) I liked the ADOM model myself. Same as used in DoomRL, yes?
+
+<Greg> Were there any thoughts on how many items could be equipped, and how many different types of items there are? I see the word MUD being tossed about, and I've played in MUDs where a character could equip maybe thirty different pieces of equipment; on the other hand, Angband has maybe 8 or 10 equip slots, if I recall correctly.
