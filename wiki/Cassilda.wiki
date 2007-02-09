@@ -2,7 +2,7 @@
 
 = Who am I? =
 
-My name's Greg. I live in Rochester, NY. Eight hours out of the day, I'm a hard-working software engineer. The other sixteen, I'm a big freakin' nerd.
+My name's Greg. I live in Rochester, NY. Eight hours out of the day, I'm a hard-working professional software engineer. The other sixteen, I'm a big freakin' nerd.
 
 = Gaming Interests =
 
@@ -21,6 +21,5 @@ My name's Greg. I live in Rochester, NY. Eight hours out of the day, I'm a hard-
    * Crawl
    * Rogue, Moria, Larn
    * Lots of others sitting on some corner of my hard drive
-
 
 
