@@ -1,0 +1,20 @@
+#summary Two often computationally expensive elements
+
+= LOS =
+
+Three options here:
+- No LOS - player can see everything on screen even if there is a wall between it and the @
+- Weak LOS - player has restricted LOS, but awake monsters can sense all enemies on the screen
+- Strong LOS - both player and monsters have realistic LOS. Very computationally expensive
+
+= Pathfinding =
+
+Monsters will need some form of pathfinding for finding their way around. Given the multiplayer nature of the game we don't want to spend too many CPU cycles on it. Any suggestions?
+
+Are we allowing digging? If you don't have digging, then some shortcuts can be done in pathfinding (precalculating good paths, etc). On the other hand I suspect we want digging...?
+
+
+
+
+
+
