@@ -1,4 +1,5 @@
 #summary Requirements to build the project
+#labels Featured
 
 = Build tools =
 
