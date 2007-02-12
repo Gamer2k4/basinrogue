@@ -1,4 +1,5 @@
 #summary Who he is
+#labels User
 
 Antoine is a regulator in the electricity industry, who likes to work on roguelikes in his spare time (when not attending Mrs Antoine, who is lovely apart from her habit of referring to RGRD as 'really geeky, really dorky').
 
