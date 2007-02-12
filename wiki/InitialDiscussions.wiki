@@ -1,4 +1,5 @@
 #summary Initial discussions.
+#labels Featured
 
 = Discussions of technology, content, development approach and communication =
 
@@ -12,6 +13,7 @@
   * *Konijn* is in New York (GMT - 5)
   * *Christophe* ( Cavalaria Christophe ) is in France (GMT + 1)
   * *Gamer_2k4* is in Wisconsin (GMT - 6)
+  * *Nolithius* is in Miami (GMT - 5)
 
 = Communication =
 Wiki seems like the way to go;
@@ -41,4 +43,3 @@ I'm not saying that I'm the only one coming up with ideas, or Christophe is the 
     * Name most like a prehistoric era Guy: Nolithius 
     * Guy who can actually program in real life: Cassilda
     * Why don't we start over again in Python Guy: Antoine
-    
