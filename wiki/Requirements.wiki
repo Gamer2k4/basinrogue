@@ -1,5 +1,5 @@
 #summary Requirements to build the project
-#labels Featured
+#labels Featured,Phase-Requirements
 
 = Build tools =
 
