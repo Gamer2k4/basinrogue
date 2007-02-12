@@ -29,5 +29,7 @@ We can also use IRC, Email or IM but remember to copy into the Wiki any importan
     * Lead Programmer: Christophe
     * Administrator: Konijn
     * Design: Gamer_2k4
+    * Documentation: Nolithius
+    * Go-to Guy: Cassilda (I dunno...got a specific title you want?)
 
 I'm not saying that I'm the only one coming up with ideas, or Christophe is the only one coding, or Konijn is the only one to find bugs, or Antoine gets to tell everyone what to do.  But I thought it would be nifty to have titles instead of vague job descriptions.
