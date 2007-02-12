@@ -1,4 +1,5 @@
 #summary He's that guy with the hair.
+#labels User
 
 = Who am I? =
 
@@ -21,4 +22,3 @@ My name's Greg. I live in Rochester, NY. Eight hours out of the day, I'm a hard-
    * Crawl
    * Rogue, Moria, Larn
    * Lots of others sitting on some corner of my hard drive
-
