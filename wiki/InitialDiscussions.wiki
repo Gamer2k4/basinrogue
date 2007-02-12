@@ -33,3 +33,12 @@ We can also use IRC, Email or IM but remember to copy into the Wiki any importan
     * Go-to Guy: Cassilda (I dunno...got a specific title you want?)
 
 I'm not saying that I'm the only one coming up with ideas, or Christophe is the only one coding, or Konijn is the only one to find bugs, or Antoine gets to tell everyone what to do.  But I thought it would be nifty to have titles instead of vague job descriptions.
+
+  * Counter proposal by Antoine (somewhat tongue in cheek):
+    * Lead Programmer: Christophe
+    * Sinister Storyline Wrangler: Gamer_2k4
+    * Most unpronounceably named Guy: Konijn
+    * Name most like a prehistoric era Guy: Nolithius 
+    * Guy who can actually program in real life: Cassilda
+    * Why don't we start over again in Python Guy: Antoine
+    
