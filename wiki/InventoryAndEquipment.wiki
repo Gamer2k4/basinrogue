@@ -12,3 +12,5 @@ Many methods have been used to represent the storing of items.  Ideally, one sho
 <Greg> Were there any thoughts on how many items could be equipped, and how many different types of items there are? I see the word MUD being tossed about, and I've played in MUDs where a character could equip maybe thirty different pieces of equipment; on the other hand, Angband has maybe 8 or 10 equip slots, if I recall correctly.
 
 (A.) I'd had in mind an Angband-like configuration, but then I come from an Angband background. Open to suggestions. It does take a lot of time to design many different types of items.
+
+G2k4: I can take care of item design.  Anyway, why not keep this simple? Headgear, body armor, leg armor, gloves, boots, amulet, weapon, free hand...er, maybe that wasn't so simple.  But I don't think we need things like belts, or bracers, or other "smaller" armor.
