@@ -13,4 +13,4 @@ Monsters will need some form of pathfinding for finding their way around. Given 
 
 Are we allowing digging? If you don't have digging, then some shortcuts can be done in pathfinding (precalculating good paths, etc). On the other hand I suspect we want digging...?
 
-(C.) A good carefuly crafted A* pathfind shouldn't be such a performance problem. It might be a problem on a server with a LOT of players and monsters but until that happens, we'll just consider it'll work out in the end. As for digging, I do not favor that too much since it gives a lot of power to the player, but on the other hand, terrain alteration caused by big spells is fun ;)
+(C.) A good carefuly crafted A-star pathfind shouldn't be such a performance problem. It might be a problem on a server with a LOT of players and monsters but until that happens, we'll just consider it'll work out in the end. As for digging, I do not favor that too much since it gives a lot of power to the player, but on the other hand, terrain alteration caused by big spells is fun ;)
