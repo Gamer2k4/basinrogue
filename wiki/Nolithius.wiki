@@ -1,4 +1,5 @@
 #summary User summary
+#labels User
 
 = Who? =
 
