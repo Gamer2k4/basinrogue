@@ -19,4 +19,4 @@ Here is how I build the Windows version. First, make sure that all [Requirements
     If CMake complains that it cannot find one of the SDL libs, most often it means that your Distro split appart the libSDL header files into a separate devel package. Check your distro package manager for those additional installs.
 
 
-(A. I can successfully build the Windows version, with no changes except that I need to add some lines to the cmake config files to point to the above SDL dirs. [Self note - Must set up a batch file to do this as recommended by C.C.] However, the resulting workspace doesn't come up right in MSVC++ - the client project does not show up on the left hand pane, only the server project. Vexing.)
+(A. I can successfully build the Windows version, using a batch file to pass Cmake the relevant paths. However, the resulting workspace doesn't come up right in MSVC++ - the client project does not show up on the left hand pane, only the server project. Vexing.)
