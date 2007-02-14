@@ -268,4 +268,5 @@ void LevelViewPort::SendLevelInfo ( NetworkCommandBuffer* buffer, int posx, int 
 		for ( int ii=0; ii < sizex; ++ii )
 			if ( IsDirty ( ii, jj ) )
 				level->SendTileInfo ( buffer, ii, jj );
+	buffer->SendChar ( 'f' );
 }

@@ -20,6 +20,7 @@ class GameWorld
 {
 	private:
 		std::vector<std::vector<TileIdType> >* elem_array;
+		std::vector<std::vector<TileIdType> >* back_buffer_elem_array;
 	public:
 		int sizex;
 		int sizey;
@@ -32,6 +33,7 @@ class GameWorld
 		void ClearAll();
 		void ClearTile ( int posx, int posy );
 		void AddTile ( int posx, int posy, TileIdType id );
+		void SwapBuffers();
 };
 
 class GameView

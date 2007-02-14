@@ -97,7 +97,7 @@ int main ( int argc, char* argv[] )
 		exit ( 1 );
 	}
 
-	SDL_Surface* screen = SDL_SetVideoMode ( 800, 672, 0, SDL_SWSURFACE );
+	SDL_Surface* screen = SDL_SetVideoMode ( 800, 672, 0, SDL_SWSURFACE | SDL_DOUBLEBUF );
 
 	if ( !screen )
 	{
@@ -120,13 +120,15 @@ int main ( int argc, char* argv[] )
 
 	while (main_view.CheckReadyToGo()==0) connection.Update();
 	main_view.DrawView();
-	SDL_UpdateRect ( screen, 0, 0, 0, 0 );
+	SDL_Flip(screen);
+	// SDL_UpdateRect ( screen, 0, 0, 0, 0 );
 
 	while ( !must_quit )
 	{
 		// Handle mouse and keyboard input
 		main_view.DrawView();
-		SDL_UpdateRect ( screen, 0, 0, 0, 0 );
+		SDL_Flip(screen);
+		// SDL_UpdateRect ( screen, 0, 0, 0, 0 );
 		connection.Update();
 		handle_input ( connection );
 	}
