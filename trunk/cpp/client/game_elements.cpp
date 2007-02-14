@@ -17,24 +17,23 @@
 #include "game_elements.h"
 
 
-GameWorld::GameWorld() : elem_array ( 0 )
+GameWorld::GameWorld() : elem_array ( 0 ), back_buffer_elem_array ( 0 )
 {}
 
 GameWorld::~GameWorld()
 {
 	delete elem_array;
+	delete back_buffer_elem_array;
 }
 
 void GameWorld::Resize ( int _sizex, int _sizey )
 {
 	sizex = _sizex;
 	sizey = _sizey;
-	if ( elem_array )
-	{
-		delete elem_array;
-	}
+	delete elem_array;
+	delete back_buffer_elem_array;
 	elem_array = new std::vector<std::vector<TileIdType> > ( sizex * sizey );
-	ClearAll();
+	back_buffer_elem_array = new std::vector<std::vector<TileIdType> > ( sizex * sizey );
 }
 
 const std::vector<TileIdType>& GameWorld::GetTileList ( int x, int y ) const
@@ -49,7 +48,7 @@ const std::vector<TileIdType>& GameWorld::GetTileList ( int x, int y ) const
 void GameWorld::ClearAll()
 {
 	for ( unsigned ii=0; ii < elem_array->size(); ++ii )
-		elem_array->at ( ii ).clear();
+		back_buffer_elem_array->at ( ii ).clear();
 }
 
 void GameWorld::ClearTile ( int posx, int posy )
@@ -58,8 +57,7 @@ void GameWorld::ClearTile ( int posx, int posy )
 	{
 		std::cout << "Tile out of range :" << posx << ", " << posy << "\n";
 	}
-	elem_array->at ( posx + posy * sizex ).clear();
-	//TODO Add dirty bit for quick refresh (but how will this interact with scrolling? A.)
+	back_buffer_elem_array->at ( posx + posy * sizex ).clear();
 }
 
 void GameWorld::AddTile ( int posx, int posy, TileIdType id )
@@ -68,9 +66,13 @@ void GameWorld::AddTile ( int posx, int posy, TileIdType id )
 	{
 		std::cout << "Tile out of range :" << posx << ", " << posy << "\n";
 	}
-	elem_array->at ( posx + posy * sizex ).push_back ( id );
-	//TODO Add dirty bit for quick refresh (but how will this interact with scrolling? A.)
+	back_buffer_elem_array->at ( posx + posy * sizex ).push_back ( id );
 };
+
+void GameWorld::SwapBuffers()
+{
+	*elem_array = *back_buffer_elem_array;
+}
 
 //-------------------------------------------------------------------------------------------------
 
