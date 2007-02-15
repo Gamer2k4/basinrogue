@@ -29,6 +29,7 @@ void StairsDownTrigger::OnPlayerStepsOnTile ( Player& player )
 	Level* level = player.mobile->GetLevel();
 	Dungeon& current_dungeon = level->GetDungeon();
 	current_dungeon.getWorld().PlayerChangesDungeon ( player, current_dungeon.getName(), level->depth + 1 );
+	player.SendMessage ( "You go down the stairs..." );
 }
 
 void StairsUpTrigger::OnPlayerStepsOnTile ( Player& player )
@@ -36,6 +37,7 @@ void StairsUpTrigger::OnPlayerStepsOnTile ( Player& player )
 	Level* level = player.mobile->GetLevel();
 	Dungeon& current_dungeon = level->GetDungeon();
 	current_dungeon.getWorld().PlayerChangesDungeon ( player, current_dungeon.getName(), level->depth - 1 );
+	player.SendMessage ( "You climb the stairs..." );
 }
 
 StairsChangeDungeonTrigger::StairsChangeDungeonTrigger ( const std::string& next_dungeon, int depth ) :
@@ -45,6 +47,7 @@ StairsChangeDungeonTrigger::StairsChangeDungeonTrigger ( const std::string& next
 
 void StairsChangeDungeonTrigger::OnPlayerStepsOnTile ( Player& player )
 {
+	player.SendMessage ( "You pass through a portal..." );
 	Level* level = player.mobile->GetLevel();
 	Dungeon& current_dungeon = level->GetDungeon();
 	current_dungeon.getWorld().PlayerChangesDungeon ( player, next_dungeon, depth );

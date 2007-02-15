@@ -43,6 +43,9 @@ class Player
 		void SendReadyToGo();
 
 		void MakeSound ( const Sound* s, double volume ); // volume of 0 is silent, 1 is loud
+
+		void SendMessage ( char* message );
+		void SendMessage ( std::string message );
 };
 
 #endif

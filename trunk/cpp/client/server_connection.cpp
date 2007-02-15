@@ -19,7 +19,7 @@
 #include "server_connection.h"
 
 
-ServerConnection::ServerConnection ( GameWorld& world, GameView& view, TileLib& tile_lib, SoundLib& sound_lib ) : world ( world ), view ( view ), tile_lib ( tile_lib ), sound_lib ( sound_lib ), server_socket ( 0 )
+ServerConnection::ServerConnection ( GameWorld& world, GameView& view, TileLib& tile_lib, SoundLib& sound_lib, MessageArea& message_area ) : world ( world ), view ( view ), tile_lib ( tile_lib ), sound_lib ( sound_lib ), message_area ( message_area ), server_socket ( 0 )
 {}
 
 ServerConnection::~ServerConnection()
@@ -135,6 +135,15 @@ void ServerConnection::Update()
 				server_socket->ReadChar();
 				world.SwapBuffers();
 				break;
+			case MSG_SENDMESSAGE:
+				if ( server_socket->GetNbCommands() >= 2 )
+				{
+					server_socket->ReadChar();
+					std::string message = server_socket->ReadString();
+					message_area.AddMessage ( message );
+					break;
+				}
+				return;
 		}
 	}
 }

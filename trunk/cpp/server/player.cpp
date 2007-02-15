@@ -110,3 +110,17 @@ void Player::MakeSound ( const Sound* s, double volume )
 	command_buffer->SendInt ( s->GetSoundId() );
 	command_buffer->SendDouble ( volume );
 }
+
+void Player::SendMessage ( char* message )
+{
+	command_buffer->SendChar ( MSG_SENDMESSAGE );
+	command_buffer->SendString ( std::string( message ) );
+
+}
+
+void Player::SendMessage ( std::string message )
+{
+	command_buffer->SendChar ( MSG_SENDMESSAGE );
+	command_buffer->SendString ( std::string( message ) );
+
+}

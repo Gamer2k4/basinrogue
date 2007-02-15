@@ -87,7 +87,12 @@ GameView::GameView ( const GameWorld& world, const TileLib& tile_lib, SDL_Surfac
 		viewx ( -1 ),
 		viewy ( -1 ),
 		ready_to_go( 0 )
-{}
+{
+	dest.x = originx;
+	dest.y = originy;
+	dest.w = tile_lib.sizex * sizex;
+	dest.h = tile_lib.sizey * sizey;
+}
 
 void GameView::SetReadyToGo()
 {
@@ -99,16 +104,17 @@ int GameView::CheckReadyToGo()
 	return ready_to_go;
 }
 
-void GameView::DrawTile ( int posx, int posy, int scrolled_posx, int scrolled_posy ) const
+void GameView::DrawTile ( int posx, int posy, int scrolled_posx, int scrolled_posy )
 {
-	SDL_Rect dest;
-	dest.x = scrolled_posx*tile_lib.sizex + originx;
-	dest.y = scrolled_posy*tile_lib.sizey + originy;
-
+	SDL_Rect this_tile;
+	this_tile.x = originx + scrolled_posx * tile_lib.sizex;
+	this_tile.y = originy + scrolled_posy * tile_lib.sizey;
+	this_tile.w = tile_lib.sizex;
+	this_tile.h = tile_lib.sizey;
 	const std::vector<TileIdType>& tile_list = world.GetTileList ( posx, posy );
 	if ( tile_list.empty() )
 	{
-		SDL_FillRect ( dest_surface,&dest,0 );
+		SDL_FillRect ( dest_surface,&this_tile,0 );
 	}
 	else
 	{
@@ -120,28 +126,23 @@ void GameView::DrawTile ( int posx, int posy, int scrolled_posx, int scrolled_po
 
 		id = tile_list[0];
 		surface = tile_lib.GetTileById ( id );
-		SDL_BlitSurface ( surface, NULL, dest_surface, &dest );
+		SDL_BlitSurface ( surface, NULL, dest_surface, &this_tile );
 		for ( unsigned ii = 1; ii < tile_list.size(); ++ii )
 		{
 			id = tile_list[ii];
 			surface = tile_lib.GetTileById ( id );
-			SDL_BlitSurface ( surface, NULL, dest_surface, &dest );
+			SDL_BlitSurface ( surface, NULL, dest_surface, &this_tile );
 		}
 	}
 }
 
-void GameView::DrawView() const
+void GameView::DrawView()
 {
-	SDL_Rect dest;
-	dest.x = originx;
-	dest.y = originy;
-	dest.w = tile_lib.sizex * sizex;
-	dest.h = tile_lib.sizey * sizey;
-	SDL_FillRect ( dest_surface,&dest,0 );
-	for ( int scrolled_jj = 0; scrolled_jj < sizey; ++scrolled_jj )
+	SDL_FillRect ( dest_surface, &dest, 0 );
+	for ( int scrolled_jj = 0; scrolled_jj < sizey; scrolled_jj++ )
 	{
 		int jj = scrolled_jj + viewy - ( ( sizey-1 ) /2 );
-		for ( int scrolled_ii = 0; scrolled_ii <= sizex; ++scrolled_ii )
+		for ( int scrolled_ii = 0; scrolled_ii < sizex; scrolled_ii++ )
 		{
 			int ii = scrolled_ii + viewx - ( ( sizex-1 ) /2 );
 			if ( ii>=0 && ii<world.sizex && jj>=0 && jj<world.sizey )
@@ -150,6 +151,7 @@ void GameView::DrawView() const
 			}
 		}
 	}
+	SDL_UpdateRect ( dest_surface, dest.x, dest.y, dest.w, dest.h );
 }
 
 void GameView::SetCharacterPos ( int posx, int posy )

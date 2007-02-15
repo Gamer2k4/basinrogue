@@ -13,6 +13,7 @@
 #include "tile_lib.h"
 #include "sound_lib.h"
 #include "server_connection.h"
+#include "message_area.h"
 
 bool must_quit = false;
 
@@ -36,37 +37,63 @@ void send_command ( ServerConnection& connection, SDLKey key )
 		connection.SendCommand ( move_ne );
 }
 
-void handle_input ( ServerConnection& connection )
+void handle_input ( ServerConnection& connection, MessageArea& message_area )
 {
-	SDL_Event event;
-	while ( SDL_PollEvent ( &event ) )
+	if (message_area.GetBlocked())
 	{
-		switch ( event.type )
+		int not_unblocked_yet = 1;
+		SDL_Event event;
+		while ( SDL_PollEvent ( &event ) && not_unblocked_yet)
 		{
-			case SDL_KEYDOWN:
-				if ( event.key.keysym.sym == SDLK_ESCAPE )
-				{
+			switch ( event.type )
+			{
+				case SDL_KEYDOWN:
+					not_unblocked_yet = false;
+					message_area.SetUnblocked();
+					break;
+
+				case SDL_QUIT:
+					must_quit = true;
+					not_unblocked_yet = false;
+					break;
+			}
+		}
+	}
+	else
+	{
+		SDL_Event event;
+		while ( SDL_PollEvent ( &event ) )
+		{
+			switch ( event.type )
+			{
+				case SDL_KEYDOWN:
+					if ( event.key.keysym.sym == SDLK_ESCAPE )
+					{
+						must_quit = true;
+						break;
+					}
+
+					send_command ( connection, event.key.keysym.sym );
+					message_area.InputReceived();
+					break;
+
+				case SDL_KEYUP:
+					//KeyUp( event.key.keysym.sym );
+					break;
+
+				case SDL_QUIT:
 					must_quit = true;
 					break;
-				}
-
-				send_command ( connection, event.key.keysym.sym );
-				break;
-
-			case SDL_KEYUP:
-				//KeyUp( event.key.keysym.sym );
-				break;
-
-			case SDL_QUIT:
-				must_quit = true;
-				break;
+			}
 		}
-
 	}
 }
 
 const int levelsizex = 25; // for testing, increase later?
 const int levelsizey = 21;
+
+const int screenwidth = 1000;
+const int screenheight = 672;
 
 int main ( int argc, char* argv[] )
 {
@@ -97,7 +124,14 @@ int main ( int argc, char* argv[] )
 		exit ( 1 );
 	}
 
-	SDL_Surface* screen = SDL_SetVideoMode ( 800, 672, 0, SDL_SWSURFACE | SDL_DOUBLEBUF );
+	if ( TTF_Init() < 0 )
+	{
+		std::cerr << "Unable to init TTF: " << TTF_GetError() << "\n";
+		exit ( 1 );
+	}
+	atexit(TTF_Quit);
+
+	SDL_Surface* screen = SDL_SetVideoMode ( screenwidth, screenheight, 0, SDL_SWSURFACE | SDL_DOUBLEBUF );
 
 	if ( !screen )
 	{
@@ -111,8 +145,10 @@ int main ( int argc, char* argv[] )
 	TileLib main_view_tile_lib ( 32, 32 );
 	SoundLib sound_lib;
 	GameView main_view ( world, main_view_tile_lib, screen, levelsizex, levelsizey, 0, 0 );
+	MessageArea message_area ( screen, screenwidth-levelsizex*32-20, 180, levelsizex*32+10, screenheight-190 );
+	message_area.Clear();
 
-	ServerConnection connection ( world, main_view, main_view_tile_lib, sound_lib );
+	ServerConnection connection ( world, main_view, main_view_tile_lib, sound_lib, message_area );
 	if ( argc > 1 )
 		connection.Connect ( argv[1], 1664 );
 	else
@@ -120,17 +156,14 @@ int main ( int argc, char* argv[] )
 
 	while (main_view.CheckReadyToGo()==0) connection.Update();
 	main_view.DrawView();
-	SDL_Flip(screen);
-	// SDL_UpdateRect ( screen, 0, 0, 0, 0 );
 
 	while ( !must_quit )
 	{
 		// Handle mouse and keyboard input
 		main_view.DrawView();
-		SDL_Flip(screen);
-		// SDL_UpdateRect ( screen, 0, 0, 0, 0 );
+		message_area.Show();
 		connection.Update();
-		handle_input ( connection );
+		handle_input ( connection, message_area );
 	}
 
 	Mix_CloseAudio();
