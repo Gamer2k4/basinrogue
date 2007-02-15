@@ -32,7 +32,7 @@ class MessageArea
 		SDL_Color message_color;
 
 		std::vector < std::string > messages;
-		int input_received;
+		bool input_received;
 		int blocked;
 		int current_message;
 
@@ -40,7 +40,7 @@ class MessageArea
 		MessageArea ( SDL_Surface* dest_surface, int sizex, int sizey, int originx, int originy );
 		~MessageArea();
 
-		void AddMessage ( std::string& message );
+		void AddMessage ( const std::string& message );
 		void Show();
 		void Clear();
 		int GetBlocked() const;
@@ -50,26 +50,9 @@ class MessageArea
 
 /* SDL_ttf helper functions cribbed off the Web follow */
 
-enum ETextHAlign
-{
-   ETextHAlign_Left,
-   ETextHAlign_Center,
-   ETextHAlign_Right
-};
-
-enum ETextVAlign
-{
-   ETextVAlign_Top,
-   ETextVAlign_Center,
-   ETextVAlign_Bottom
-};
-
-bool CanWrapText(std::string& sText, int iWrapOffset);
-int CalcTextWidth(TTF_Font* pTextFont, std::string& sText);
-std::string CalcTextLine(std::string& sEntireText, TTF_Font* pTextFont, int iMaxWidth);
-std::vector<std::string> WrapText(std::string sEntireText, TTF_Font* pTextFont, int iMaxWidth);
-bool DrawText(std::string& sLine, SDL_Surface* pSurface, TTF_Font* pTextFont, SDL_Color vTextColor,
-              SDL_Rect& vDrawingRect, ETextHAlign eHAlignment, ETextVAlign eVAlignment);
+std::vector<std::string> WrapText ( const std::string& message, TTF_Font* textFont, int maxWidth );
+void DrawText ( std::string& line, SDL_Surface* surface, TTF_Font* textFont, SDL_Color textColor,
+                SDL_Rect& drawingPos );
 
 /* End cribbed code */
 
