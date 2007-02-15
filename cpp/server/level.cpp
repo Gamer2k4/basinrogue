@@ -75,12 +75,12 @@ Level::Level ( int sizex, int sizey ) :
 void Level::SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y )
 {
 	int index = x + y * sizex;
-	buffer->SendChar ( 'c' );
+	buffer->SendChar ( MSG_CLEARTILE );
 	buffer->SendInt ( x );
 	buffer->SendInt ( y );
 	if ( level_table[index].tile )
 	{
-		buffer->SendChar ( 't' );
+		buffer->SendChar ( MSG_ADDTILE );
 		buffer->SendInt ( x );
 		buffer->SendInt ( y );
 		buffer->SendInt ( level_table[index].tile->GetTileId() );
@@ -88,7 +88,7 @@ void Level::SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y )
 	Mobile* mob = GetMobileAt ( x, y );
 	if ( mob )
 	{
-			buffer->SendChar ( 't' );
+			buffer->SendChar ( MSG_ADDTILE );
 			buffer->SendInt ( x );
 			buffer->SendInt ( y );
 			buffer->SendInt ( mob->GetAppearance()->GetTileId() );
@@ -230,7 +230,7 @@ void LevelViewPort::AttachToLevel ( Level* new_level, NetworkCommandBuffer* buff
 		sizex = level->sizex;
 		sizey = level->sizey;
 		MarkAllDirty();
-		buffer->SendChar ( 'd' );
+		buffer->SendChar ( MSG_RESIZEWORLD );
 		buffer->SendInt ( level->sizex );
 		buffer->SendInt ( level->sizey );
 		MarkAllDirty();
@@ -261,12 +261,12 @@ void LevelViewPort::MarkAllClean()
 
 void LevelViewPort::SendLevelInfo ( NetworkCommandBuffer* buffer, int posx, int posy )
 {
-	buffer->SendChar ( '@' );
+	buffer->SendChar ( MSG_SETCHARPOS );
 	buffer->SendInt ( posx );
 	buffer->SendInt ( posy );
 	for ( int jj=0; jj < sizey; ++jj )
 		for ( int ii=0; ii < sizex; ++ii )
 			if ( IsDirty ( ii, jj ) )
 				level->SendTileInfo ( buffer, ii, jj );
-	buffer->SendChar ( 'f' );
+	buffer->SendChar ( MSG_SWAPBUFFERS );
 }

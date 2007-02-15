@@ -61,7 +61,7 @@ void TileLib::SendTileLib ( NetworkCommandBuffer* buffer ) const
 {
 	for ( unsigned ii=0; ii < tile_list.size(); ++ii )
 	{
-		buffer->SendChar ( 'l' );
+		buffer->SendChar ( MSG_SENDTILE );
 		buffer->SendInt ( tile_list[ii]->GetTileId() );
 		buffer->SendInt ( tile_list[ii]->row_of_bmp );
 		buffer->SendInt ( tile_list[ii]->col_of_bmp );

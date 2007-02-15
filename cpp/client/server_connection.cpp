@@ -51,7 +51,7 @@ void ServerConnection::Update()
 		char command = server_socket->PeekReadChar();
 		switch ( command )
 		{
-			case 'l': // TODO can we use an enum instead of these chars? they are getting messy
+			case MSG_SENDTILE:
 				if ( server_socket->GetNbCommands() >= 4 )
 				{
 					server_socket->ReadChar();
@@ -62,7 +62,7 @@ void ServerConnection::Update()
 					break;
 				}
 				return;
-			case 's':
+			case MSG_SENDSOUND:
 				if ( server_socket->GetNbCommands() >= 3 )
 				{
 					server_socket->ReadChar();
@@ -72,7 +72,7 @@ void ServerConnection::Update()
 					break;
 				}
 				return;
-			case 'd':
+			case MSG_RESIZEWORLD:
 				if ( server_socket->GetNbCommands() >= 3 )
 				{
 					server_socket->ReadChar();
@@ -82,7 +82,7 @@ void ServerConnection::Update()
 					break;
 				}
 				return;
-			case 't':
+			case MSG_ADDTILE:
 				if ( server_socket->GetNbCommands() >= 4 )
 				{
 					server_socket->ReadChar();
@@ -93,7 +93,7 @@ void ServerConnection::Update()
 					break;
 				}
 				return;
-			case 'c':
+			case MSG_CLEARTILE:
 				if ( server_socket->GetNbCommands() >= 3 )
 				{
 					server_socket->ReadChar();
@@ -103,7 +103,7 @@ void ServerConnection::Update()
 					break;
 				}
 				return;
-			case '@':
+			case MSG_SETCHARPOS:
 				if ( server_socket->GetNbCommands() >= 3 )
 				{
 					server_socket->ReadChar();
@@ -113,7 +113,7 @@ void ServerConnection::Update()
 					break;
 				}
 				return;
-			case 'p':
+			case MSG_PLAYSOUND:
 				if ( server_socket->GetNbCommands() >= 3 )
 				{
 					server_socket->ReadChar();
@@ -123,15 +123,15 @@ void ServerConnection::Update()
 					break;
 				}
 				return;
-			case 'r':
+			case MSG_CLEARLEVEL:
 				server_socket->ReadChar();
 				world.ClearAll();
 				break;
-			case 'o':
+			case MSG_VIEWISREADY:
 				server_socket->ReadChar();
 				view.SetReadyToGo();
 				break;
-			case 'f':
+			case MSG_SWAPBUFFERS:
 				server_socket->ReadChar();
 				world.SwapBuffers();
 				break;
