@@ -26,14 +26,14 @@ class Dungeon
 {
 	private:
 		World& world;
-		std::string name;
+		std::string name, entry_message;
 
 		Dungeon ( const Dungeon& level );
 		const Dungeon& operator = ( const Dungeon& level );
 	protected:
 		virtual Level* VirtualGetLevel ( int depth ) = 0;
 	public:
-		Dungeon ( const std::string& name, World& world );
+		Dungeon ( const std::string& name, const std::string& entry_message, World& world );
 		virtual ~Dungeon();
 
 		std::string getName() const;
@@ -41,6 +41,8 @@ class Dungeon
 		Level* GetLevel ( int depth );
 
 		World& getWorld() const;
+
+		std::string GetEntryMessage() const;
 
 };
 
@@ -51,7 +53,7 @@ class TownLevel : public Dungeon
 	protected:
 		virtual Level* VirtualGetLevel ( int depth );
 	public:
-		TownLevel ( const std::string& name, World& world, Level& town_level );
+		TownLevel ( const std::string& name, const std::string& entry_message, World& world, Level& town_level );
 		virtual ~TownLevel();
 };
 
@@ -70,7 +72,7 @@ class MultilevelDungeon : public Dungeon
 	protected:
 		virtual Level* VirtualGetLevel ( int depth );
 	public:
-		MultilevelDungeon ( const std::string& name, World& world, LevelGenerator& generator );
+		MultilevelDungeon ( const std::string& name, const std::string& entry_message, World& world, LevelGenerator& generator );
 		virtual ~MultilevelDungeon();
 
 		void setLevelmax ( int theValue );

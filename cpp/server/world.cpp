@@ -63,6 +63,7 @@ void World::PlayerChangesDungeon(Player& player, const std::string& dungeon_name
 	Level* next_level = dungeon_list[dungeon_name]->GetLevel(depth);
 	player.mobile->SetLevel( *next_level, 1, 1 );
 	player.viewport.AttachToLevel( next_level, player.command_buffer );
+	player.SendMessage ( next_level->GetDungeon().GetEntryMessage() );
 	if (old_level->getMustKillOnLeave())
 		delete old_level;
 	std::cout << "Player enters dungeon " << dungeon_name << " depth " << depth << "\n";

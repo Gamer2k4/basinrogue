@@ -180,9 +180,9 @@ int main ( int argc, char* argv[] )
 	set_level_map ( level );
 	level.GetTile(1, 9).trigger = new StairsChangeDungeonTrigger("sewer", 0);
 	World world;
-	TownLevel town_level ( "town", world, level );
+	TownLevel town_level ( "town", "You are back in town.", world, level );
 	InstanceLevelGenerator generator(dungeonsizex, dungeonsizey, dungeon_map, goblin_tile, ground_tile, wall_tile, stairs_down_tile, stairs_up_tile );
-	MultilevelDungeon sewer( "sewer", world, generator);
+	MultilevelDungeon sewer( "sewer", "You cautiously enter the sewer...", world, generator);
 	sewer.setLevelmax(10);
 
 	world.SetStartingDungeon ( "town" );
@@ -259,6 +259,9 @@ int main ( int argc, char* argv[] )
 					sound_lib.SendSoundLib ( player->command_buffer );
 					player->SendLevelInfo();
 					player->SendReadyToGo();
+					player->SendMessage ( "Welcome to the demo. Try walking around a bit and see what happens." );
+					player->SendMessage ( "This is really only to test the messaging." );
+					player->SendMessage ( "So's this." );
 					player_list.push_back ( player );
 				}
 			}

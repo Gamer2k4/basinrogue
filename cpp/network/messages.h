@@ -8,3 +8,4 @@
 #define MSG_PLAYSOUND   'p' // play a sound
 #define MSG_VIEWISREADY 'o' // when this is received, the map is ready to be displayed
 #define MSG_SWAPBUFFERS 'f' // flash the double-buffering
+#define MSG_SENDMESSAGE 'm' // send a text message to the player
