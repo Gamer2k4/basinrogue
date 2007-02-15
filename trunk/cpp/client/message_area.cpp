@@ -28,7 +28,7 @@ MessageArea::MessageArea ( SDL_Surface* dest_surface, int sizex, int sizey, int 
 	dest.w = sizex;
 	dest.h = sizey;
 
-	font = TTF_OpenFont ( "client/data/VeraMono.ttf", 12 );
+	font = TTF_OpenFont ( "client/data/Vera.ttf", 12 );
 	if ( !font )
 	{
 		std::cerr << "Error creating TTF_Font: " << TTF_GetError() << "\n";
