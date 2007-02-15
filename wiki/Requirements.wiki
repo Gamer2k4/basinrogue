@@ -26,5 +26,6 @@ There are only a few of them, all SDL related:
   * SDL_image with PNG support
   * SDL_net
   * SDL_mixer
+  * SDL_TTF
 
 Warning for Windows users: Download the devel version of the libs to get the requires .h and .lib files. If you are using MinGW and not Visual Studio, download the MinGW version of those.
