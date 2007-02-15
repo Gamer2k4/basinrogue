@@ -28,21 +28,22 @@ MessageArea::MessageArea ( SDL_Surface* dest_surface, int sizex, int sizey, int 
 	dest.w = sizex;
 	dest.h = sizey;
 
-	font = TTF_OpenFont( "client\\data\\cour.ttf", 12 );
+	font = TTF_OpenFont ( "client/data/VeraMono.ttf", 12 );
 	if ( !font )
 	{
 		std::cerr << "Error creating TTF_Font: " << TTF_GetError() << "\n";
 		exit ( 1 );
 	}
 	int junk;
-    TTF_SizeText( font, "abacab", &junk, &font_height );
+	TTF_SizeText ( font, "abacab", &junk, &font_height );
+	font_height = TTF_FontLineSkip ( font );
 
 	message_color.r = 255;
 	message_color.g = 255;
 	message_color.b = 0;
 	message_color.unused = 0;
 
-	input_received = 1;
+	input_received = true;
 	blocked = 0;
 	current_message = -1;
 }
@@ -50,11 +51,15 @@ MessageArea::MessageArea ( SDL_Surface* dest_surface, int sizex, int sizey, int 
 MessageArea::~MessageArea()
 {
 	// delete font; this gets me a compile-time warning - not sure why?
+	// because the font type is an internal hidden type from SDL, and one
+	// does not call delete on internal types.
+	// That is what TTF_CloseFont is meant for anyway :)
+	TTF_CloseFont ( font );
 }
 
 void MessageArea::InputReceived()
 {
-	input_received = 1; // ready for more input with no 'more' prompt
+	input_received = true; // ready for more input with no 'more' prompt
 }
 
 int MessageArea::GetBlocked() const
@@ -65,19 +70,19 @@ int MessageArea::GetBlocked() const
 void MessageArea::SetUnblocked()
 {
 	blocked = blocked - 1;
-	input_received = 0;
+	input_received = false;
 	current_message = current_message + 1;
 }
 
-void MessageArea::AddMessage ( std::string& message )
+void MessageArea::AddMessage ( const std::string& message )
 {
 	if ( message.length() == 0 )
 	{
 		return;
 	}
-	if (input_received)
+	if ( input_received )
 	{
-		input_received = 0;
+		input_received = false;
 		current_message = current_message + 1;
 	}
 	else
@@ -90,16 +95,17 @@ void MessageArea::AddMessage ( std::string& message )
 void MessageArea::Show()
 {
 	SDL_FillRect ( dest_surface, &dest, 0 );
-	std::vector < std::string > wrapped_text = WrapText ( messages[current_message] + (blocked ? " --more--" : ""), font, dest.w );
+	std::vector < std::string > wrapped_text = WrapText ( messages[current_message] + ( blocked ? " --more--" : "" ), font, dest.w );
 	SDL_Rect this_line_dest;
 	this_line_dest.x = originx;
 	this_line_dest.y = originy;
-	this_line_dest.w = sizex;
-	this_line_dest.h = font_height + 5;
+	// from SDL manual : Only the position is used in the dstrect (the width and height are ignored).
+	// this_line_dest.w = sizex;
+	// this_line_dest.h = font_height;
 	for ( int i=0 ; i < wrapped_text.size() ; i++ )
 	{
-		DrawText ( wrapped_text[i], dest_surface, font, message_color, this_line_dest, ETextHAlign_Left, ETextVAlign_Top );
-		this_line_dest.y = this_line_dest.y + 5 + font_height;
+		DrawText ( wrapped_text[i], dest_surface, font, message_color, this_line_dest );
+		this_line_dest.y += font_height;
 	}
 	SDL_UpdateRect ( dest_surface, dest.x, dest.y, dest.w, dest.h );
 }
@@ -110,125 +116,97 @@ void MessageArea::Clear()
 	SDL_UpdateRect ( dest_surface, dest.x, dest.y, dest.w, dest.h );
 }
 
-/* SOME CODE CRIBBED OFF THE WEB FOLLOWS. NEEDS A TIDY UP */
+/* SOME CODE CRIBBED OFF THE WEB FOLLOWS. NEEDS A TIDY UP
 
-bool CanWrapText(std::string& sText, int iWrapOffset)
+This is C looking code used for standard C strings. Fortunately,
+C++ strings are far more powerful and useful so the end result
+will look better :) */
+
+/* There was a small bug that caused that function to return a space in the front of each line
+So I wrote a new one :)
+*/
+
+void Tokenize ( const std::string& str,
+                std::vector<std::string>& tokens,
+                const std::string& delimiters = " " )
 {
-   if (iWrapOffset >= sText.length()-1)
-      return true;
+	std::string::size_type lastPos = 0;
+	std::string::size_type pos = str.find_first_of ( delimiters, lastPos );
 
-   if (sText[iWrapOffset+1] == ' ' ||
-       sText[iWrapOffset+1] == '\r' ||
-       sText[iWrapOffset+1] == '\n' ||
-       sText[iWrapOffset+1] == '\t')
-   {
-      return true;
-   }
-   else
-      return false;
+	while ( std::string::npos != pos || std::string::npos != lastPos )
+	{
+		tokens.push_back ( str.substr ( lastPos, pos - lastPos ) );
+		if ( pos == std::string::npos )
+			return;
+		lastPos = pos + 1;
+		pos = str.find_first_of ( delimiters, lastPos );
+	}
 }
 
-int CalcTextWidth(TTF_Font* pTextFont, std::string& sText)
+void WrapSingleLine ( const std::string& line, std::vector<std::string>& result, TTF_Font* textFont, int maxWidth )
 {
-   int iWidth = 0;
-   int iHeight = 0;
-   TTF_SizeText(pTextFont, sText.c_str(), &iWidth, &iHeight);
-   return iWidth;
+	int w;
+	if ( TTF_SizeUTF8 ( textFont, line.c_str(), &w, 0 ) )
+		return; // Silently ignoring errors ?
+	if ( w <= maxWidth )
+	{
+		result.push_back ( line );
+		return;
+	}
+	std::string right_part = line;
+	std::string::size_type pos = right_part.size();
+	while ( pos > 0 )
+	{
+		pos = right_part.find_last_of ( ' ', pos );
+		if ( pos == std::string::npos )
+		{
+			// Word wrap failed, bailing out
+			result.push_back ( right_part );
+			return;
+		}
+		pos = right_part.find_last_not_of ( ' ', pos );
+		if ( pos == std::string::npos )
+		{
+			// Word wrap failed, bailing out
+			result.push_back ( right_part );
+			return;
+		}
+		std::string left_part = right_part.substr ( 0, pos+1 );
+		if ( TTF_SizeUTF8 ( textFont, left_part.c_str(), &w, 0 ) )
+			return; // Silently ignoring errors ?
+		if ( w <= maxWidth )
+		{
+			result.push_back ( left_part );
+			right_part = right_part.substr ( pos+2, std::string::npos );
+			pos = std::string::npos;
+		}
+	}
 }
 
-std::string CalcTextLine(std::string& sEntireText, TTF_Font* pTextFont, int iMaxWidth)
-{
-   int iLastWrapPos = -1;
-
-   for (int iCharPos = 0; iCharPos < sEntireText.length(); iCharPos++)
-   {
-      // always break on line-feed
-      if (sEntireText[iCharPos] == '\n' || sEntireText[iCharPos] == '\r')
-      {
-         iLastWrapPos = iCharPos;
-         break;
-      }
-
-      // can wrap at this location?
-      if (CanWrapText(sEntireText, iCharPos))
-      {
-         // wrap pos is end of line; get current line
-		  std::string sCurAttempt = sEntireText.substr(0,iCharPos+1);
-
-         // fits within max width?
-         if (CalcTextWidth(pTextFont, sCurAttempt) < iMaxWidth)
-            iLastWrapPos = iCharPos;
-         else
-            break;
-      }
-   }
-
-   if (iLastWrapPos == -1)
-   {
-      // no place to wrap; give whole line
-      return sEntireText;
-   }
-   else
-   {
-      // wrap position is end of line
-      return sEntireText.substr(0,iLastWrapPos+1);
-   }
-}
-
-std::vector<std::string> WrapText(std::string sEntireText, TTF_Font* pTextFont, int iMaxWidth)
+std::vector<std::string> WrapText ( const std::string& message, TTF_Font* textFont, int maxWidth )
 {
 	std::vector<std::string> result;
-	int iLastWrapPos = -1;
-	while ( sEntireText.size() > 0 ){
-		std::string this_line = CalcTextLine(sEntireText,pTextFont,iMaxWidth);
-		result.push_back(this_line);
-		iLastWrapPos = iLastWrapPos + this_line.length();
-		sEntireText = sEntireText.substr(this_line.length(),sEntireText.length());
-	}
+	std::vector<std::string> line_list;
+
+	Tokenize ( message, line_list, "\n" );
+	for ( int ii = 0; ii < line_list.size(); ++ii )
+		WrapSingleLine ( line_list[ii], result, textFont, maxWidth );
+
 	return result;
 }
 
-bool DrawText(std::string& sLine, SDL_Surface* pSurface, TTF_Font* pTextFont, SDL_Color vTextColor,
-              SDL_Rect& vDrawingRect, ETextHAlign eHAlignment, ETextVAlign eVAlignment)
+void DrawText ( std::string& line, SDL_Surface* surface, TTF_Font* textFont, SDL_Color textColor,
+                SDL_Rect& drawingPos )
 {
-   SDL_Surface* pText = TTF_RenderText_Solid(pTextFont, sLine.c_str(), vTextColor);
-   if (!pText)
-      return false;
+	SDL_Surface* textSurface = TTF_RenderUTF8_Blended ( textFont, line.c_str(), textColor );
+	// RenderBlended because some fonts will slightly overlap when drawn one above the
+	// other. Things like the letter 'g' for example extends slightly on the line bellow
+	// when using BitstreamVeraMono
 
-   switch (eHAlignment)
-   {
-   case ETextHAlign_Left:
-      break;
-   case ETextHAlign_Center:
-	  vDrawingRect.x += (vDrawingRect.w - pText->w) / 2 > 0 ? (vDrawingRect.w - pText->w) / 2 : 0;
-      break;
-   case ETextHAlign_Right:
-	   vDrawingRect.x += (vDrawingRect.w - pText->w) > 0 ? (vDrawingRect.w - pText->w) : 0;
-      break;
-   }
+	if ( !textSurface )
+		return;
 
-   switch (eVAlignment)
-   {
-   case ETextVAlign_Top:
-      break;
-   case ETextVAlign_Center:
-      vDrawingRect.y += (vDrawingRect.h - pText->h) / 2;
-      break;
-   case ETextVAlign_Bottom:
-      vDrawingRect.y += vDrawingRect.h - pText->h;
-      break;
-   }
-
-   vDrawingRect.w = pText->w;
-   vDrawingRect.h = pText->h;
-
-   // We don't let SDL_BlitSurface change vDrawingRect, since we already know that it's
-   // correct, and SDL_BlitSurface doesn't handle negative x and y values that way we want to.
-   SDL_Rect vTmpRect = vDrawingRect;
-   SDL_BlitSurface(pText, NULL, pSurface, &vTmpRect);
-
-   SDL_FreeSurface(pText);
-   return true;
+	SDL_BlitSurface ( textSurface, 0, surface, &drawingPos );
+	SDL_FreeSurface ( textSurface );
+	return;
 }
-
-/* CRIBBED MATERIAL ENDS */
