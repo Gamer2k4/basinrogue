@@ -16,6 +16,7 @@
 #include <string>
 #include <queue>
 #include "SDL_net.h"
+#include "messages.h"
 
 class ReadSocketError
 {

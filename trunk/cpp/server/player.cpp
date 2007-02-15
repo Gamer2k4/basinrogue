@@ -101,12 +101,12 @@ void Player::SendLevelInfo()
 
 void Player::SendReadyToGo()
 {
-	command_buffer->SendChar( 'o' );
+	command_buffer->SendChar( MSG_VIEWISREADY );
 }
 
 void Player::MakeSound ( const Sound* s, double volume )
 {
-	command_buffer->SendChar ( 'p' );
+	command_buffer->SendChar ( MSG_PLAYSOUND );
 	command_buffer->SendInt ( s->GetSoundId() );
 	command_buffer->SendDouble ( volume );
 }

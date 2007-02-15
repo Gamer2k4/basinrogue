@@ -50,7 +50,7 @@ void SoundLib::SendSoundLib ( NetworkCommandBuffer* buffer ) const
 {
 	for ( unsigned ii=0; ii < sound_list.size(); ++ii )
 	{
-		buffer->SendChar ( 's' );
+		buffer->SendChar ( MSG_SENDSOUND );
 		buffer->SendInt ( sound_list[ii]->GetSoundId() );
 		buffer->SendString ( sound_list[ii]->filename_prefix );
 	}
