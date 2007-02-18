@@ -102,30 +102,17 @@ Level::Level ( int sizex, int sizey ) :
 
 void Level::SendTileInfo ( NetworkCommandBuffer& buffer, int x, int y )
 {
+	NetworkCommandBuffer::Command command(buffer);
 	int index = x + y * sizex;
-	{
-		NetworkCommandBuffer::Command command(buffer);
-		command.SendChar ( MSG_CLEARTILE );
-		command.SendInt ( x );
-		command.SendInt ( y );
-	}
+	command.SendChar ( MSG_ADDTILE );
+	command.SendInt ( x );
+	command.SendInt ( y );
 	if ( level_table[index].tile )
-	{
-		NetworkCommandBuffer::Command command(buffer);
-		command.SendChar ( MSG_ADDTILE );
-		command.SendInt ( x );
-		command.SendInt ( y );
 		command.SendInt ( level_table[index].tile->GetTileId() );
-	}
+
 	mobile_range mob_pos = GetMobileAt ( x, y );
 	for (mobile_map::iterator iter = mob_pos.first; iter != mob_pos.second; ++iter)
-	{
-		NetworkCommandBuffer::Command command(buffer);
-		command.SendChar ( MSG_ADDTILE );
-		command.SendInt ( x );
-		command.SendInt ( y );
 		command.SendInt ( (*iter).second->GetAppearance()->GetTileId() );
-	}
 }
 
 void Level::SetIsDirty ( int x, int y )
