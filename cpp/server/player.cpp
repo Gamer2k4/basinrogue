@@ -16,15 +16,17 @@
 #include "player.h"
 
 
-Player::Player ( TCPsocket socket, Mobile* mobile ) : socket ( socket ), mobile ( mobile ), is_disconnected ( false )
+Player::Player ( TCPsocket socket, Mobile* mobile ) :
+		socket ( socket ),
+		mobile ( mobile ),
+		is_disconnected ( false ),
+		command_buffer ( socket )
 {
-	command_buffer = new NetworkCommandBuffer ( socket );
-	viewport.AttachToLevel ( mobile->GetLevel(),command_buffer );
+	viewport.AttachToLevel ( mobile->GetLevel(), command_buffer );
 }
 
 Player::~Player()
 {
-	delete command_buffer;
 	delete mobile;
 }
 
@@ -51,11 +53,12 @@ void Player::Think()
 {
 	try
 	{
-		command_buffer->Think();
+		command_buffer.Think();
 
-		while ( command_buffer->GetNbCommands() > 0 )
+		while ( command_buffer.HasCommands() )
 		{
-			char cmd = command_buffer->ReadChar();
+			int cmd_size = command_buffer.ReadInt();
+			char cmd = command_buffer.ReadChar();
 			switch ( cmd )
 			{
 				case '1':
@@ -101,26 +104,30 @@ void Player::SendLevelInfo()
 
 void Player::SendReadyToGo()
 {
-	command_buffer->SendChar( MSG_VIEWISREADY );
+	NetworkCommandBuffer::Command command(command_buffer);
+	command.SendChar( MSG_VIEWISREADY );
 }
 
 void Player::MakeSound ( const Sound* s, double volume )
 {
-	command_buffer->SendChar ( MSG_PLAYSOUND );
-	command_buffer->SendInt ( s->GetSoundId() );
-	command_buffer->SendDouble ( volume );
+	NetworkCommandBuffer::Command command(command_buffer);
+	command.SendChar ( MSG_PLAYSOUND );
+	command.SendInt ( s->GetSoundId() );
+	command.SendDouble ( volume );
 }
 
 void Player::SendMessage ( char* message )
 {
-	command_buffer->SendChar ( MSG_SENDMESSAGE );
-	command_buffer->SendString ( std::string( message ) );
+	NetworkCommandBuffer::Command command(command_buffer);
+	command.SendChar ( MSG_SENDMESSAGE );
+	command.SendString ( std::string( message ) );
 
 }
 
 void Player::SendMessage ( std::string message )
 {
-	command_buffer->SendChar ( MSG_SENDMESSAGE );
-	command_buffer->SendString ( std::string( message ) );
+	NetworkCommandBuffer::Command command(command_buffer);
+	command.SendChar ( MSG_SENDMESSAGE );
+	command.SendString ( std::string( message ) );
 
 }

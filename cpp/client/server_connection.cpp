@@ -48,110 +48,93 @@ void ServerConnection::Update()
 	server_socket->Think();
 	while ( server_socket->HasCommands() )
 	{
-		char command = server_socket->PeekReadChar();
+		server_socket->ReadInt();
+		char command = server_socket->ReadChar();
 		switch ( command )
 		{
 			case MSG_SENDTILE:
-				if ( server_socket->GetNbCommands() >= 4 )
-				{
-					server_socket->ReadChar();
-					int id = server_socket->ReadInt();
-					int row_of_bmp = server_socket->ReadInt();
-					int col_of_bmp = server_socket->ReadInt();
-					tile_lib.AddTile ( id, row_of_bmp, col_of_bmp );
-					break;
-				}
-				return;
+			{
+				int id = server_socket->ReadInt();
+				int row_of_bmp = server_socket->ReadInt();
+				int col_of_bmp = server_socket->ReadInt();
+				tile_lib.AddTile ( id, row_of_bmp, col_of_bmp );
+				break;
+			}
 			case MSG_SENDSOUND:
-				if ( server_socket->GetNbCommands() >= 3 )
-				{
-					server_socket->ReadChar();
-					int id = server_socket->ReadInt();
-					std::string filename_prefix = server_socket->ReadString();
-					sound_lib.AddSound ( id, filename_prefix );
-					break;
-				}
-				return;
+			{
+				int id = server_socket->ReadInt();
+				std::string filename_prefix = server_socket->ReadString();
+				sound_lib.AddSound ( id, filename_prefix );
+				break;
+			}
 			case MSG_RESIZEWORLD:
-				if ( server_socket->GetNbCommands() >= 3 )
-				{
-					server_socket->ReadChar();
-					int sizex = server_socket->ReadInt();
-					int sizey = server_socket->ReadInt();
-					world.Resize ( sizex,sizey );
-					break;
-				}
-				return;
+			{
+				int sizex = server_socket->ReadInt();
+				int sizey = server_socket->ReadInt();
+				world.Resize ( sizex,sizey );
+				break;
+			}
 			case MSG_ADDTILE:
-				if ( server_socket->GetNbCommands() >= 4 )
-				{
-					server_socket->ReadChar();
-					int x = server_socket->ReadInt();
-					int y = server_socket->ReadInt();
-					int id = server_socket->ReadInt();
-					world.AddTile ( x, y, id );
-					break;
-				}
-				return;
+			{
+				int x = server_socket->ReadInt();
+				int y = server_socket->ReadInt();
+				int id = server_socket->ReadInt();
+				world.AddTile ( x, y, id );
+				break;
+			}
 			case MSG_CLEARTILE:
-				if ( server_socket->GetNbCommands() >= 3 )
-				{
-					server_socket->ReadChar();
-					int x = server_socket->ReadInt();
-					int y = server_socket->ReadInt();
-					world.ClearTile ( x, y );
-					break;
-				}
-				return;
+			{
+				int x = server_socket->ReadInt();
+				int y = server_socket->ReadInt();
+				world.ClearTile ( x, y );
+				break;
+			}
 			case MSG_SETCHARPOS:
-				if ( server_socket->GetNbCommands() >= 3 )
-				{
-					server_socket->ReadChar();
-					int posx = server_socket->ReadInt();
-					int posy = server_socket->ReadInt();
-					view.SetCharacterPos ( posx, posy );
-					break;
-				}
-				return;
+			{
+				int posx = server_socket->ReadInt();
+				int posy = server_socket->ReadInt();
+				view.SetCharacterPos ( posx, posy );
+				break;
+			}
 			case MSG_PLAYSOUND:
-				if ( server_socket->GetNbCommands() >= 3 )
-				{
-					server_socket->ReadChar();
-					int id = server_socket->ReadInt();
-					double volume = server_socket->ReadDouble();
-					sound_lib.GetSoundById ( id )->Play ( volume );
-					break;
-				}
-				return;
+			{
+				int id = server_socket->ReadInt();
+				double volume = server_socket->ReadDouble();
+				sound_lib.GetSoundById ( id )->Play ( volume );
+				break;
+			}
 			case MSG_CLEARLEVEL:
-				server_socket->ReadChar();
+			{
 				world.ClearAll();
 				break;
+			}
 			case MSG_VIEWISREADY:
-				server_socket->ReadChar();
+			{
 				view.SetReadyToGo();
 				break;
+			}
 			case MSG_SWAPBUFFERS:
-				server_socket->ReadChar();
+			{
 				world.SwapBuffers();
 				break;
+			}
 			case MSG_SENDMESSAGE:
-				if ( server_socket->GetNbCommands() >= 2 )
-				{
-					server_socket->ReadChar();
-					std::string message = server_socket->ReadString();
-					message_area.AddMessage ( message );
-					break;
-				}
-				return;
+			{
+				std::string message = server_socket->ReadString();
+				message_area.AddMessage ( message );
+				break;
+			}
+			default:
+				std::cout << "Unknown command received : " << command << std::endl;
+				RaiseSocketError ( "Unknown command recieved" );
 		}
 	}
 }
 
-void ServerConnection::SendCommand ( ClientCommand command )
+void ServerConnection::SendCommand ( ClientCommand cmd )
 {
 	char k;
-	switch ( command )
+	switch ( cmd )
 	{
 		case move_sw:
 			k = '1';
@@ -180,5 +163,6 @@ void ServerConnection::SendCommand ( ClientCommand command )
 		default:
 			return;
 	}
-	server_socket->SendChar ( k );
+	NetworkCommandBuffer::Command command(*server_socket);
+	command.SendChar( k );
 }

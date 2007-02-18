@@ -100,26 +100,31 @@ Level::Level ( int sizex, int sizey ) :
 	level_table.resize ( sizex * sizey );
 }
 
-void Level::SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y )
+void Level::SendTileInfo ( NetworkCommandBuffer& buffer, int x, int y )
 {
 	int index = x + y * sizex;
-	buffer->SendChar ( MSG_CLEARTILE );
-	buffer->SendInt ( x );
-	buffer->SendInt ( y );
+	{
+		NetworkCommandBuffer::Command command(buffer);
+		command.SendChar ( MSG_CLEARTILE );
+		command.SendInt ( x );
+		command.SendInt ( y );
+	}
 	if ( level_table[index].tile )
 	{
-		buffer->SendChar ( MSG_ADDTILE );
-		buffer->SendInt ( x );
-		buffer->SendInt ( y );
-		buffer->SendInt ( level_table[index].tile->GetTileId() );
+		NetworkCommandBuffer::Command command(buffer);
+		command.SendChar ( MSG_ADDTILE );
+		command.SendInt ( x );
+		command.SendInt ( y );
+		command.SendInt ( level_table[index].tile->GetTileId() );
 	}
 	mobile_range mob_pos = GetMobileAt ( x, y );
 	for (mobile_map::iterator iter = mob_pos.first; iter != mob_pos.second; ++iter)
 	{
-		buffer->SendChar ( MSG_ADDTILE );
-		buffer->SendInt ( x );
-		buffer->SendInt ( y );
-		buffer->SendInt ( (*iter).second->GetAppearance()->GetTileId() );
+		NetworkCommandBuffer::Command command(buffer);
+		command.SendChar ( MSG_ADDTILE );
+		command.SendInt ( x );
+		command.SendInt ( y );
+		command.SendInt ( (*iter).second->GetAppearance()->GetTileId() );
 	}
 }
 
@@ -293,10 +298,10 @@ LevelViewPort::LevelViewPort() : level ( 0 )
 LevelViewPort::~LevelViewPort()
 {
 	if ( level )
-		AttachToLevel ( 0,0 );
+		level->RemoveViewPort ( this );
 }
 
-void LevelViewPort::AttachToLevel ( Level* new_level, NetworkCommandBuffer* buffer )
+void LevelViewPort::AttachToLevel ( Level* new_level, NetworkCommandBuffer& buffer )
 {
 	if ( level )
 		level->RemoveViewPort ( this );
@@ -307,9 +312,10 @@ void LevelViewPort::AttachToLevel ( Level* new_level, NetworkCommandBuffer* buff
 		sizex = level->sizex;
 		sizey = level->sizey;
 		MarkAllDirty();
-		buffer->SendChar ( MSG_RESIZEWORLD );
-		buffer->SendInt ( level->sizex );
-		buffer->SendInt ( level->sizey );
+		NetworkCommandBuffer::Command command(buffer);
+		command.SendChar ( MSG_RESIZEWORLD );
+		command.SendInt ( level->sizex );
+		command.SendInt ( level->sizey );
 		MarkAllDirty();
 	}
 }
@@ -336,15 +342,21 @@ void LevelViewPort::MarkAllClean()
 	dirty_table.swap ( new_dirty_table );
 }
 
-void LevelViewPort::SendLevelInfo ( NetworkCommandBuffer* buffer, int posx, int posy )
+void LevelViewPort::SendLevelInfo ( NetworkCommandBuffer& buffer, int posx, int posy )
 {
-	buffer->SendChar ( MSG_SETCHARPOS );
-	buffer->SendInt ( posx );
-	buffer->SendInt ( posy );
+	{
+		NetworkCommandBuffer::Command command(buffer);
+		command.SendChar ( MSG_SETCHARPOS );
+		command.SendInt ( posx );
+		command.SendInt ( posy );
+	}
 	for ( int jj=0; jj < sizey; ++jj )
 		for ( int ii=0; ii < sizex; ++ii )
 			if ( IsDirty ( ii, jj ) )
 				level->SendTileInfo ( buffer, ii, jj );
-	buffer->SendChar ( MSG_SWAPBUFFERS );
+	{
+		NetworkCommandBuffer::Command command(buffer);
+		command.SendChar ( MSG_SWAPBUFFERS );
+	}
 }
 

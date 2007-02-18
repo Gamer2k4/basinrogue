@@ -37,6 +37,14 @@ bool NetworkCommandBuffer::GetIsConnected()
 	return is_connected;
 }
 
+int NetworkCommandBuffer::PeekReadInt()
+{
+	if ( buffer.empty() )
+		throw ReadSocketError();
+	std::string data = buffer.front();
+	return atoi ( data.c_str() );
+}
+
 int NetworkCommandBuffer::ReadInt()
 {
 	if ( buffer.empty() )
@@ -88,7 +96,13 @@ int NetworkCommandBuffer::GetNbCommands()
 
 bool NetworkCommandBuffer::HasCommands()
 {
-	return !buffer.empty();
+	int nb_elements = buffer.size();
+	if (nb_elements)
+	{
+		int command_size = PeekReadInt();
+		return command_size < nb_elements;
+	}
+	return false;
 }
 
 void NetworkCommandBuffer::SendString ( const std::string message )
@@ -99,19 +113,24 @@ void NetworkCommandBuffer::SendString ( const std::string message )
 	SDLNet_TCP_Send ( socket, const_cast<char*> ( message.data() ), message.size() );
 }
 
-void NetworkCommandBuffer::SendChar ( char message )
+void NetworkCommandBuffer::Command::SendString ( const std::string message )
+{
+	outbound_command_buffer.push_back( message );
+}
+
+void NetworkCommandBuffer::Command::SendChar ( char message )
 {
 	SendString( std::string( 1, message ) );
 }
 
-void NetworkCommandBuffer::SendInt ( int message )
+void NetworkCommandBuffer::Command::SendInt ( int message )
 {
 	std::stringstream buffer;
 	buffer << message;
 	SendString( buffer.str() );
 }
 
-void NetworkCommandBuffer::SendDouble ( double message )
+void NetworkCommandBuffer::Command::SendDouble ( double message )
 {
 	std::stringstream buffer;
 	buffer << message;
@@ -193,6 +212,30 @@ void NetworkCommandBuffer::AddCharToCommandSize ( char chr )
 
 void NetworkCommandBuffer::DumpBuffer()
 {}
+
+NetworkCommandBuffer::Command::Command(NetworkCommandBuffer& buffer) : buffer( buffer )
+{}
+
+NetworkCommandBuffer::Command::~Command()
+{
+	FlushCommand();
+}
+
+void NetworkCommandBuffer::Command::FlushCommand()
+{
+	int nb_elements = outbound_command_buffer.size();
+
+	if (nb_elements)
+	{
+		std::stringstream nb_elements_as_string;
+		nb_elements_as_string << nb_elements;
+		buffer.SendString( nb_elements_as_string.str() );
+
+		for (int ii = 0; ii < nb_elements; ++ii)
+			buffer.SendString( outbound_command_buffer[ii] );
+		outbound_command_buffer.clear();
+	}
+}
 
 void RaiseSocketError ( const char* message )
 {

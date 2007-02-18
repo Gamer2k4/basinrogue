@@ -57,13 +57,14 @@ Tile& TileLib::AddTile ( const std::string name, int row_of_bmp, int col_of_bmp,
 	return *tile;
 }
 
-void TileLib::SendTileLib ( NetworkCommandBuffer* buffer ) const
+void TileLib::SendTileLib ( NetworkCommandBuffer& buffer ) const
 {
 	for ( unsigned ii=0; ii < tile_list.size(); ++ii )
 	{
-		buffer->SendChar ( MSG_SENDTILE );
-		buffer->SendInt ( tile_list[ii]->GetTileId() );
-		buffer->SendInt ( tile_list[ii]->row_of_bmp );
-		buffer->SendInt ( tile_list[ii]->col_of_bmp );
+		NetworkCommandBuffer::Command command(buffer);
+		command.SendChar ( MSG_SENDTILE );
+		command.SendInt ( tile_list[ii]->GetTileId() );
+		command.SendInt ( tile_list[ii]->row_of_bmp );
+		command.SendInt ( tile_list[ii]->col_of_bmp );
 	}
 }

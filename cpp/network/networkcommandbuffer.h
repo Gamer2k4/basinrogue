@@ -46,6 +46,24 @@ class SocketSetEncapsulator
 */
 class NetworkCommandBuffer
 {
+	public:
+		class Command
+		{
+			private:
+				NetworkCommandBuffer& buffer;
+				std::vector<std::string> outbound_command_buffer;
+			public:
+				Command(NetworkCommandBuffer& buffer);
+				~Command();
+
+				void FlushCommand();
+
+				void SendString ( const std::string message );
+				void SendChar ( char message );
+				void SendInt ( int message );
+				void SendDouble ( double message );
+		};
+
 	private:
 		TCPsocket socket;
 		std::queue<std::string> buffer;
@@ -57,21 +75,19 @@ class NetworkCommandBuffer
 
 		void AddCharToBuffer ( char chr );
 		void AddCharToCommandSize( char chr );
+
+		void SendString ( const std::string message );
 	public:
 		NetworkCommandBuffer ( TCPsocket socket );
 		~NetworkCommandBuffer();
 
 		bool GetIsConnected();
+		int PeekReadInt();
 		int ReadInt();
 		char PeekReadChar();
 		char ReadChar();
 		std::string ReadString();
 		double ReadDouble();
-
-		void SendString ( const std::string message );
-		void SendChar ( char message );
-		void SendInt ( int message );
-		void SendDouble ( double message );
 
 		bool HasCommands();
 		int GetNbCommands();

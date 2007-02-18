@@ -47,7 +47,7 @@ class TileLib
 		~TileLib();
 
 		Tile& AddTile ( const std::string name, int row_of_bmp, int col_of_bmp, int flags );
-		void SendTileLib ( NetworkCommandBuffer* buffer ) const;
+		void SendTileLib ( NetworkCommandBuffer& buffer ) const;
 };
 
 #endif
