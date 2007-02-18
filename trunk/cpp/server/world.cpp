@@ -57,14 +57,17 @@ void World::AddPlayer(Mobile* mobile)
 	mobile->SetLevel( *level, 1, 1 );
 }
 
-void World::PlayerChangesDungeon(Player& player, const std::string& dungeon_name, int depth)
+void World::PlayerChangesDungeon(Player& player, const std::string& dungeon_name, int depth, const std::string& entrance_tag)
 {
 	Level* old_level = player.mobile->GetLevel();
 	Level* next_level = dungeon_list[dungeon_name]->GetLevel(depth);
-	player.mobile->SetLevel( *next_level, 1, 1 );
+	int startx = 1;
+	int starty = 1;
+	next_level->FindTileWithTag(entrance_tag, startx, starty);
+	player.mobile->SetLevel( *next_level, startx, starty );
 	player.viewport.AttachToLevel( next_level, player.command_buffer );
 	player.SendMessage ( next_level->GetDungeon().GetEntryMessage() );
+	std::cout << "Player enters dungeon " << dungeon_name << " depth " << depth << "\n";
 	if (old_level->getMustKillOnLeave())
 		delete old_level;
-	std::cout << "Player enters dungeon " << dungeon_name << " depth " << depth << "\n";
 }
