@@ -16,12 +16,7 @@
 
 #include "message_area.h"
 
-MessageArea::MessageArea ( SDL_Surface* dest_surface, int sizex, int sizey, int originx, int originy ) :
-		dest_surface ( dest_surface ),
-		sizex ( sizex ),
-		sizey ( sizey ),
-		originx ( originx ),
-		originy ( originy )
+MessageArea::MessageArea ( SDL_Surface* dest_surface, int sizex, int sizey, int originx, int originy ) : Widget( dest_surface, sizex, sizey, originx, originy )
 {
 	dest.x = originx;
 	dest.y = originy;
@@ -34,8 +29,6 @@ MessageArea::MessageArea ( SDL_Surface* dest_surface, int sizex, int sizey, int 
 		std::cerr << "Error creating TTF_Font: " << TTF_GetError() << "\n";
 		exit ( 1 );
 	}
-	int junk;
-	TTF_SizeText ( font, "abacab", &junk, &font_height );
 	font_height = TTF_FontLineSkip ( font );
 
 	message_color.r = 255;
@@ -92,9 +85,11 @@ void MessageArea::AddMessage ( const std::string& message )
 	messages.push_back ( message );
 }
 
-void MessageArea::Show()
+void MessageArea::Draw()
 {
 	SDL_FillRect ( dest_surface, &dest, 0 );
+	if (current_message < 0)
+		return;
 	std::vector < std::string > wrapped_text = WrapText ( messages[current_message] + ( blocked ? " --more--" : "" ), font, dest.w );
 	SDL_Rect this_line_dest;
 	this_line_dest.x = originx;
@@ -107,12 +102,6 @@ void MessageArea::Show()
 		DrawText ( wrapped_text[i], dest_surface, font, message_color, this_line_dest );
 		this_line_dest.y += font_height;
 	}
-	SDL_UpdateRect ( dest_surface, dest.x, dest.y, dest.w, dest.h );
-}
-
-void MessageArea::Clear()
-{
-	SDL_FillRect ( dest_surface, &dest, 0 ); // just set area to black, for now
 	SDL_UpdateRect ( dest_surface, dest.x, dest.y, dest.w, dest.h );
 }
 

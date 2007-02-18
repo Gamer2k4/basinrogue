@@ -13,19 +13,16 @@
 #ifndef MESSAGE_AREA_H
 #define MESSAGE_AREA_H
 
+#include "widget.h"
+
 #include <string>
 #include <vector>
-#include "SDL.h"
-#include "SDL_ttf.h"
+#include <SDL.h>
+#include <SDL_ttf.h>
 
-class MessageArea
+class MessageArea : public Widget
 {
 	private:
-		SDL_Surface* dest_surface;
-		int sizex;
-		int sizey;
-		int originx;
-		int originy;
 		SDL_Rect dest;
 		TTF_Font *font;
 		int font_height;
@@ -40,9 +37,9 @@ class MessageArea
 		MessageArea ( SDL_Surface* dest_surface, int sizex, int sizey, int originx, int originy );
 		~MessageArea();
 
+		void Draw();
+
 		void AddMessage ( const std::string& message );
-		void Show();
-		void Clear();
 		int GetBlocked() const;
 		void SetUnblocked();
 		void InputReceived(); // call this when the player has had a chance to read the message, so no need for a --more-- prompt

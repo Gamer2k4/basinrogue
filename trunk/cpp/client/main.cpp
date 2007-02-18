@@ -14,6 +14,7 @@
 #include "sound_lib.h"
 #include "server_connection.h"
 #include "message_area.h"
+#include "text_input.h"
 
 bool must_quit = false;
 
@@ -37,7 +38,7 @@ void send_command ( ServerConnection& connection, SDLKey key )
 		connection.SendCommand ( move_ne );
 }
 
-void handle_input ( ServerConnection& connection, MessageArea& message_area )
+void handle_input ( ServerConnection& connection, MessageArea& message_area, TextInput& input )
 {
 	if (message_area.GetBlocked())
 	{
@@ -67,14 +68,27 @@ void handle_input ( ServerConnection& connection, MessageArea& message_area )
 			switch ( event.type )
 			{
 				case SDL_KEYDOWN:
-					if ( event.key.keysym.sym == SDLK_ESCAPE )
+					switch (event.key.keysym.sym)
 					{
-						must_quit = true;
-						break;
+						case SDLK_ESCAPE:
+							must_quit = true;
+							break;
+						case SDLK_RETURN:
+						case SDLK_KP_ENTER:
+							if (input.getFocus())
+								std::cout << "Player said : " << input.getValue().c_str() << std::endl;
+							input.setValue( std::wstring() );
+							input.setFocus(!input.getFocus());
+							break;
+						default:
+							if (input.getFocus())
+								input.OnKeyDown(event.key.keysym);
+							else
+							{
+								send_command ( connection, event.key.keysym.sym );
+								message_area.InputReceived();
+							}
 					}
-
-					send_command ( connection, event.key.keysym.sym );
-					message_area.InputReceived();
 					break;
 
 				case SDL_KEYUP:
@@ -140,13 +154,17 @@ int main ( int argc, char* argv[] )
 	}
 
 	SDL_EnableKeyRepeat ( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
+	SDL_EnableUNICODE( 1 );
 
 	GameWorld world;
 	TileLib main_view_tile_lib ( 32, 32 );
 	SoundLib sound_lib;
 	GameView main_view ( world, main_view_tile_lib, screen, levelsizex, levelsizey, 0, 0 );
 	MessageArea message_area ( screen, screenwidth-levelsizex*32-20, 180, levelsizex*32+10, screenheight-190 );
-	message_area.Clear();
+	message_area.Draw();
+	TextInput text_input ( screen, screenwidth-levelsizex*32-20, 20, levelsizex*32+10, 0 );
+	// text_input.setValue( std::wstring(L"Hello world") );
+	text_input.Draw();
 
 	ServerConnection connection ( world, main_view, main_view_tile_lib, sound_lib, message_area );
 	if ( argc > 1 )
@@ -161,9 +179,10 @@ int main ( int argc, char* argv[] )
 	{
 		// Handle mouse and keyboard input
 		main_view.DrawView();
-		message_area.Show();
+		message_area.Draw();
+		text_input.Draw();
 		connection.Update();
-		handle_input ( connection, message_area );
+		handle_input ( connection, message_area, text_input );
 	}
 
 	Mix_CloseAudio();

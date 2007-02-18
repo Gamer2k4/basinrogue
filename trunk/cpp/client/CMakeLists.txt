@@ -6,6 +6,9 @@ FIND_PACKAGE(SDL_net REQUIRED)
 INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR} ${SDLIMAGE_INCLUDE_DIR} ${SDLTTF_INCLUDE_DIR} ${SDLNET_INCLUDE_DIR} ${SDLMIXER_INCLUDE_DIR} ../network)
 LINK_LIBRARIES(${SDL_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLTTF_LIBRARY} ${SDLNET_LIBRARY} ${SDLMAIN_LIBRARY} ${SDLMIXER_LIBRARY})
 
-SET(source_files main game_elements tile_lib server_connection sound_lib message_area ../network/networkcommandbuffer)
-# SET_SOURCE_FILES_PROPERTIES(${source_files} PROPERTIES COMPILE_FLAGS "-g -W -Wall")
+FILE(GLOB source_files "*.cpp")
+FILE(GLOB network_files "../network/*.cpp")
+
+ADD_EXECUTABLE(brclient-sdl ${source_files} ${network_files})
+
 ADD_EXECUTABLE(brclient-sdl ${source_files})
