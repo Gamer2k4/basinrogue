@@ -67,7 +67,8 @@ Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 					if (depth < 10)
 					{
 						tile = stairs_down;
-						trigger = new StairsDownTrigger();
+						trigger = new StairsDownTrigger("up");
+						trigger->tag = "down";
 					}
 					else
 						tile = ground;
@@ -75,9 +76,10 @@ Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 				case '>':
 					tile = stairs_up;
 					if (depth > 0)
-						trigger = new StairsUpTrigger();
+						trigger = new StairsUpTrigger("down");
 					else
-						trigger = new StairsChangeDungeonTrigger("town");
+						trigger = new StairsChangeDungeonTrigger("town", 0, "sewer");
+					trigger->tag = "up";
 					break;
 				default:
 					tile = 0;

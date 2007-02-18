@@ -28,29 +28,50 @@ const int FLAG_BLOCKS_VIEW = 1 << 1;
 
 class TileTrigger
 {
+	private:
+		bool temporary;
 	public:
+		TileTrigger();
+		virtual ~TileTrigger();
+
 		virtual void OnPlayerStepsOnTile ( Player& player );
+
+		void setIsTemporary ( bool theValue );
+
+
+		bool getIsTemporary() const;
+
+		std::string tag;
 };
 
-class StairsDownTrigger : public TileTrigger
+class LevelChangeTrigger : public TileTrigger
 {
 	public:
-		virtual void OnPlayerStepsOnTile ( Player& player );
+		LevelChangeTrigger( const std::string& target_tag = "" );
+		std::string target_tag;
 };
 
-class StairsUpTrigger : public TileTrigger
+class StairsDownTrigger : public LevelChangeTrigger
 {
 	public:
+		StairsDownTrigger( const std::string& target_tag = "" );
 		virtual void OnPlayerStepsOnTile ( Player& player );
 };
 
-class StairsChangeDungeonTrigger : public TileTrigger
+class StairsUpTrigger : public LevelChangeTrigger
+{
+	public:
+		StairsUpTrigger( const std::string& target_tag = "" );
+		virtual void OnPlayerStepsOnTile ( Player& player );
+};
+
+class StairsChangeDungeonTrigger : public LevelChangeTrigger
 {
 	private:
 		std::string next_dungeon;
 		int depth;
 	public:
-		StairsChangeDungeonTrigger ( const std::string& next_dungeon, int depth = 0 );
+		StairsChangeDungeonTrigger ( const std::string& next_dungeon, int depth = 0, const std::string& target_tag = "" );
 		virtual void OnPlayerStepsOnTile ( Player& player );
 };
 
@@ -60,6 +81,8 @@ class LevelTile
 		//LevelTile(const LevelTile&);
 		//const LevelTile& operator =(const LevelTile&);
 	public:
+		virtual ~LevelTile();
+
 		Tile* tile;
 		TileTrigger* trigger;
 		LevelTile();
@@ -112,6 +135,7 @@ class Level
 		void ActivateKillOnLeave();
 		bool getMustKillOnLeave();
 
+		bool FindTileWithTag(const std::string& tag, int& outx, int& outy);
 };
 
 class LevelViewPort

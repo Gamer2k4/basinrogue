@@ -178,7 +178,8 @@ int main ( int argc, char* argv[] )
 	std::list<Player*> player_list;
 	Level level ( levelsizex, levelsizey );
 	set_level_map ( level );
-	level.GetTile(1, 9).trigger = new StairsChangeDungeonTrigger("sewer", 0);
+	level.GetTile(1, 9).trigger = new StairsChangeDungeonTrigger("sewer", 0, "up");
+	level.GetTile(1, 9).trigger->tag = "sewer";
 	World world;
 	TownLevel town_level ( "town", "You are back in town.", world, level );
 	InstanceLevelGenerator generator(dungeonsizex, dungeonsizey, dungeon_map, goblin_tile, ground_tile, wall_tile, stairs_down_tile, stairs_up_tile );

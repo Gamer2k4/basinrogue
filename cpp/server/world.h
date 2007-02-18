@@ -42,7 +42,7 @@ class World
 		void SetStartingDungeon(const std::string& dungeon_name);
 
 		void AddPlayer(Mobile* mobile);
-		void PlayerChangesDungeon(Player& player, const std::string& dungeon_name, int depth);
+		void PlayerChangesDungeon(Player& player, const std::string& dungeon_name, int depth, const std::string& entrance_tag);
 };
 
 #endif
