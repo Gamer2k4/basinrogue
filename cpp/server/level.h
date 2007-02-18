@@ -95,14 +95,22 @@ class Level
 	private:
 		std::vector<LevelTile> level_table;
 		std::set<Mobile*> mobile_list;                     // any changes to one of these
-		std::map<std::pair<int,int>, Mobile*> mobile_hash; // must be reflected in the other!
+		std::multimap<std::pair<int,int>, Mobile*> mobile_hash; // must be reflected in the other!
 		std::set<LevelViewPort*> viewport_list;
 		Dungeon* dungeon;
 		bool must_kill_on_leave;
 		double clock;
 
 		void SetIsDirty ( int x, int y );
+
+		void RemoveMobileFromMap( Mobile& mob );
+		void InsertMobileInMap( Mobile& mob );
 	public:
+		typedef std::pair<int,int> mobile_map_key;
+		typedef std::pair<std::pair<int,int>, Mobile*> mobile_map_elem;
+		typedef std::multimap<std::pair<int,int>, Mobile*> mobile_map;
+		typedef std::pair<mobile_map::iterator, mobile_map::iterator> mobile_range;
+
 		const int sizex;
 		const int sizey;
 
@@ -121,8 +129,9 @@ class Level
 
 		void AddMobile ( Mobile& mob );
 		void RemoveMobile ( Mobile& mob );
-		void MoveMobile ( Mobile& mob, int old_posx, int old_posy );
-		Mobile* GetMobileAt ( int posx, int posy ); // return 0 if none there
+		void MoveMobile ( Mobile& mob, int new_posx, int new_posy );
+		mobile_range GetMobileAt ( int posx, int posy );
+		Mobile* GetFirstMobileAt ( int posx, int posy ); // return 0 if none there
 
 		void AddViewPort ( LevelViewPort* viewport );
 		void RemoveViewPort ( LevelViewPort* viewport );
