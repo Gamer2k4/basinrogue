@@ -47,12 +47,8 @@ void Mobile::Translate ( int decx, int decy )
 {
 	if ( level )
 		level->BeforeMoveEvent ( *this );
-	int old_posx = posx;
-	int old_posy = posy;
-	posx += decx;
-	posy += decy;
 	if ( level )
-		level->MoveMobile ( *this, old_posx, old_posy );
+		level->MoveMobile ( *this, posx + decx, posy + decy );
 	dirty = true;
 	if ( level )
 		level->AfterMoveEvent ( *this );
@@ -67,10 +63,10 @@ bool Mobile::TryMove ( int decx, int decy )
 	{
 		return false;
 	}
-	Mobile* mob = level->GetMobileAt ( x, y );
-	if ( mob )
+	Mobile* mob = level->GetFirstMobileAt ( x, y );
+	if ( mob ) // Hack, only bump into first mobile found
 	{
-		BumpInto ( mob );
+		BumpInto( mob );
 		return false;
 	}
 	LevelTile& tile = level->GetTile ( x, y );

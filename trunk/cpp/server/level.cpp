@@ -113,13 +113,13 @@ void Level::SendTileInfo ( NetworkCommandBuffer* buffer, int x, int y )
 		buffer->SendInt ( y );
 		buffer->SendInt ( level_table[index].tile->GetTileId() );
 	}
-	Mobile* mob = GetMobileAt ( x, y );
-	if ( mob )
+	mobile_range mob_pos = GetMobileAt ( x, y );
+	for (mobile_map::iterator iter = mob_pos.first; iter != mob_pos.second; ++iter)
 	{
 		buffer->SendChar ( MSG_ADDTILE );
 		buffer->SendInt ( x );
 		buffer->SendInt ( y );
-		buffer->SendInt ( mob->GetAppearance()->GetTileId() );
+		buffer->SendInt ( (*iter).second->GetAppearance()->GetTileId() );
 	}
 }
 
@@ -181,30 +181,60 @@ void Level::StuffCanHappen()
 	}
 }
 
+void Level::RemoveMobileFromMap( Mobile& mob )
+{
+	mobile_range mob_pos = GetMobileAt( mob.posx, mob.posy );
+	for (mobile_map::iterator iter = mob_pos.first; iter != mob_pos.second; ++iter)
+		if ((*iter).second == &mob)
+		{
+			mobile_hash.erase(iter);
+			return;
+		}
+}
+
+void Level::InsertMobileInMap( Mobile& mob )
+{
+	mobile_hash.insert (
+			std::pair<std::pair<int,int>, Mobile*>(
+			std::pair<int,int>(mob.posx,mob.posy),
+			&mob )
+					   );
+}
+
+
 void Level::AddMobile ( Mobile& mob )
 {
 	mobile_list.insert ( &mob );
-	mobile_hash [ std::pair<int,int> ( mob.posx,mob.posy ) ] = &mob;
+	InsertMobileInMap ( mob );
 }
 
 void Level::RemoveMobile ( Mobile& mob )
 {
+	RemoveMobileFromMap ( mob );
 	mobile_list.erase ( &mob );
-	mobile_hash.erase ( std::make_pair ( mob.posx,mob.posy ) );
 }
 
-void Level::MoveMobile ( Mobile& mob, int old_posx, int old_posy )
+void Level::MoveMobile ( Mobile& mob, int new_posx, int new_posy )
 {
-	mobile_hash.erase ( std::make_pair ( old_posx,old_posy ) );
-	mobile_hash [ std::pair<int,int> ( mob.posx,mob.posy ) ] = &mob;
+	RemoveMobileFromMap ( mob );
+	mob.posx = new_posx;
+	mob.posy = new_posy;
+	InsertMobileInMap ( mob );
 }
 
-Mobile* Level::GetMobileAt ( int posx, int posy )
+Level::mobile_range Level::GetMobileAt ( int posx, int posy )
 {
-	if ( mobile_hash.find ( std::make_pair ( posx, posy ) ) == mobile_hash.end ( ) )
-		return 0;
+	mobile_map_key pos = std::make_pair( posx, posy );
+	return mobile_hash.equal_range( pos );
+}
+
+Mobile* Level::GetFirstMobileAt ( int posx, int posy )
+{
+	mobile_range mob_pos = GetMobileAt ( posx, posy );
+	if ( mob_pos.first != mob_pos.second ) // Hack, only bump into first mobile found
+		return (*mob_pos.first).second;
 	else
-		return mobile_hash [ std::make_pair ( posx, posy ) ];
+		return 0;
 }
 
 void Level::AddViewPort ( LevelViewPort* viewport )
