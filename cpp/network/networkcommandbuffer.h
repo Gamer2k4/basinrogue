@@ -50,9 +50,13 @@ class NetworkCommandBuffer
 		TCPsocket socket;
 		std::queue<std::string> buffer;
 		bool is_connected;
+		unsigned int current_command_size;
+		char size_buffer[4];
+		unsigned int size_buffer_used;
 		std::string current_command;
 
 		void AddCharToBuffer ( char chr );
+		void AddCharToCommandSize( char chr );
 	public:
 		NetworkCommandBuffer ( TCPsocket socket );
 		~NetworkCommandBuffer();

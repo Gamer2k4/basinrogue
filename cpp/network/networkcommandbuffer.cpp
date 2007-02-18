@@ -18,7 +18,11 @@
 
 const bool debug_all_message = false;
 
-NetworkCommandBuffer::NetworkCommandBuffer ( TCPsocket socket ) : socket ( socket ), is_connected ( true )
+NetworkCommandBuffer::NetworkCommandBuffer ( TCPsocket socket ) :
+		socket ( socket ),
+		is_connected ( true ),
+		current_command_size( 0 ),
+		size_buffer_used( 0 )
 {}
 
 
@@ -89,32 +93,29 @@ bool NetworkCommandBuffer::HasCommands()
 
 void NetworkCommandBuffer::SendString ( const std::string message )
 {
+	char buffer[4];
+	SDLNet_Write32(message.size(), buffer);
+	SDLNet_TCP_Send ( socket, buffer, 4 );
 	SDLNet_TCP_Send ( socket, const_cast<char*> ( message.data() ), message.size() );
-	SDLNet_TCP_Send ( socket, const_cast<char*> ( "\n" ), 1 );
 }
 
 void NetworkCommandBuffer::SendChar ( char message )
 {
-	SDLNet_TCP_Send ( socket, &message, 1 );
-	SDLNet_TCP_Send ( socket, const_cast<char*> ( "\n" ), 1 );
+	SendString( std::string( 1, message ) );
 }
 
 void NetworkCommandBuffer::SendInt ( int message )
 {
 	std::stringstream buffer;
-	buffer << message << "\n";
-	std::string data ( buffer.str() );
-
-	SDLNet_TCP_Send ( socket, const_cast<char*> ( data.data() ), data.size() );
+	buffer << message;
+	SendString( buffer.str() );
 }
 
 void NetworkCommandBuffer::SendDouble ( double message )
 {
 	std::stringstream buffer;
-	buffer << message << "\n";
-	std::string data ( buffer.str() );
-
-	SDLNet_TCP_Send ( socket, const_cast<char*> ( data.data() ), data.size() );
+	buffer << message;
+	SendString( buffer.str() );
 }
 
 
@@ -153,7 +154,10 @@ void NetworkCommandBuffer::Think()
 				else
 					std::cout << "Read: " << msg << "\n";
 			}
-			AddCharToBuffer ( msg );
+			if (current_command_size > 0)
+				AddCharToBuffer ( msg );
+			else
+				AddCharToCommandSize( msg );
 		}
 	if ( numready < 0 )
 	{
@@ -165,18 +169,25 @@ void NetworkCommandBuffer::Think()
 
 void NetworkCommandBuffer::AddCharToBuffer ( char chr )
 {
-	if ( chr == '\n' )
+	current_command+=chr;
+	if (current_command.size() == current_command_size)
 	{
-		if ( current_command.size() == 0 )
-			throw ReadSocketError();
 		buffer.push ( current_command );
 		if ( debug_all_message )
 			std::cout << "New message received: " << current_command << "\n";
 		current_command = "";
+		current_command_size = 0;
 	}
-	else
+}
+
+void NetworkCommandBuffer::AddCharToCommandSize ( char chr )
+{
+	size_buffer[size_buffer_used] = chr;
+	++size_buffer_used;
+	if (size_buffer_used == 4)
 	{
-		current_command+=chr;
+		current_command_size = SDLNet_Read32(size_buffer);
+		size_buffer_used = 0;
 	}
 }
 
