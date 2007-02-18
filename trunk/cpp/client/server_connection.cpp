@@ -48,7 +48,7 @@ void ServerConnection::Update()
 	server_socket->Think();
 	while ( server_socket->HasCommands() )
 	{
-		server_socket->ReadInt();
+		int command_size = server_socket->ReadInt();
 		char command = server_socket->ReadChar();
 		switch ( command )
 		{
@@ -78,15 +78,10 @@ void ServerConnection::Update()
 			{
 				int x = server_socket->ReadInt();
 				int y = server_socket->ReadInt();
-				int id = server_socket->ReadInt();
-				world.AddTile ( x, y, id );
-				break;
-			}
-			case MSG_CLEARTILE:
-			{
-				int x = server_socket->ReadInt();
-				int y = server_socket->ReadInt();
 				world.ClearTile ( x, y );
+				int nb_tiles = command_size - 3;
+				for (int ii = 0; ii < nb_tiles; ++ii)
+					world.AddTile ( x, y, server_socket->ReadInt() );
 				break;
 			}
 			case MSG_SETCHARPOS:
