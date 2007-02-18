@@ -44,7 +44,7 @@ class SoundLib
 		~SoundLib();
 
 		Sound& AddSound ( const std::string name, const std::string filename_prefix );
-		void SendSoundLib ( NetworkCommandBuffer* buffer ) const;
+		void SendSoundLib ( NetworkCommandBuffer& buffer ) const;
 };
 
 #endif

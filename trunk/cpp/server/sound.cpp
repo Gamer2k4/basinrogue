@@ -46,12 +46,15 @@ Sound& SoundLib::AddSound ( const std::string name, const std::string filename_p
 	return *sound;
 }
 
-void SoundLib::SendSoundLib ( NetworkCommandBuffer* buffer ) const
+void SoundLib::SendSoundLib ( NetworkCommandBuffer& buffer ) const
 {
 	for ( unsigned ii=0; ii < sound_list.size(); ++ii )
 	{
-		buffer->SendChar ( MSG_SENDSOUND );
-		buffer->SendInt ( sound_list[ii]->GetSoundId() );
-		buffer->SendString ( sound_list[ii]->filename_prefix );
+		{
+			NetworkCommandBuffer::Command command(buffer);
+			command.SendChar ( MSG_SENDSOUND );
+			command.SendInt ( sound_list[ii]->GetSoundId() );
+			command.SendString ( sound_list[ii]->filename_prefix );
+		}
 	}
 }

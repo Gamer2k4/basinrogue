@@ -24,7 +24,7 @@
 class Player
 {
 	public:
-		NetworkCommandBuffer* command_buffer;
+		NetworkCommandBuffer command_buffer;
 		TCPsocket socket;
 		Mobile* mobile;
 		LevelViewPort viewport;
