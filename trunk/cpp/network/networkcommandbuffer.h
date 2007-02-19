@@ -63,6 +63,7 @@ class NetworkCommandBuffer
 				void SendInt ( int message );
 				void SendDouble ( double message );
 		};
+		friend class Command;
 
 	private:
 		TCPsocket socket;
