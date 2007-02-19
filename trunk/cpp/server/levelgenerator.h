@@ -34,19 +34,23 @@ class StaticLevelGenerator : public LevelGenerator
 		virtual Level& GenerateLevel(int depth);
 };
 
+class TownLevelGenerator : public LevelGenerator
+{
+	private:
+		TileLib tile_lib;
+	public:
+		TownLevelGenerator ( TileLib& tile_lib );
+		virtual ~TownLevelGenerator();
+
+		Level& GenerateLevel(int depth);
+};
+
 class InstanceLevelGenerator : public LevelGenerator
 {
 	private:
-		int sizex;
-		int sizey;
-		const char* pattern;
-		Tile* ground;
-		Tile* wall;
-		Tile* stairs_down;
-		Tile* stairs_up;
-   		Tile* goblin;
+		TileLib tile_lib;
 	public:
-		InstanceLevelGenerator(int sizex, int sizey, const char* pattern, Tile* goblin, Tile* ground, Tile* wall, Tile* stairs_down = 0, Tile* stairs_up = 0);
+		InstanceLevelGenerator ( TileLib& tile_lib ) ;
 		virtual ~InstanceLevelGenerator();
 		virtual Level& GenerateLevel(int depth);
 };

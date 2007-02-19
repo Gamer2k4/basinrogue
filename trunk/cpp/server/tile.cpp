@@ -57,6 +57,18 @@ Tile& TileLib::AddTile ( const std::string name, int row_of_bmp, int col_of_bmp,
 	return *tile;
 }
 
+Tile* TileLib::GetTileByName ( const std::string& name )
+{
+	for ( int i=0; i < tile_list.size() ; i++)
+	{
+		if ( tile_list[i]->name == name )
+		{
+			return tile_list[i];
+		}
+	}
+	return 0;
+}
+
 void TileLib::SendTileLib ( NetworkCommandBuffer& buffer ) const
 {
 	for ( unsigned ii=0; ii < tile_list.size(); ++ii )
