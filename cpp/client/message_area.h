@@ -45,12 +45,8 @@ class MessageArea : public Widget
 		void InputReceived(); // call this when the player has had a chance to read the message, so no need for a --more-- prompt
 };
 
-/* SDL_ttf helper functions cribbed off the Web follow */
-
 std::vector<std::string> WrapText ( const std::string& message, TTF_Font* textFont, int maxWidth );
 void DrawText ( std::string& line, SDL_Surface* surface, TTF_Font* textFont, SDL_Color textColor,
                 SDL_Rect& drawingPos );
-
-/* End cribbed code */
 
 #endif
