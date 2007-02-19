@@ -229,6 +229,33 @@ Mobile* Level::GetFirstMobileAt ( int posx, int posy )
 		return 0;
 }
 
+std::pair<int,int> Level::GetSpawnPoint ( const std::string& entrance_tag )
+{
+	int startx, starty;
+	int entrance_exists = FindTileWithTag (entrance_tag, startx, starty);
+	if ( entrance_exists )
+	{
+		return std::make_pair ( startx, starty );
+	}
+	// If we get this far, it's probably the town (but it could be a malcreated dungeon with no entrance).
+	// Find a clear spot, anywhere will do.
+	for ( int x = 1; x < sizex; x++ )
+	{
+		for ( int y = 1; y < sizey; y++ )
+		{
+			LevelTile& tile = GetTile ( x, y );
+			if ( tile.tile->HasOneFlag ( FLAG_BLOCKS_MOVEMENT ) )
+				continue;
+			Mobile* mob = GetFirstMobileAt ( x, y );
+			if ( mob )
+				continue;
+			return std::make_pair ( x, y );
+		}
+	}
+	std::cerr << "Unable to find a player spawn point\n";
+	exit ( 1 );
+}
+
 void Level::AddViewPort ( LevelViewPort* viewport )
 {
 	viewport_list.insert ( viewport );

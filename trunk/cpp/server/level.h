@@ -133,6 +133,8 @@ class Level
 		mobile_range GetMobileAt ( int posx, int posy );
 		Mobile* GetFirstMobileAt ( int posx, int posy ); // return 0 if none there
 
+		std::pair<int,int> GetSpawnPoint ( const std::string& entrance_tag );
+
 		void AddViewPort ( LevelViewPort* viewport );
 		void RemoveViewPort ( LevelViewPort* viewport );
 

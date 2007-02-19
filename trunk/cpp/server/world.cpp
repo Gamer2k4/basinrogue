@@ -54,7 +54,8 @@ void World::SetStartingDungeon(const std::string& dungeon_name)
 void World::AddPlayer(Mobile* mobile)
 {
 	Level* level = dungeon_list[starting_dungeon]->GetLevel(0);
-	mobile->SetLevel( *level, 1, 1 );
+	std::pair < int, int > start_pos = level->GetSpawnPoint ( std::string("XXX") ); /* hack: start anywhere */
+	mobile->SetLevel( *level, start_pos.first, start_pos.second );
 }
 
 void World::PlayerChangesDungeon(Player& player, const std::string& dungeon_name, int depth, const std::string& entrance_tag)
@@ -63,8 +64,8 @@ void World::PlayerChangesDungeon(Player& player, const std::string& dungeon_name
 	Level* next_level = dungeon_list[dungeon_name]->GetLevel(depth);
 	int startx = 1;
 	int starty = 1;
-	next_level->FindTileWithTag(entrance_tag, startx, starty);
-	player.mobile->SetLevel( *next_level, startx, starty );
+	std::pair < int, int > start_pos = next_level->GetSpawnPoint ( entrance_tag );
+	player.mobile->SetLevel( *next_level, start_pos.first, start_pos.second );
 	player.viewport.AttachToLevel( next_level, player.command_buffer );
 	player.SendMessage ( next_level->GetDungeon().GetEntryMessage() );
 	std::cout << "Player enters dungeon " << dungeon_name << " depth " << depth << "\n";
