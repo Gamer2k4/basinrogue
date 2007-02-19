@@ -25,23 +25,78 @@ Level& StaticLevelGenerator::GenerateLevel ( int depth )
 	return level;
 }
 
+TownLevelGenerator::TownLevelGenerator (
+	TileLib& tile_lib ) :
+		tile_lib ( tile_lib )
+{}
+
+Level& TownLevelGenerator::GenerateLevel ( int depth )
+{
+	int levelsizex = 35;
+	int levelsizey = 30;
+	const char* pattern =
+	"###################################"
+    "#...................#...###########"
+    "#.............####..#...###########"
+    "#......#####..#..#......###########"
+    "#......#...#.....#..###############"
+    "#......#...#..#..#......###########"
+    "#......##.##..####................#"
+    "#..............#........#########.#"
+    "#..............#........#########.#"
+    "#>#............#........#########.#"
+    "################..##.############.#"
+    "#.................#.....#########.#"
+    "#.................#.....#########.#"
+    "#.................#.....#########.#"
+    "#.................###############.#"
+    "#....#####.....#####....#########.#"
+    "#....#...#.....#...#....#########.#"
+    "#....#...###.###...#....#########.#"
+    "#....#.............#....#########.#"
+    "#....####.......####....#########.#"
+    "#.......#.......#.................#"
+    "#.......#...............###########"
+    "#.......#.......#.......###########"
+    "#.......#.......#.......###########"
+    "##.#########.######################"
+    "##.#########.######################"
+    "#..#########.######################"
+    "#.##########.######################"
+    "#............######################"
+    "###################################"
+    ;
+	Tile* ground      = tile_lib.GetTileByName ( "town_ground" );
+	Tile* wall        = tile_lib.GetTileByName ( "town_wall" );
+	Tile* stairs_down = tile_lib.GetTileByName ( "town_stairs_down" );
+	Level& level = *new Level( levelsizex, levelsizey );
+	for ( int jj=0; jj < levelsizey; ++jj )
+		for ( int ii=0; ii < levelsizex; ++ii )
+		{
+			char tile_char = pattern[ii+jj*levelsizex];
+			Tile* this_tile;
+			TileTrigger* trigger = 0;
+			if ( tile_char=='#' )
+				this_tile = wall;
+			else if ( tile_char == '>' )
+			{
+				this_tile = stairs_down;
+				trigger = new StairsChangeDungeonTrigger("sewer", 0, "up");
+				trigger->tag = "sewer";
+			}
+			else
+				this_tile = ground;
+			level.SetTile ( ii, jj, this_tile, trigger );
+		}
+	return level;
+}
+
+TownLevelGenerator::~TownLevelGenerator()
+{}
 
 InstanceLevelGenerator::InstanceLevelGenerator (
-    int sizex, int sizey,
-    const char* pattern,
-    Tile* goblin,
-    Tile* ground,
-    Tile* wall,
-    Tile* stairs_down,
-    Tile* stairs_up ) :
-		sizex ( sizex ),
-		sizey ( sizey ),
-		goblin ( goblin ),
-		pattern ( pattern ),
-		ground ( ground ),
-		wall ( wall ),
-		stairs_down ( stairs_down ),
-		stairs_up ( stairs_up )
+    TileLib& tile_lib ) :
+		tile_lib ( tile_lib )
 {}
 
 InstanceLevelGenerator::~InstanceLevelGenerator()
@@ -49,6 +104,24 @@ InstanceLevelGenerator::~InstanceLevelGenerator()
 
 Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 {
+	int sizex = 10;
+	int sizey = 10;
+	const char* pattern =
+		"##########"
+		"#...>....#"
+		"#........#"
+		"#........#"
+		"#<.......#"
+		"#........#"
+		"#........#"
+		"#........#"
+		"#........#"
+		"##########";
+	Tile* goblin      = tile_lib.GetTileByName ( "goblin" );
+	Tile* ground      = tile_lib.GetTileByName ( "ground" );
+	Tile* wall        = tile_lib.GetTileByName ( "wall" );
+	Tile* stairs_down = tile_lib.GetTileByName ( "stairs_down" );
+	Tile* stairs_up   = tile_lib.GetTileByName ( "stairs_up" );
 	Level& level = *new Level ( sizex, sizey );
 	for ( int jj=0; jj < sizey; ++jj )
 		for ( int ii=0; ii < sizex; ++ii )

@@ -19,95 +19,6 @@
 #include "SDL_main.h"
 #include "SDL_net.h"
 
-Tile* town_ground_tile;
-Tile* town_wall_tile;
-Tile* town_stairs_down_tile;
-Tile* town_stairs_up_tile;
-Tile* ground_tile;
-Tile* wall_tile;
-Tile* stairs_down_tile;
-Tile* stairs_up_tile;
-Tile* player_tile;
-Tile* goblin_tile;
-
-Sound* wind_sound;
-
-const int levelsizex = 35;
-const int levelsizey = 30;
-
-const char* level_map =
-    "###################################"
-    "#...................#...###########"
-    "#.............####..#...###########"
-    "#......#####..#..#......###########"
-    "#......#...#.....#..###############"
-    "#......#...#..#..#......###########"
-    "#......##.##..####................#"
-    "#..............#........#########.#"
-    "#..............#........#########.#"
-    "#<#............#........#########.#"
-    "################..##.############.#"
-    "#.................#.....#########.#"
-    "#.................#.....#########.#"
-    "#.................#.....#########.#"
-    "#.................###############.#"
-    "#....#####.....#####....#########.#"
-    "#....#...#.....#...#....#########.#"
-    "#....#...###.###...#....#########.#"
-    "#....#.............#....#########.#"
-    "#....####.......####....#########.#"
-    "#.......#.......#.................#"
-    "#.......#...............###########"
-    "#.......#.......#.......###########"
-    "#.......#.......#.......###########"
-    "##.#########.######################"
-    "##.#########.######################"
-    "#..#########.######################"
-    "#.##########.######################"
-    "#............######################"
-    "###################################";
-
-const int dungeonsizex = 10;
-const int dungeonsizey = 10;
-
-const char* dungeon_map =
-		"##########"
-		"#...>....#"
-		"#........#"
-		"#........#"
-		"#<.......#"
-		"#........#"
-		"#........#"
-		"#........#"
-		"#........#"
-		"##########";
-
-Tile* get_tile_id ( char tile_char )
-{
-	switch ( tile_char )
-	{
-		case '#':
-			return town_wall_tile;
-		case '.':
-			return town_ground_tile;
-		case '<':
-			return town_stairs_down_tile;
-		case '>':
-			return town_stairs_up_tile;
-		default:
-			return 0;
-	}
-}
-
-void set_level_map ( Level& level )
-{
-	for ( int jj=0; jj < levelsizey; ++jj )
-		for ( int ii=0; ii < levelsizex; ++ii )
-		{
-			level.SetTile ( ii, jj, get_tile_id ( level_map[ii+jj*levelsizex] ) );
-		}
-}
-
 bool IsPlayerConnected ( Player* player )
 {
 	bool must_remove = player->GetIsDisconnected();
@@ -123,19 +34,19 @@ int main ( int argc, char* argv[] )
 	std::list<Player*>::iterator iter;
 
 	TileLib tile_lib;
-	town_ground_tile = &tile_lib.AddTile ( "town_ground", 23, 13, 0 );
-	town_wall_tile = &tile_lib.AddTile ( "town_wall", 25, 0, FLAG_BLOCKS_MOVEMENT );
-	town_stairs_down_tile = &tile_lib.AddTile ( "town_stairs_down", 25, 29, 0 );
-	town_stairs_up_tile = &tile_lib.AddTile ( "town_stairs_down", 25, 28, 0 );
-	ground_tile = &tile_lib.AddTile ( "ground", 23, 1, 0 );
-	wall_tile = &tile_lib.AddTile ( "wall", 22, 0, FLAG_BLOCKS_MOVEMENT );
-	stairs_down_tile = &tile_lib.AddTile ( "stairs_down", 22, 16, 0 );
-	stairs_up_tile = &tile_lib.AddTile ( "stairs_down", 22, 15, 0 );
-	player_tile = &tile_lib.AddTile ( "player", 3, 2, FLAG_BLOCKS_MOVEMENT );
-	goblin_tile = &tile_lib.AddTile ( "goblin", 21, 9, FLAG_BLOCKS_MOVEMENT );
+	tile_lib.AddTile ( "town_ground", 23, 13, 0 );
+	tile_lib.AddTile ( "town_wall", 25, 0, FLAG_BLOCKS_MOVEMENT );
+	tile_lib.AddTile ( "town_stairs_down", 25, 29, 0 );
+	tile_lib.AddTile ( "town_stairs_down", 25, 28, 0 );
+	tile_lib.AddTile ( "ground", 23, 1, 0 );
+	tile_lib.AddTile ( "wall", 22, 0, FLAG_BLOCKS_MOVEMENT );
+	tile_lib.AddTile ( "stairs_down", 22, 16, 0 );
+	tile_lib.AddTile ( "stairs_up", 22, 15, 0 );
+	tile_lib.AddTile ( "player", 3, 2, FLAG_BLOCKS_MOVEMENT );
+	tile_lib.AddTile ( "goblin", 21, 9, FLAG_BLOCKS_MOVEMENT );
 
 	SoundLib sound_lib;
-	wind_sound = &sound_lib.AddSound ( "whoosh", "wind" );
+	sound_lib.AddSound ( "whoosh", "wind" );
 
 	atexit ( SDL_Quit );
 
@@ -176,13 +87,12 @@ int main ( int argc, char* argv[] )
 
 	SDLNet_TCP_AddSocket ( main_set, listen_socket );
 	std::list<Player*> player_list;
-	Level level ( levelsizex, levelsizey );
-	set_level_map ( level );
-	level.GetTile(1, 9).trigger = new StairsChangeDungeonTrigger("sewer", 0, "up");
-	level.GetTile(1, 9).trigger->tag = "sewer";
+
+	TownLevelGenerator town_generator ( tile_lib ) ;
+	Level level_for_town = town_generator.GenerateLevel ( 0 );
 	World world;
-	TownLevel town_level ( "town", "You are back in town.", world, level );
-	InstanceLevelGenerator generator(dungeonsizex, dungeonsizey, dungeon_map, goblin_tile, ground_tile, wall_tile, stairs_down_tile, stairs_up_tile );
+	TownLevel town_level ( "town", "You are back in town.", world, level_for_town );
+	InstanceLevelGenerator generator ( tile_lib );
 	MultilevelDungeon sewer( "sewer", "You cautiously enter the sewer...", world, generator);
 	sewer.setLevelmax(10);
 
@@ -253,7 +163,7 @@ int main ( int argc, char* argv[] )
 					SDLNet_TCP_AddSocket ( main_set, client_socket );
 					std::cout << "New player connected\n";
 					Mobile* player_mobile = new PlayerMonster();
-					player_mobile->SetAppearance ( player_tile );
+					player_mobile->SetAppearance ( tile_lib.GetTileByName ( "player" ) );
 					world.AddPlayer ( player_mobile );
 					Player* player = new Player ( client_socket, player_mobile );
 					tile_lib.SendTileLib ( player->command_buffer );
