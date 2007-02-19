@@ -112,10 +112,10 @@ Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 		"#........#"
 		"#........#"
 		"#<.......#"
+		"#......g.#"
 		"#........#"
 		"#........#"
-		"#........#"
-		"#........#"
+		"#...g....#"
 		"##########";
 	Tile* goblin      = tile_lib.GetTileByName ( "goblin" );
 	Tile* ground      = tile_lib.GetTileByName ( "ground" );
@@ -123,6 +123,7 @@ Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 	Tile* stairs_down = tile_lib.GetTileByName ( "stairs_down" );
 	Tile* stairs_up   = tile_lib.GetTileByName ( "stairs_up" );
 	Level& level = *new Level ( sizex, sizey );
+	Monster* mob;
 	for ( int jj=0; jj < sizey; ++jj )
 		for ( int ii=0; ii < sizex; ++ii )
 		{
@@ -136,7 +137,13 @@ Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 				case '.':
 					tile = ground;
 					break;
-				case '<':
+				case 'g':
+					tile = ground;
+					mob = new Monster();
+					mob->SetLevel ( level, ii, jj );
+					mob->SetAppearance ( goblin );
+					break;
+				case '>':
 					if (depth < 10)
 					{
 						tile = stairs_down;
@@ -146,7 +153,7 @@ Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 					else
 						tile = ground;
 					break;
-				case '>':
+				case '<':
 					tile = stairs_up;
 					if (depth > 0)
 						trigger = new StairsUpTrigger("down");
@@ -159,9 +166,6 @@ Level& InstanceLevelGenerator::GenerateLevel ( int depth )
 			}
 			level.SetTile ( ii, jj, tile, trigger );
 		}
-	Monster* mob = new Monster();
-	mob->SetLevel ( level, 7, 7 );
-	mob->SetAppearance ( goblin );
 	level.depth = depth;
 	level.ActivateKillOnLeave();
 	return level;
