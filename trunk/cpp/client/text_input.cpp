@@ -71,7 +71,7 @@ bool TextInput::OnKeyDown ( SDL_keysym& keysym )
 			value.erase(cursor_pos, 1);
 			break;
 		case SDLK_CLEAR:
-			value.clear();
+			setValue ( L"" ); /* value.clear() is a compile time error for me, A. */
 			cursor_pos = 0;
 			break;
 		default:
@@ -82,6 +82,7 @@ bool TextInput::OnKeyDown ( SDL_keysym& keysym )
 				++cursor_pos;
 			}
 	}
+	return 1; 
 }
 
 void TextInput::Draw()
@@ -99,7 +100,8 @@ void TextInput::Draw()
 	int size = value.size() +1;
 	if (size > 1)
 	{
-		Uint16 data[size];
+		Uint16* data;
+		data = new Uint16[size];
 		for ( int ii = 0; ii < size; ++ii )
 			data[ii] = ( Uint16 ) value.c_str() [ii];
 		SDL_Surface* textSurface = TTF_RenderUNICODE_Blended ( font, data, message_color );
@@ -112,6 +114,7 @@ void TextInput::Draw()
 
 		data[cursor_pos] = 0;
 		TTF_SizeUNICODE ( font, data, &x, &h );
+		delete[] data;
 	}
 	else
 	{
