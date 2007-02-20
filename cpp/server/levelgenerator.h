@@ -20,6 +20,14 @@
 */
 class LevelGenerator
 {
+	protected:
+		void SetFloorAndWallTiles ( TileLib& tile_lib, std::string floor_theme, std::string walls_theme );
+		Tile *ground, *wall, *stairs_up, *stairs_down; // only store floor/walls here for now - other stuff can be accessed from tilelib as needed
+
+		Level& MakeFromPattern ( TileLib& tile_lib,
+		                         int levelsizex, int levelsizey, std::string pattern,
+			         		     std::vector< std::pair<int, int> > monster_locations, std::vector<std::string> monster_types,
+			         		     int depth, int kill_on_leave = 1 );
 	public:
 		virtual ~LevelGenerator();
 		virtual Level& GenerateLevel(int depth) = 0;
