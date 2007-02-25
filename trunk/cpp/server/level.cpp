@@ -49,7 +49,7 @@ StairsDownTrigger::StairsDownTrigger( const std::string& target_tag ) :
 void StairsDownTrigger::OnPlayerStepsOnTile ( Player& player )
 {
 	Level* level = player.mobile->GetLevel();
-	Dungeon& current_dungeon = level->GetDungeon();
+	const Dungeon& current_dungeon = level->GetDungeon();
 	current_dungeon.getWorld().PlayerChangesDungeon ( player, current_dungeon.getName(), level->depth + 1, target_tag );
 	player.SendMessage ( "You go down the stairs..." );
 }
@@ -61,7 +61,7 @@ StairsUpTrigger::StairsUpTrigger( const std::string& target_tag ) :
 void StairsUpTrigger::OnPlayerStepsOnTile ( Player& player )
 {
 	Level* level = player.mobile->GetLevel();
-	Dungeon& current_dungeon = level->GetDungeon();
+	const Dungeon& current_dungeon = level->GetDungeon();
 	current_dungeon.getWorld().PlayerChangesDungeon ( player, current_dungeon.getName(), level->depth - 1, target_tag );
 	player.SendMessage ( "You climb the stairs..." );
 }
@@ -76,7 +76,7 @@ void StairsChangeDungeonTrigger::OnPlayerStepsOnTile ( Player& player )
 {
 	player.SendMessage ( "You pass through a portal..." );
 	Level* level = player.mobile->GetLevel();
-	Dungeon& current_dungeon = level->GetDungeon();
+	const Dungeon& current_dungeon = level->GetDungeon();
 	current_dungeon.getWorld().PlayerChangesDungeon ( player, next_dungeon, depth, target_tag );
 }
 
@@ -131,12 +131,18 @@ LevelTile& Level::GetTile ( int posx, int posy )
 	return level_table[index];
 }
 
-void Level::SetTile ( int posx, int posy, Tile* tile, TileTrigger* trigger )
+void Level::SetTile ( int posx, int posy, Tile* tile )
 {
 	int index = posx + posy * sizex;
 	level_table[index].tile = tile;
-	level_table[index].trigger = trigger;
+	// level_table[index].trigger = 0;
 	SetIsDirty ( posx, posy );
+}
+
+void Level::SetTrigger ( int posx, int posy, TileTrigger* trigger )
+{
+	int index = posx + posy * sizex;
+	level_table[index].trigger = trigger;
 }
 
 void Level::BeforeMoveEvent ( Mobile& mob )
@@ -266,12 +272,12 @@ void Level::RemoveViewPort ( LevelViewPort* viewport )
 	viewport_list.erase ( viewport );
 }
 
-void Level::SetDungeon ( Dungeon& dungeon )
+void Level::SetDungeon ( const Dungeon& dungeon )
 {
 	this->dungeon = &dungeon;
 }
 
-Dungeon& Level::GetDungeon()
+const Dungeon& Level::GetDungeon()
 {
 	return *dungeon;
 }

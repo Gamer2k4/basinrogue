@@ -45,7 +45,7 @@ TileLib::~TileLib()
 	tile_list.clear();
 }
 
-Tile& TileLib::AddTile ( const std::string name, int row_of_bmp, int col_of_bmp, int flags )
+Tile& TileLib::NewTile ( const std::string name, int row_of_bmp, int col_of_bmp, int flags )
 {
 	Tile* tile = new Tile ( name );
 	int new_id = tile_list.size();
@@ -55,18 +55,6 @@ Tile& TileLib::AddTile ( const std::string name, int row_of_bmp, int col_of_bmp,
 	tile->row_of_bmp = row_of_bmp;
 	tile->col_of_bmp = col_of_bmp;
 	return *tile;
-}
-
-Tile* TileLib::GetTileByName ( const std::string& name )
-{
-	for ( int i=0; i < tile_list.size() ; i++)
-	{
-		if ( tile_list[i]->name == name )
-		{
-			return tile_list[i];
-		}
-	}
-	return 0;
 }
 
 void TileLib::SendTileLib ( NetworkCommandBuffer& buffer ) const

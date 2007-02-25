@@ -1,4 +1,4 @@
 PROJECT(basinrogue)
 SET(EXECUTABLE_OUTPUT_PATH ..)
-SUBDIRS(client server)
+SUBDIRS(lua client server)
 

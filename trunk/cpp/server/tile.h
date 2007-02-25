@@ -46,8 +46,7 @@ class TileLib
 	public:
 		~TileLib();
 
-		Tile* GetTileByName ( const std::string& name ); // my implementation isn't great, would be nice if someone could improve
-		Tile& AddTile ( const std::string name, int row_of_bmp, int col_of_bmp, int flags );
+		Tile& NewTile ( const std::string name, int row_of_bmp, int col_of_bmp, int flags );
 		void SendTileLib ( NetworkCommandBuffer& buffer ) const;
 };
 

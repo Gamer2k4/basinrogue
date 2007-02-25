@@ -19,6 +19,71 @@
 #include "SDL_main.h"
 #include "SDL_net.h"
 
+#include "luabinding.h"
+
+Tile* town_ground_tile;
+Tile* town_wall_tile;
+Tile* town_stairs_down_tile;
+Tile* town_stairs_up_tile;
+Tile* ground_tile;
+Tile* wall_tile;
+Tile* stairs_down_tile;
+Tile* stairs_up_tile;
+Tile* player_tile;
+Tile* goblin_tile;
+
+Sound* wind_sound;
+
+const int levelsizex = 35;
+const int levelsizey = 30;
+
+const char* level_map =
+		"###################################"
+		"#...................#...###########"
+		"#.......###...####..#...###########"
+		"#......#####..#..#......###########"
+		"#......##T##.....#..###############"
+		"#......##.##..#..#......###########"
+		"#.......#.#...####................#"
+		"#..............#........#########.#"
+		"#..............#........#########.#"
+		"#S#............#........#########.#"
+		"################..##.############.#"
+		"#.................#.....#########.#"
+		"#.................#.....#########.#"
+		"#.................#.....#########.#"
+		"#.................###############.#"
+		"#....#####.....#####....#########.#"
+		"#....#...#.....#...#....#########.#"
+		"#....#...###.###...#....#########.#"
+		"#....#.............#....#########.#"
+		"#....####.......####....#########.#"
+		"#.......#.......#.................#"
+		"#.......#...............###########"
+		"#.......#.......#.......###########"
+		"#.......#.......#.......###########"
+		"##.#########.######################"
+		"##.#########.######################"
+		"#..#########.######################"
+		"#.##########.######################"
+		"#............######################"
+		"###################################";
+
+const int dungeonsizex = 10;
+const int dungeonsizey = 10;
+
+const char* dungeon_map =
+		"##########"
+		"#...>....#"
+		"#........#"
+		"#........#"
+		"#<.......#"
+		"#........#"
+		"#........#"
+		"#......m.#"
+		"#........#"
+		"##########";
+
 bool IsPlayerConnected ( Player* player )
 {
 	bool must_remove = player->GetIsDisconnected();
@@ -29,21 +94,22 @@ int main ( int argc, char* argv[] )
 {
 	std::cout << "Server\n";
 
+
 	srand((unsigned)time(0));
 
 	std::list<Player*>::iterator iter;
 
 	TileLib tile_lib;
-	tile_lib.AddTile ( "town_ground", 23, 13, 0 );
-	tile_lib.AddTile ( "town_wall", 25, 0, FLAG_BLOCKS_MOVEMENT );
-	tile_lib.AddTile ( "town_stairs_down", 25, 29, 0 );
-	tile_lib.AddTile ( "town_stairs_down", 25, 28, 0 );
-	tile_lib.AddTile ( "ground", 23, 1, 0 );
-	tile_lib.AddTile ( "wall", 22, 0, FLAG_BLOCKS_MOVEMENT );
-	tile_lib.AddTile ( "stairs_down", 22, 16, 0 );
-	tile_lib.AddTile ( "stairs_up", 22, 15, 0 );
-	tile_lib.AddTile ( "player", 3, 2, FLAG_BLOCKS_MOVEMENT );
-	tile_lib.AddTile ( "goblin", 21, 9, FLAG_BLOCKS_MOVEMENT );
+	town_ground_tile = &tile_lib.NewTile ( "town_ground", 23, 13, 0 );
+	town_wall_tile = &tile_lib.NewTile ( "town_wall", 25, 0, FLAG_BLOCKS_MOVEMENT );
+	town_stairs_down_tile = &tile_lib.NewTile ( "town_stairs_down", 25, 29, 0 );
+	town_stairs_up_tile = &tile_lib.NewTile ( "town_stairs_down", 25, 28, 0 );
+	ground_tile = &tile_lib.NewTile ( "ground", 23, 1, 0 );
+	wall_tile = &tile_lib.NewTile ( "wall", 22, 0, FLAG_BLOCKS_MOVEMENT );
+	stairs_down_tile = &tile_lib.NewTile ( "stairs_down", 22, 16, 0 );
+	stairs_up_tile = &tile_lib.NewTile ( "stairs_down", 22, 15, 0 );
+	player_tile = &tile_lib.NewTile ( "player", 3, 2, FLAG_BLOCKS_MOVEMENT );
+	goblin_tile = &tile_lib.NewTile ( "goblin", 21, 9, FLAG_BLOCKS_MOVEMENT );
 
 	SoundLib sound_lib;
 	sound_lib.AddSound ( "whoosh", "wind" );
@@ -88,15 +154,35 @@ int main ( int argc, char* argv[] )
 	SDLNet_TCP_AddSocket ( main_set, listen_socket );
 	std::list<Player*> player_list;
 
-	TownLevelGenerator town_generator ( tile_lib ) ;
-	Level level_for_town = town_generator.GenerateLevel ( 0 );
-	World world;
-	TownLevel town_level ( "town", "You are back in town.", world, level_for_town );
-	InstanceLevelGenerator generator ( tile_lib );
-	MultilevelDungeon sewer( "sewer", "You cautiously enter the sewer...", world, generator);
-	sewer.setLevelmax(10);
+	/*TownLevelGenerator town_generator ( tile_lib ) ;
+	Level level_for_town = town_generator.GenerateLevel ( 0 );*/
 
-	world.SetStartingDungeon ( "town" );
+	World world;
+
+	MapLevelGenerator& town_generator = *new MapLevelGenerator(levelsizex, levelsizey, level_map, town_ground_tile );
+	town_generator.SetTileConverter('#', town_wall_tile);
+	town_generator.SetTileConverter('S', town_stairs_down_tile, ChangeDungeonTeleport, (char*)"sewer");
+	town_generator.SetTileConverter('T', town_stairs_up_tile, ChangeDungeonTeleport, (char*)"tower");
+	TownLevel& town_level = *new TownLevel( "town", "You are back in town.", world, town_generator );
+
+	MapLevelGenerator& sewer_generator = *new MapLevelGenerator(dungeonsizex, dungeonsizey, dungeon_map, ground_tile );
+	sewer_generator.SetTileConverter('#', wall_tile);
+	sewer_generator.SetTileConverter('<', stairs_down_tile, GenerateDownStairs);
+	sewer_generator.SetTileConverter('>', stairs_up_tile, GenerateUpStairs);
+	sewer_generator.SetTileConverter('m', 0, GenerateMonster, goblin_tile);
+	MultilevelDungeon& sewer = *new MultilevelDungeon( "sewer", "You cautiously enter the sewer...", world, sewer_generator);
+
+	MapLevelGenerator& tower_generator = *new MapLevelGenerator(dungeonsizex, dungeonsizey, dungeon_map, ground_tile );
+	tower_generator.SetTileConverter('#', wall_tile);
+	tower_generator.SetTileConverter('<', stairs_up_tile, GenerateDownStairs);
+	tower_generator.SetTileConverter('>', stairs_down_tile, GenerateUpStairs);
+	tower_generator.SetTileConverter('m', 0, GenerateMonster, goblin_tile);
+	MultilevelDungeon& tower = *new MultilevelDungeon( "tower", "You climb up the wizard's tower...", world, tower_generator);
+	tower.setLevelmax(5);
+
+	LuaInterpreter li(world, tile_lib);
+	li.RegisterEngine();
+	li.RunFile("main.lua");
 
 	//Uint32 last_wind_whoosh = SDL_GetTicks(); // make a wind noise every 20s from now on
 	//// I just do not trust SDL_GetTicks to return the correct value :)
@@ -163,7 +249,7 @@ int main ( int argc, char* argv[] )
 					SDLNet_TCP_AddSocket ( main_set, client_socket );
 					std::cout << "New player connected\n";
 					Mobile* player_mobile = new PlayerMonster();
-					player_mobile->SetAppearance ( tile_lib.GetTileByName ( "player" ) );
+					player_mobile->SetAppearance ( player_tile );
 					world.AddPlayer ( player_mobile );
 					Player* player = new Player ( client_socket, player_mobile );
 					tile_lib.SendTileLib ( player->command_buffer );

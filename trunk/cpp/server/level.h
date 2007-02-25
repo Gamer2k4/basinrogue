@@ -97,7 +97,7 @@ class Level
 		std::set<Mobile*> mobile_list;                     // any changes to one of these
 		std::multimap<std::pair<int,int>, Mobile*> mobile_hash; // must be reflected in the other!
 		std::set<LevelViewPort*> viewport_list;
-		Dungeon* dungeon;
+		const Dungeon* dungeon;
 		bool must_kill_on_leave;
 		double clock;
 
@@ -118,8 +118,8 @@ class Level
 
 		Level ( int sizex, int sizey );
 		LevelTile& GetTile ( int posx, int posy );
-		void SetTile ( int posx, int posy, Tile* tile, TileTrigger* trigger = 0 );
-		void SetTile ( int posx, int posy, LevelTile* tile );
+		void SetTile ( int posx, int posy, Tile* tile );
+		void SetTrigger ( int posx, int posy, TileTrigger* trigger );
 
 		void BeforeMoveEvent ( Mobile& mob );
 		void AfterMoveEvent ( Mobile& mob );
@@ -140,8 +140,8 @@ class Level
 
 		void SendTileInfo ( NetworkCommandBuffer& buffer, int x, int y );
 
-		void SetDungeon ( Dungeon& dungeon );
-		Dungeon& GetDungeon();
+		void SetDungeon ( const Dungeon& dungeon );
+		const Dungeon& GetDungeon();
 
 		void ActivateKillOnLeave();
 		bool getMustKillOnLeave();

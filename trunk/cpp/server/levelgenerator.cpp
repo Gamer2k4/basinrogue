@@ -12,214 +12,89 @@
 #pragma warning(disable:4786)
 
 #include "levelgenerator.h"
+#include "dungeon.h"
 
 LevelGenerator::~LevelGenerator()
 {}
 
-void LevelGenerator::SetFloorAndWallTiles ( TileLib& tile_lib, std::string floor_theme, std::string walls_theme )
+MapLevelGenerator::MapLevelGenerator (
+    int sizex, int sizey,
+    const char* pattern,
+    Tile* ground ) :
+		sizex ( sizex ),
+		sizey ( sizey ),
+		pattern ( pattern ),
+		ground ( ground )
+{}
+
+MapLevelGenerator::~MapLevelGenerator()
+{}
+
+void MapLevelGenerator::SetTileConverter(unsigned char tile_id, Tile* tile, GenerateEvent event, void* closure)
 {
-	// so far: floor_theme = "dirt" or "grey", walls_theme = "wood" or "stone"
-	// can add more later if desired
-	if ( floor_theme == "dirt" )
-	{
-		ground = tile_lib.GetTileByName ( "town_ground" );
-	}
-	else if ( floor_theme == "grey" )
-	{
-		ground = tile_lib.GetTileByName ( "ground" );
-	}
-	if ( walls_theme == "wood" )
-	{
-		wall        = tile_lib.GetTileByName ( "town_wall" );
-		stairs_down = tile_lib.GetTileByName ( "town_stairs_down" );
-		stairs_up   = tile_lib.GetTileByName ( "town_stairs_up" );
-	}
-	else if ( walls_theme == "stone" )
-	{
-		wall        = tile_lib.GetTileByName ( "wall" );
-		stairs_down = tile_lib.GetTileByName ( "stairs_down" );
-		stairs_up   = tile_lib.GetTileByName ( "stairs_up" );
-	}
+	TileConverter& converter = converter_array[tile_id];
+	converter.tile = tile;
+	converter.event = event;
+	converter.closure = closure;
 }
 
-Level& LevelGenerator::MakeFromPattern ( TileLib& tile_lib,
-										 int levelsizex, int levelsizey, std::string pattern,
-				   			             std::vector< std::pair<int, int> > monster_locations, std::vector<std::string> monster_types,
-							             int depth, int kill_on_leave )
+Level& MapLevelGenerator::GenerateLevel ( int depth, const Dungeon& dungeon )
 {
-	Level& level = *new Level( levelsizex, levelsizey );
-	Monster* mob;
-	for ( int jj=0; jj < levelsizey; ++jj )
-		for ( int ii=0; ii < levelsizex; ++ii )
-		{
-			char tile_char = pattern[ii+jj*levelsizex];
-			Tile* this_tile;
-			TileTrigger* trigger = 0;
-			if ( tile_char=='#' )
-				this_tile = wall;
-			else if ( tile_char == 'S' )
-			{
-				this_tile = stairs_down;
-				trigger = new StairsChangeDungeonTrigger("sewer", 1, "up");
-				trigger->tag = "sewer";
-			}
-			else if ( tile_char == 'T' )
-			{
-				this_tile = stairs_up;
-				trigger = new StairsChangeDungeonTrigger("town", 0, "sewer");
-				trigger->tag = "up";
-			}
-			else if ( tile_char == '>' )
-			{
-				this_tile = stairs_down;
-				trigger = new StairsDownTrigger("up");
-				trigger->tag = "down";
-			}
-			else if ( tile_char == '<' )
-			{
-				this_tile = stairs_up;
-				trigger = new StairsUpTrigger("down");
-				trigger->tag = "up";
-			}
-			else
-				this_tile = ground;
-			level.SetTile ( ii, jj, this_tile, trigger );
-		}
-	for ( int i = 0; i < monster_locations.size(); i++)
-	{
-		mob = new Monster();
-		mob->SetLevel ( level, monster_locations[i].first, monster_locations[i].second );
-		mob->SetAppearance ( tile_lib.GetTileByName ( monster_types[i] ) );
-	}
+	Level& level = *new Level ( sizex, sizey );
+	level.SetDungeon(dungeon);
 	level.depth = depth;
-	if ( kill_on_leave )
-	{
-		level.ActivateKillOnLeave();
-	}
+	for ( int jj=0; jj < sizey; ++jj )
+		for ( int ii=0; ii < sizex; ++ii )
+		{
+			unsigned char ch = pattern[ii+jj*sizex];
+			TileConverter& converter = converter_array[ch];
+			if (converter.tile)
+				level.SetTile ( ii, jj, converter.tile );
+			else
+				level.SetTile ( ii, jj, ground );
+			if (converter.event)
+				converter.event(level, ii, jj, converter.closure);
+		}
 	return level;
 }
 
-StaticLevelGenerator::StaticLevelGenerator ( Level& level ) : level ( level )
-{}
-
-Level& StaticLevelGenerator::GenerateLevel ( int depth )
+void GenerateUpStairs(Level& level, int x, int y, void* closure)
 {
-	return level;
-}
-
-TownLevelGenerator::TownLevelGenerator (
-	TileLib& tile_lib ) :
-		tile_lib ( tile_lib )
-{
-	SetFloorAndWallTiles ( tile_lib, "dirt", "wood" );
-}
-
-TownLevelGenerator::~TownLevelGenerator()
-{}
-
-Level& TownLevelGenerator::GenerateLevel ( int depth )
-{
-	int levelsizex = 35;
-	int levelsizey = 30;
-	std::string pattern =
-	"###################################"
-    "#...................#...###########"
-    "#.............####..#...###########"
-    "#......#####..#..#......###########"
-    "#......#...#.....#..###############"
-    "#......#...#..#..#......###########"
-    "#......##.##..####................#"
-    "#..............#........#########.#"
-    "#..............#........#########.#"
-    "#S#............#........#########.#"
-    "################..##.############.#"
-    "#.................#.....#########.#"
-    "#.................#.....#########.#"
-    "#.................#.....#########.#"
-    "#.................###############.#"
-    "#....#####.....#####....#########.#"
-    "#....#...#.....#...#....#########.#"
-    "#....#...###.###...#....#########.#"
-    "#....#.............#....#########.#"
-    "#....####.......####....#########.#"
-    "#.......#.......#.................#"
-    "#.......#...............###########"
-    "#.......#.......#.......###########"
-    "#.......#.......#.......###########"
-    "##.#########.######################"
-    "##.#########.######################"
-    "#..#########.######################"
-    "#.##########.######################"
-    "#............######################"
-    "###################################"
-    ;
-    std::vector< std::pair<int,int> > no_monster_locs;
-    std::vector<std::string> no_monsters;
-	return MakeFromPattern ( tile_lib, levelsizex, levelsizey, pattern, no_monster_locs, no_monsters, depth, 0);
-}
-
-InstanceLevelGenerator::InstanceLevelGenerator (
-    TileLib& tile_lib ) :
-		tile_lib ( tile_lib )
-{
-	SetFloorAndWallTiles ( tile_lib, "grey", "stone" );
-}
-
-InstanceLevelGenerator::~InstanceLevelGenerator()
-{}
-
-Level& InstanceLevelGenerator::GenerateLevel ( int depth )
-{
-	int levelsizex = 10;
-	int levelsizey = 10;
-	std::string pattern;
-	if ( depth==1 )
-	{
-		pattern =
-		"##########"
-		"#...>....#"
-		"#........#"
-		"#........#"
-		"#T.......#"
-		"#........#"
-		"#........#"
-		"#........#"
-		"#........#"
-		"##########";
-	}
-	else if ( depth==10 )
-	{
-		pattern =
-		"##########"
-		"#........#"
-		"#........#"
-		"#........#"
-		"#<.......#"
-		"#........#"
-		"#........#"
-		"#........#"
-		"#........#"
-		"##########";
-	}
+	const Dungeon& dungeon = level.GetDungeon();
+	TileTrigger* trigger;
+	if (level.depth > 0)
+		trigger = new StairsUpTrigger("down");
 	else
+		trigger = new StairsChangeDungeonTrigger("town", 0, dungeon.getName());
+	trigger->tag = "up";
+	level.SetTrigger(x, y, trigger);
+}
+
+void GenerateDownStairs(Level& level, int x, int y, void* closure)
+{
+	const Dungeon& dungeon = level.GetDungeon();
+	if (level.depth < dungeon.getLevelmax())
 	{
-		pattern =
-		"##########"
-		"#...>....#"
-		"#........#"
-		"#........#"
-		"#<.......#"
-		"#........#"
-		"#........#"
-		"#........#"
-		"#........#"
-		"##########";
+		TileTrigger* trigger = new StairsDownTrigger("up");
+		trigger->tag = "down";
+		level.SetTrigger(x, y, trigger);
 	}
-    std::vector< std::pair<int,int> > monster_locs;
-    std::vector<std::string> monsters;
-    monster_locs.push_back ( std::make_pair ( 7, 7 ) );
-    monsters.push_back ( "goblin" );
-    monster_locs.push_back ( std::make_pair ( 8, 8 ) );
-    monsters.push_back ( "goblin" );
-	return MakeFromPattern ( tile_lib, levelsizex, levelsizey, pattern, monster_locs, monsters, depth);
+}
+
+void ChangeDungeonTeleport(Level& level, int x, int y, void* closure)
+{
+	const Dungeon& dungeon = level.GetDungeon();
+	const char* dungeon_id = (const char*) closure;
+	TileTrigger* trigger = new StairsChangeDungeonTrigger(dungeon_id, 0, "up");
+	trigger->tag = dungeon_id;
+	level.SetTrigger(x, y, trigger);
+}
+
+void GenerateMonster(Level& level, int x, int y, void* closure)
+{
+	const Dungeon& dungeon = level.GetDungeon();
+	Tile* monster_type = (Tile*) closure;
+	Monster* mob = new Monster();
+	mob->SetLevel ( level, x, y );
+	mob->SetAppearance ( monster_type );
 }
