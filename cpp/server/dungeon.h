@@ -27,6 +27,7 @@ class Dungeon
 	private:
 		World& world;
 		std::string name, entry_message;
+		int levelmax;
 
 		Dungeon ( const Dungeon& level );
 		const Dungeon& operator = ( const Dungeon& level );
@@ -44,6 +45,9 @@ class Dungeon
 
 		std::string GetEntryMessage() const;
 
+		void setLevelmax ( int theValue );
+		int getLevelmax() const;
+
 };
 
 class TownLevel : public Dungeon
@@ -53,7 +57,7 @@ class TownLevel : public Dungeon
 	protected:
 		virtual Level* VirtualGetLevel ( int depth );
 	public:
-		TownLevel ( const std::string& name, const std::string& entry_message, World& world, Level& town_level );
+		TownLevel ( const std::string& name, const std::string& entry_message, World& world, LevelGenerator& generator );
 		virtual ~TownLevel();
 };
 
@@ -66,7 +70,6 @@ struct ExternalConnection
 class MultilevelDungeon : public Dungeon
 {
 	private:
-		int levelmax;
 		LevelGenerator& generator;
 		std::vector<ExternalConnection> connection_list;
 	protected:
@@ -74,11 +77,6 @@ class MultilevelDungeon : public Dungeon
 	public:
 		MultilevelDungeon ( const std::string& name, const std::string& entry_message, World& world, LevelGenerator& generator );
 		virtual ~MultilevelDungeon();
-
-		void setLevelmax ( int theValue );
-
-
-		int getLevelmax() const;
 
 };
 

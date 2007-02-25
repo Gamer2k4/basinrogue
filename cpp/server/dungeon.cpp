@@ -41,15 +41,16 @@ std::string Dungeon::GetEntryMessage() const
 Level* Dungeon::GetLevel ( int depth )
 {
 	Level* level = VirtualGetLevel( depth );
-	level->SetDungeon(*this);
 	return level;
 }
 
 
-TownLevel::TownLevel ( const std::string& name, const std::string& entry_message, World& world, Level& town_level ) :
+TownLevel::TownLevel ( const std::string& name, const std::string& entry_message, World& world, LevelGenerator& generator ) :
 		Dungeon ( name, entry_message, world ),
-		town_level ( town_level )
-{}
+		town_level ( generator.GenerateLevel(0, *this) )
+{
+
+}
 
 TownLevel::~TownLevel()
 {
@@ -75,7 +76,8 @@ MultilevelDungeon::~MultilevelDungeon()
 
 Level* MultilevelDungeon::VirtualGetLevel ( int depth )
 {
-	Level& level = generator.GenerateLevel ( depth );
+	Level& level = generator.GenerateLevel ( depth, *this );
+	level.ActivateKillOnLeave();
 	return &level;
 }
 
@@ -86,13 +88,13 @@ World& Dungeon::getWorld() const
 }
 
 
-int MultilevelDungeon::getLevelmax() const
+int Dungeon::getLevelmax() const
 {
 	return levelmax;
 }
 
 
-void MultilevelDungeon::setLevelmax ( int theValue )
+void Dungeon::setLevelmax ( int theValue )
 {
 	levelmax = theValue;
 }

@@ -15,53 +15,52 @@
 #include "level.h"
 #include "tile.h"
 
+class Dungeon;
+
 /**
 	@author
 */
 class LevelGenerator
 {
-	protected:
-		void SetFloorAndWallTiles ( TileLib& tile_lib, std::string floor_theme, std::string walls_theme );
-		Tile *ground, *wall, *stairs_up, *stairs_down; // only store floor/walls here for now - other stuff can be accessed from tilelib as needed
-
-		Level& MakeFromPattern ( TileLib& tile_lib,
-		                         int levelsizex, int levelsizey, std::string pattern,
-			         		     std::vector< std::pair<int, int> > monster_locations, std::vector<std::string> monster_types,
-			         		     int depth, int kill_on_leave = 1 );
 	public:
 		virtual ~LevelGenerator();
-		virtual Level& GenerateLevel(int depth) = 0;
+		virtual Level& GenerateLevel ( int depth, const Dungeon& dungeon ) = 0;
 };
 
-class StaticLevelGenerator : public LevelGenerator
+typedef void ( *GenerateEvent ) ( Level& level, int x, int y, void* closure );
+
+struct TileConverter
+{
+	Tile* tile;
+	GenerateEvent event;
+	void* closure;
+
+	TileConverter ( Tile* tile = 0, GenerateEvent event = 0, void* closure = 0 ) :
+			tile ( tile ),
+			event ( event ),
+			closure ( closure )
+	{}
+};
+
+class MapLevelGenerator : public LevelGenerator
 {
 	private:
-		Level& level;
+		int sizex;
+		int sizey;
+		const char* pattern;
+		TileConverter converter_array[256];
+		Tile* ground;
 	public:
-		StaticLevelGenerator(Level& level);
-		virtual Level& GenerateLevel(int depth);
+		MapLevelGenerator ( int sizex, int sizey, const char* pattern, Tile* ground );
+
+		void SetTileConverter ( unsigned char tile_id, Tile* tile, GenerateEvent event = 0, void* closure = 0 );
+		virtual ~MapLevelGenerator();
+		virtual Level& GenerateLevel ( int depth, const Dungeon& dungeon );
 };
 
-class TownLevelGenerator : public LevelGenerator
-{
-	private:
-		TileLib tile_lib;
-	public:
-		TownLevelGenerator ( TileLib& tile_lib );
-		virtual ~TownLevelGenerator();
-
-		Level& GenerateLevel(int depth);
-};
-
-class InstanceLevelGenerator : public LevelGenerator
-{
-	private:
-		TileLib tile_lib;
-	public:
-		InstanceLevelGenerator ( TileLib& tile_lib ) ;
-		virtual ~InstanceLevelGenerator();
-		virtual Level& GenerateLevel(int depth);
-};
-
+void GenerateUpStairs ( Level& level, int x, int y, void* closure );
+void GenerateDownStairs ( Level& level, int x, int y, void* closure );
+void ChangeDungeonTeleport ( Level& level, int x, int y, void* closure );
+void GenerateMonster ( Level& level, int x, int y, void* closure );
 
 #endif

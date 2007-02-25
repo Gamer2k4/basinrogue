@@ -46,6 +46,7 @@ bool World::HasDungeon(Dungeon& dungeon) const
 
 void World::SetStartingDungeon(const std::string& dungeon_name)
 {
+	std::cout << "Starting dungeon defined: " << dungeon_name << std::endl;
 	if (dungeon_list.find(dungeon_name) == dungeon_list.end())
 		throw std::string("Invalid dungeon.");
 	starting_dungeon = dungeon_name;
